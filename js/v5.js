@@ -1,0 +1,16 @@
+(()=>{'use strict';
+const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
+const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
+function tryEnterNativeFullscreen(){try{if(document.fullscreenElement)return;const el=document.documentElement;if(el.requestFullscreen){const p=el.requestFullscreen({navigationUI:'hide'});p&&p.catch&&p.catch(()=>{})}}catch(e){}}
+function tryExitNativeFullscreen(){try{if(document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();p&&p.catch&&p.catch(()=>{})}}catch(e){}}
+function setMode(dest){const immersive=IMMERSIVE.has(dest);document.body.classList.toggle('game-fullscreen',immersive);document.body.classList.toggle('elevator-fullscreen',dest==='elevator');document.body.dataset.playRoute=dest||'';if(immersive)tryEnterNativeFullscreen();else if(MENU.has(dest))tryExitNativeFullscreen()}
+function scenicMarkup(){return`<div class="scenic-world" aria-hidden="true"><div class="scenic-cloud c1"></div><div class="scenic-cloud c2"></div><div class="scenic-cloud c3"></div><div class="scenic-haze"></div><div class="scenic-ridge"></div><div class="scenic-skyline"><div class="scenic-building b1"></div><div class="scenic-building b2"></div><div class="scenic-building b3"></div><div class="scenic-building b4 crown"></div><div class="scenic-building b5"></div><div class="scenic-building b6"></div><div class="scenic-building b7"></div><div class="scenic-building b8"></div></div><div class="scenic-river"></div><div class="scenic-park"></div><div class="scenic-road"></div><div class="scenic-trees">🌳 🌲 🌳 🌲 🌳 🌲 🌳 🌲 🌳</div></div>`}
+function upgradeElevator(){const track=document.querySelector('#floorTrack');if(!track||track.dataset.v5==='1')return;track.dataset.v5='1';track.insertAdjacentHTML('afterbegin',scenicMarkup());const cabin=document.querySelector('.glass-cabin');if(cabin)cabin.classList.add('premium-panorama');document.querySelectorAll('.floor-key').forEach(btn=>{btn.setAttribute('aria-label',`${btn.textContent.trim()}층`);btn.title=`${btn.textContent.trim()}층`});}
+function detectCurrentScreen(){const main=document.querySelector('#main');if(!main)return;upgradeElevator();if(main.querySelector('.elevator-shell')){setMode('elevator');return}if(main.querySelector('.bathroom-scene')){document.body.classList.add('game-fullscreen');document.body.classList.remove('elevator-fullscreen');return}
+}
+document.addEventListener('click',e=>{const target=e.target.closest('[data-go]');if(!target)return;const dest=target.dataset.go;if(IMMERSIVE.has(dest)||MENU.has(dest))setMode(dest)},true);
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&IMMERSIVE.has(document.body.dataset.playRoute||''))document.body.classList.add('game-fullscreen')});
+const main=document.querySelector('#main');if(main){new MutationObserver(()=>detectCurrentScreen()).observe(main,{childList:true,subtree:true})}
+window.addEventListener('pageshow',detectCurrentScreen);
+setTimeout(detectCurrentScreen,0);
+})();
