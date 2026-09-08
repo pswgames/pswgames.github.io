@@ -1,0 +1,11 @@
+{
+  "name": "서우 놀이터",
+  "short_name": "서우 놀이터",
+  "description": "색깔, 모양, 기억 놀이를 짧고 즐겁게 하는 어린이용 웹앱",
+  "lang": "ko-KR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6fbff",
+  "theme_color": "#7cc7ff"
+}
