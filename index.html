@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#7cc7ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="서우 놀이터" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237cc7ff'/%3E%3Ctext x='32' y='44' font-size='38' text-anchor='middle'%3E⭐%3C/text%3E%3C/svg%3E" />
+  <title>서우 놀이터</title>
+  <style>
+    :root{--bg:#f6fbff;--card:#fff;--ink:#17324a;--muted:#638098;--blue:#5db5f5;--blue2:#dff2ff;--green:#88d498;--yellow:#ffd86b;--pink:#ffb6cf;--shadow:0 10px 30px rgba(29,92,135,.12)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif}
+    body{min-height:100%;padding:env(safe-area-inset-top) env(safe-area-inset-right) calc(18px + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
+    button{font:inherit;color:inherit}
+    .app{width:min(760px,100%);margin:0 auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 18px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{width:52px;height:52px;border-radius:18px;background:linear-gradient(145deg,#86d1ff,#63aef0);display:grid;place-items:center;font-size:28px;box-shadow:var(--shadow)}
+    h1{font-size:clamp(24px,7vw,36px);margin:0;letter-spacing:-.04em}.sub{font-size:14px;color:var(--muted);margin-top:3px}
+    .iconbtn{border:0;background:#fff;width:48px;height:48px;border-radius:16px;box-shadow:var(--shadow);font-size:23px;cursor:pointer}
+    .hero{background:linear-gradient(135deg,#e8f7ff,#fff8db);border:1px solid #e5f0f7;border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+    .hero .hello{font-size:clamp(24px,6vw,34px);font-weight:900;letter-spacing:-.04em}.hero p{margin:7px 0 0;color:var(--muted);line-height:1.55}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.gamecard{border:0;background:var(--card);border-radius:24px;padding:18px 14px;min-height:158px;text-align:left;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}.gamecard:active{transform:scale(.98)}.gicon{font-size:48px}.gtitle{font-size:20px;font-weight:900;letter-spacing:-.03em}.gdesc{font-size:13px;color:var(--muted);margin-top:3px}
+    .wide{grid-column:1/-1;min-height:112px;flex-direction:row;align-items:center;gap:14px}.wide .gicon{font-size:42px}.wide .grow{flex:1}
+    .screen{display:none}.screen.active{display:block}.topbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}.back{border:0;background:#fff;border-radius:15px;height:48px;padding:0 16px;box-shadow:var(--shadow);font-weight:800}.progress{flex:1;height:12px;background:#e7f1f7;border-radius:999px;overflow:hidden}.progress>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#5db5f5,#88d498);transition:width .25s ease}.stars{font-weight:900;white-space:nowrap}
+    .prompt{background:#fff;border-radius:24px;padding:20px;text-align:center;box-shadow:var(--shadow);margin-bottom:14px}.prompt .big{font-size:clamp(27px,7vw,40px);font-weight:900;letter-spacing:-.04em}.prompt .hint{color:var(--muted);margin-top:6px}
+    .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.choice{min-height:142px;border:4px solid transparent;border-radius:26px;background:#fff;box-shadow:var(--shadow);display:grid;place-items:center;font-size:62px;font-weight:900;cursor:pointer;position:relative;overflow:hidden}.choice:active{transform:scale(.98)}.choice.correct{border-color:#72cf8d;animation:pop .35s ease}.choice.hinting{animation:pulse 1s infinite}.choice.color{font-size:18px}.swatch{width:80px;height:80px;border-radius:50%;box-shadow:inset 0 0 0 3px rgba(0,0,0,.05)}
+    @keyframes pop{50%{transform:scale(1.07)}}@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(93,181,245,.18),var(--shadow)}}
+    .feedback{min-height:54px;margin:12px 0 0;border-radius:18px;padding:14px 16px;background:#eef7fc;color:#365971;font-weight:800;text-align:center}.feedback.good{background:#e8f9ec;color:#26743c}
+    .memorystage{display:flex;justify-content:center;align-items:center;gap:10px;min-height:118px;background:#fff;border-radius:24px;box-shadow:var(--shadow);margin-bottom:14px;font-size:58px}.memorypad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.memorybtn{min-height:130px;border:0;border-radius:26px;background:#fff;box-shadow:var(--shadow);font-size:60px}.memorybtn:active{transform:scale(.98)}
+    .result{background:#fff;border-radius:28px;padding:26px;text-align:center;box-shadow:var(--shadow)}.result .trophy{font-size:72px}.result h2{font-size:30px;margin:6px 0}.result p{color:var(--muted);line-height:1.55}.primary{border:0;background:var(--blue);color:#fff;border-radius:18px;min-height:54px;padding:0 22px;font-weight:900;font-size:18px;box-shadow:var(--shadow);cursor:pointer}.secondary{border:0;background:#edf6fb;border-radius:18px;min-height:54px;padding:0 22px;font-weight:900;font-size:17px;cursor:pointer}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+    .parent{background:#fff;border-radius:26px;padding:22px;box-shadow:var(--shadow)}.parent h2{margin-top:0}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#f2f8fc;border-radius:18px;padding:16px}.stat b{font-size:25px;display:block}.stat span{font-size:13px;color:var(--muted)}.note{margin-top:14px;background:#fff8dc;border-radius:16px;padding:13px;font-size:13px;color:#6f642e;line-height:1.5}
+    .gate{background:#fff;border-radius:26px;padding:24px;text-align:center;box-shadow:var(--shadow)}.gate .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.gate button{height:70px;border:0;border-radius:20px;background:#edf6fb;font-size:24px;font-weight:900}.small{font-size:13px;color:var(--muted)}
+    .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#17324a;color:#fff;padding:12px 18px;border-radius:999px;font-weight:800;opacity:0;pointer-events:none;transition:.25s;z-index:20}.toast.show{opacity:1}
+    @media(max-width:420px){.app{padding:12px}.grid{grid-template-columns:1fr 1fr;gap:10px}.gamecard{min-height:145px;padding:15px 12px}.gicon{font-size:42px}.gtitle{font-size:18px}.choices{gap:10px}.choice{min-height:126px;font-size:54px}.swatch{width:70px;height:70px}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <section id="home" class="screen active">
+    <header><div class="brand"><div class="logo">⭐</div><div><h1>서우 놀이터</h1><div class="sub">재미있게 놀면서 한 뼘씩</div></div></div><button class="iconbtn" id="parentBtn" aria-label="보호자 메뉴">👨‍👩‍👦</button></header>
+    <div class="hero"><div class="hello">서우야, 오늘 뭐 하고 놀까? 😊</div><p>짧고 즐겁게! 틀려도 괜찮아. 다시 해보면 돼.</p></div>
+    <div class="grid">
+      <button class="gamecard" data-game="color"><div class="gicon">🌈</div><div><div class="gtitle">색깔 찾아줘!</div><div class="gdesc">듣고 같은 색을 톡!</div></div></button>
+      <button class="gamecard" data-game="shape"><div class="gicon">🔺</div><div><div class="gtitle">같은 모양 찾기</div><div class="gdesc">동그라미·세모·네모</div></div></button>
+      <button class="gamecard wide" data-game="memory"><div class="gicon">🧠</div><div class="grow"><div class="gtitle">기억하고 톡톡!</div><div class="gdesc">보고 기억한 순서대로 눌러봐</div></div><div style="font-size:30px">👉</div></button>
+    </div>
+  </section>
+
+  <section id="game" class="screen">
+    <div class="topbar"><button class="back" id="backBtn">← 홈</button><div class="progress"><i id="progressBar"></i></div><div class="stars" id="starCount">⭐ 0</div></div>
+    <div id="gameBody"></div>
+  </section>
+
+  <section id="result" class="screen"><div class="result"><div class="trophy">🎉</div><h2>멋지게 놀았어!</h2><p id="resultText">오늘도 하나 배웠네!</p><div class="actions"><button class="primary" id="againBtn">한 번 더!</button><button class="secondary" id="homeBtn">다른 놀이</button></div></div></section>
+
+  <section id="parent" class="screen"><div class="topbar"><button class="back" id="parentBack">← 홈</button></div><div id="parentBody"></div></section>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(()=>{
+  'use strict';
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const screens={home:$('#home'),game:$('#game'),result:$('#result'),parent:$('#parent')};
+  const gameBody=$('#gameBody'), progressBar=$('#progressBar'), starCount=$('#starCount'), toast=$('#toast');
+  const STORE='seowooPlayStatsV1';
+  const defaults={total:0,correct:0,rounds:0,stars:0,byGame:{color:0,shape:0,memory:0},firstPlayed:null,lastPlayed:null};
+  let stats=loadStats(), currentGame='', q=0, score=0, attempts=0, roundStarted=0, memorySeq=[], memoryPos=0, locked=false;
+  const totalQ=6;
+
+  function loadStats(){try{return Object.assign({},defaults,JSON.parse(localStorage.getItem(STORE)||'{}'))}catch(e){return JSON.parse(JSON.stringify(defaults))}}
+  function saveStats(){stats.lastPlayed=new Date().toISOString(); if(!stats.firstPlayed)stats.firstPlayed=stats.lastPlayed; localStorage.setItem(STORE,JSON.stringify(stats))}
+  function show(name){Object.values(screens).forEach(x=>x.classList.remove('active'));screens[name].classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+  function say(text){if(!('speechSynthesis' in window))return; speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=.88;u.pitch=1.08;speechSynthesis.speak(u)}
+  function notify(text){toast.textContent=text;toast.classList.add('show');clearTimeout(notify.t);notify.t=setTimeout(()=>toast.classList.remove('show'),1700)}
+  function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+  function updateProgress(){progressBar.style.width=`${Math.min(100,(q/totalQ)*100)}%`;starCount.textContent=`⭐ ${score}`}
+  function record(correct,first){stats.total++;if(correct)stats.correct++;if(first&&correct)stats.stars++;saveStats()}
+
+  const colors=[
+    {name:'빨간색',hex:'#ff5a63'},{name:'노란색',hex:'#ffd54d'},{name:'파란색',hex:'#4e9cff'},{name:'초록색',hex:'#69c985'},{name:'보라색',hex:'#a980e8'},{name:'주황색',hex:'#ff9c4a'}
+  ];
+  const shapes=[{name:'동그라미',char:'●'},{name:'세모',char:'▲'},{name:'네모',char:'■'},{name:'별',char:'★'},{name:'하트',char:'♥'}];
+  const memoryItems=['🍎','🚗','🐶','⭐'];
+
+  function startGame(type){currentGame=type;q=0;score=0;locked=false;roundStarted=Date.now();show('game');nextQuestion()}
+  function nextQuestion(){locked=false;attempts=0;updateProgress(); if(q>=totalQ)return finishGame(); if(currentGame==='color')renderColor(); else if(currentGame==='shape')renderShape(); else renderMemory()}
+
+  function renderColor(){const target=colors[Math.floor(Math.random()*colors.length)], opts=shuffle([target,...shuffle(colors.filter(c=>c!==target)).slice(0,3)]);gameBody.innerHTML=`<div class="prompt"><div class="big">${target.name}을 찾아볼까?</div><div class="hint">같은 색을 톡 눌러줘</div></div><div class="choices">${opts.map(o=>`<button class="choice color" data-name="${o.name}"><span class="swatch" style="background:${o.hex}"></span></button>`).join('')}</div><div class="feedback" id="feedback">천천히 보고 골라도 괜찮아 😊</div>`;say(`${target.name}을 찾아볼까?`); $$('.choice').forEach(b=>b.addEventListener('click',()=>answerChoice(b,b.dataset.name===target.name,target.name)))}
+  function renderShape(){const target=shapes[Math.floor(Math.random()*shapes.length)], opts=shuffle([target,...shuffle(shapes.filter(c=>c!==target)).slice(0,3)]);gameBody.innerHTML=`<div class="prompt"><div class="big">${target.name}을 찾아볼까?</div><div class="hint">같은 모양을 톡 눌러줘</div></div><div class="choices">${opts.map(o=>`<button class="choice" data-name="${o.name}" aria-label="${o.name}">${o.char}</button>`).join('')}</div><div class="feedback" id="feedback">모양을 잘 살펴봐 😊</div>`;say(`${target.name}을 찾아볼까?`); $$('.choice').forEach(b=>b.addEventListener('click',()=>answerChoice(b,b.dataset.name===target.name,target.name)))}
+  function answerChoice(btn,ok,targetName){if(locked)return;attempts++;const feedback=$('#feedback');if(ok){locked=true;btn.classList.add('correct');score++;record(true,attempts===1);feedback.className='feedback good';feedback.textContent='딩동댕! 잘 찾았어! ⭐';say('딩동댕! 잘 찾았어!');q++;updateProgress();setTimeout(nextQuestion,750)}else{record(false,false);feedback.textContent='괜찮아, 다시 찾아보자 😊';say('괜찮아. 다시 찾아보자.');if(attempts>=2){$$('.choice').forEach(x=>{if(x.dataset.name===targetName)x.classList.add('hinting')})}}}
+
+  function renderMemory(){const len=q<2?1:(q<5?2:3);memorySeq=Array.from({length:len},()=>memoryItems[Math.floor(Math.random()*memoryItems.length)]);memoryPos=0;locked=true;gameBody.innerHTML=`<div class="prompt"><div class="big">잘 보고 기억해봐!</div><div class="hint">잠깐 보여준 다음, 같은 순서로 눌러줘</div></div><div class="memorystage" id="memoryStage"></div><div class="memorypad">${memoryItems.map(x=>`<button class="memorybtn" data-item="${x}" disabled>${x}</button>`).join('')}</div><div class="feedback" id="feedback">눈으로 쏙 기억해보자 👀</div>`;say('잘 보고 기억해봐!');const stage=$('#memoryStage');let i=0;const showOne=()=>{if(i<memorySeq.length){stage.textContent=memorySeq[i++];setTimeout(()=>{stage.textContent='';setTimeout(showOne,250)},700)}else{setTimeout(()=>{stage.textContent='❓';locked=false;$$('.memorybtn').forEach(b=>{b.disabled=false;b.addEventListener('click',memoryAnswer)});say('이제 순서대로 눌러볼까?')},300)}};showOne()}
+  function memoryAnswer(e){if(locked)return;const item=e.currentTarget.dataset.item, feedback=$('#feedback');if(item===memorySeq[memoryPos]){memoryPos++; if(memoryPos>=memorySeq.length){locked=true;score++;record(true,memoryPos===memorySeq.length);feedback.className='feedback good';feedback.textContent='우와! 순서를 기억했네! ⭐';say('우와! 순서를 기억했네!');q++;updateProgress();setTimeout(nextQuestion,800)}else{feedback.textContent='맞아! 다음 것도 기억해볼까?';say('맞아! 다음 것도 기억해볼까?')}}else{record(false,false);memoryPos=0;feedback.textContent='괜찮아! 처음부터 다시 눌러보자 😊';say('괜찮아. 처음부터 다시 해보자.')}}
+
+  function finishGame(){stats.rounds++;stats.byGame=stats.byGame||{color:0,shape:0,memory:0};stats.byGame[currentGame]=(stats.byGame[currentGame]||0)+1;saveStats();$('#resultText').textContent=`별을 ${score}개 모았어! 잘했어, 서우야 ⭐`;show('result');say(`멋지게 놀았어! 별을 ${score}개 모았어!`)}
+
+  function openParent(){show('parent');renderGate()}
+  function renderGate(){let seq=[1,2,3],pos=0;$('#parentBody').innerHTML=`<div class="gate"><div style="font-size:42px">🔒</div><h2>보호자 확인</h2><p>아이의 실수 터치를 막기 위해<br><b>1 → 2 → 3</b> 순서로 눌러주세요.</p><div class="nums">${shuffle(seq).map(n=>`<button data-n="${n}">${n}</button>`).join('')}</div></div>`;$$('.nums button').forEach(b=>b.addEventListener('click',()=>{const n=Number(b.dataset.n);if(n===seq[pos]){pos++;b.style.background='#dcf7e5';if(pos===3)renderParent()}else{pos=0;notify('1부터 다시 눌러주세요')}}))}
+  function renderParent(){const pct=stats.total?Math.round(stats.correct/stats.total*100):0;$('#parentBody').innerHTML=`<div class="parent"><h2>오늘의 놀이 기록 👨‍👩‍👦</h2><p class="small">이 기록은 발달검사가 아니라, 이 기기에서의 게임 활동 기록입니다.</p><div class="stats"><div class="stat"><b>${stats.rounds||0}판</b><span>완료한 놀이</span></div><div class="stat"><b>${stats.stars||0}⭐</b><span>첫 시도 성공</span></div><div class="stat"><b>${pct}%</b><span>전체 정답 비율</span></div><div class="stat"><b>${stats.total||0}회</b><span>총 선택 횟수</span></div></div><div class="note">색깔·모양·기억 놀이는 짧게 즐기는 용도예요. 아이가 피곤해하거나 흥미를 잃으면 바로 쉬는 것이 좋습니다.</div><div class="actions"><button class="secondary" id="resetStats">기록 초기화</button></div></div>`;$('#resetStats').addEventListener('click',()=>{if(confirm('이 기기의 놀이 기록을 모두 지울까요?')){localStorage.removeItem(STORE);stats=loadStats();renderParent();notify('놀이 기록을 초기화했어요')}})}
+
+  $$('.gamecard').forEach(b=>b.addEventListener('click',()=>startGame(b.dataset.game)));
+  $('#backBtn').addEventListener('click',()=>{speechSynthesis?.cancel?.();show('home')});
+  $('#homeBtn').addEventListener('click',()=>show('home'));
+  $('#againBtn').addEventListener('click',()=>startGame(currentGame));
+  $('#parentBtn').addEventListener('click',openParent);
+  $('#parentBack').addEventListener('click',()=>show('home'));
+  if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}))}
+})();
+</script>
+</body>
+</html>
