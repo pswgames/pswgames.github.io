@@ -99,7 +99,7 @@ function startSmoothElevator(target){
   smoothElevator.moving=true;
   const goingUp=target>smoothElevator.startFloor;
   const distance=Math.abs(target-smoothElevator.startFloor);
-  smoothElevator.duration=Math.min(6200,Math.max(1500,950+distance*285));
+  smoothElevator.duration=Math.min(12000,Math.max(2400,1500+distance*520));
   smoothElevator.startTime=performance.now()+320;
   document.querySelector('.glass-cabin')?.classList.add('moving');
   document.querySelector('.cabin-frame')?.classList.add('doors-closed');
