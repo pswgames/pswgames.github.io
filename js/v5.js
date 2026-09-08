@@ -1,6 +1,8 @@
 (()=>{'use strict';
 const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
 const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
+const FLOOR_TRAVEL_MS=2000;
+const DOOR_MS=1200;
 const smoothElevator={current:1,moving:false,raf:0,startTime:0,startFloor:1,targetFloor:1,duration:0,queued:null};
 const ua=navigator.userAgent||'';
 const isIOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -57,8 +59,7 @@ function syncElevatorDom(floorFloat,final=false){
   if(arrow)setTextIfChanged(arrow,smoothElevator.moving?(smoothElevator.targetFloor>smoothElevator.startFloor?'▲':'▼'):'•');
   if(msg&&smoothElevator.moving&&!final){
     const dir=smoothElevator.targetFloor>smoothElevator.startFloor?'올라가는':'내려가는';
-    const text=`${smoothElevator.targetFloor}층으로 ${dir} 중 · 현재 ${shown}층`;
-    setTextIfChanged(msg,text);
+    setTextIfChanged(msg,`${smoothElevator.targetFloor}층으로 ${dir} 중 · 현재 ${shown}층`);
   }
 }
 function finishSmoothElevator(){
@@ -75,7 +76,7 @@ function finishSmoothElevator(){
   if(K&&K.audio){K.audio.success();K.audio.speak(`${smoothElevator.current}층 입니다`)}
   const queued=smoothElevator.queued;
   smoothElevator.queued=null;
-  if(queued&&queued!==smoothElevator.current)setTimeout(()=>startSmoothElevator(queued),450);
+  if(queued&&queued!==smoothElevator.current)setTimeout(()=>startSmoothElevator(queued),DOOR_MS+300);
 }
 function stepSmoothElevator(now){
   if(!smoothElevator.moving||!document.querySelector('.elevator-shell')){stopSmoothMotion();return}
@@ -99,8 +100,7 @@ function startSmoothElevator(target){
   smoothElevator.moving=true;
   const goingUp=target>smoothElevator.startFloor;
   const distance=Math.abs(target-smoothElevator.startFloor);
-  smoothElevator.duration=Math.min(12000,Math.max(2400,1500+distance*520));
-  smoothElevator.startTime=performance.now()+320;
+  smoothElevator.duration=Math.max(FLOOR_TRAVEL_MS,distance*FLOOR_TRAVEL_MS);
   document.querySelector('.glass-cabin')?.classList.add('moving');
   document.querySelector('.cabin-frame')?.classList.add('doors-closed');
   const msg=document.querySelector('#elevatorMsg');
@@ -112,7 +112,7 @@ function startSmoothElevator(target){
       smoothElevator.startTime=performance.now();
       smoothElevator.raf=requestAnimationFrame(stepSmoothElevator);
     }
-  },320);
+  },DOOR_MS);
 }
 function upgradeElevator(){
   const track=document.querySelector('#floorTrack');
