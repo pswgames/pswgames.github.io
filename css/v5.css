@@ -1,0 +1,92 @@
+/* v5.0: immersive game mode + premium panoramic elevator */
+
+/* ---------- immersive / full-screen game presentation ---------- */
+body.game-fullscreen{overscroll-behavior:none;background:#f7fbff}
+body.game-fullscreen .app{width:100%;max-width:none;min-height:100dvh}
+body.game-fullscreen .appbar,
+body.game-fullscreen .bottom-nav{display:none!important}
+body.game-fullscreen .main{width:100%;max-width:980px;margin:0 auto;min-height:100dvh;padding:calc(8px + var(--safeT)) 12px calc(12px + var(--safeB))}
+body.game-fullscreen .subhead{margin:0 0 8px;min-height:46px}
+body.game-fullscreen .subhead .back-btn{width:42px;height:42px;border-radius:15px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px)}
+body.game-fullscreen .subhead h1{font-size:clamp(22px,5.5vw,30px)}
+body.game-fullscreen .subhead small{font-size:11px}
+
+/* ---------- elevator: high-end panoramic cabin ---------- */
+body.elevator-fullscreen{overflow:hidden;background:#07131f}
+body.elevator-fullscreen .main{height:100dvh;max-width:none;overflow:hidden;padding:calc(6px + var(--safeT)) 8px calc(6px + var(--safeB));background:radial-gradient(circle at 50% 0,#19344c 0,#0d2235 38%,#07131f 100%)}
+body.elevator-fullscreen .subhead{max-width:760px;margin:0 auto 5px;color:#f5fbff}
+body.elevator-fullscreen .subhead small{color:#a9c0d2}
+body.elevator-fullscreen .subhead .back-btn{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2);box-shadow:none}
+
+body.elevator-fullscreen .elevator-shell{max-width:760px;height:calc(100dvh - 64px - var(--safeT) - var(--safeB));margin:0 auto;display:grid;grid-template-rows:auto minmax(190px,1fr) auto auto auto;gap:6px;overflow:hidden;padding:8px 10px 9px;border-radius:26px;background:linear-gradient(155deg,rgba(25,40,54,.98),rgba(7,18,29,.98));border:1px solid rgba(183,212,231,.18);box-shadow:0 24px 80px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.08)}
+
+body.elevator-fullscreen .elevator-display{width:128px;min-height:52px;margin:0 auto 0;border-radius:14px;background:linear-gradient(180deg,#070b0f,#111820);border:1px solid #35424d;box-shadow:inset 0 0 0 2px #05080b,0 8px 18px rgba(0,0,0,.35);gap:4px}
+body.elevator-fullscreen .elevator-display span{font-size:18px;width:18px;color:#59e39b;text-shadow:0 0 8px rgba(89,227,155,.55)}
+body.elevator-fullscreen .elevator-display strong{font-size:48px;letter-spacing:-.08em;color:#ff5b50;text-shadow:0 0 13px rgba(255,91,80,.44)}
+body.elevator-fullscreen .elevator-display small{font-size:14px;margin-bottom:10px;color:#e9a39e}
+
+body.elevator-fullscreen .glass-cabin{height:auto;min-height:190px;border-radius:22px;border:0;background:#8fd4f5;box-shadow:0 15px 34px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.55);isolation:isolate}
+body.elevator-fullscreen .outside-view{background:linear-gradient(180deg,#79c8ed 0%,#bfe9fb 46%,#eaf5f7 72%,#d7e6df 100%)}
+body.elevator-fullscreen .sky-deco{display:none}
+body.elevator-fullscreen .floor-track{height:3300px;z-index:1;will-change:transform;overflow:hidden;background:linear-gradient(180deg,#76c7ed 0%,#a9def6 30%,#dceff5 61%,#d8e2da 100%)}
+body.elevator-fullscreen .outside-floor{opacity:0;pointer-events:none}
+
+/* scenic world inserted by v5.js */
+.scenic-world{position:absolute;inset:0;height:3300px;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#69bce6 0%,#8fd1ef 20%,#bfe8f7 46%,#edf5f4 71%,#d9e2d7 100%)}
+.scenic-world:before{content:"";position:absolute;inset:0;background:linear-gradient(112deg,rgba(255,255,255,.28),transparent 28%,transparent 72%,rgba(255,255,255,.12)),radial-gradient(circle at 73% 10%,rgba(255,245,199,.95) 0 44px,rgba(255,245,199,.25) 45px 80px,transparent 82px)}
+.scenic-cloud{position:absolute;height:30px;border-radius:999px;background:rgba(255,255,255,.78);filter:blur(.2px);box-shadow:34px -8px 0 5px rgba(255,255,255,.73),70px 2px 0 -2px rgba(255,255,255,.68);opacity:.88}
+.scenic-cloud.c1{top:600px;left:10%;width:84px}.scenic-cloud.c2{top:1040px;right:14%;width:104px;transform:scale(.8)}.scenic-cloud.c3{top:1450px;left:27%;width:74px;transform:scale(.65)}
+.scenic-haze{position:absolute;left:-10%;right:-10%;top:1430px;height:720px;background:linear-gradient(180deg,transparent,rgba(241,249,250,.76) 52%,rgba(226,239,239,.28));filter:blur(4px)}
+.scenic-ridge{position:absolute;left:-8%;right:-8%;top:1760px;height:300px;opacity:.28;background:linear-gradient(135deg,transparent 0 12%,#608597 12% 20%,transparent 20% 27%,#66899a 27% 39%,transparent 39% 46%,#5d8195 46% 58%,transparent 58% 66%,#688b9d 66% 78%,transparent 78%);filter:blur(1px)}
+.scenic-skyline{position:absolute;left:2%;right:2%;top:1840px;height:900px;display:flex;align-items:flex-end;gap:8px;opacity:.78}
+.scenic-building{position:relative;flex:1;min-width:24px;border-radius:7px 7px 0 0;background:linear-gradient(90deg,#426a81,#6f91a4 52%,#385c71);border:1px solid rgba(34,74,95,.28);box-shadow:inset 8px 0 14px rgba(255,255,255,.09)}
+.scenic-building:after{content:"";position:absolute;inset:12px 7px;background:repeating-linear-gradient(180deg,rgba(200,235,246,.78) 0 7px,transparent 7px 17px),repeating-linear-gradient(90deg,transparent 0 8px,rgba(213,239,246,.55) 8px 13px,transparent 13px 22px);opacity:.65}
+.scenic-building.b1{height:420px}.scenic-building.b2{height:650px;flex:1.28}.scenic-building.b3{height:510px}.scenic-building.b4{height:770px;flex:1.15}.scenic-building.b5{height:580px}.scenic-building.b6{height:360px}.scenic-building.b7{height:700px;flex:1.2}.scenic-building.b8{height:470px}
+.scenic-building.crown:before{content:"";position:absolute;left:30%;right:30%;top:-85px;height:88px;background:linear-gradient(90deg,transparent 40%,#466c7e 42% 58%,transparent 60%);clip-path:polygon(44% 0,56% 0,64% 100%,36% 100%)}
+.scenic-river{position:absolute;left:-10%;right:-10%;top:2540px;height:210px;background:linear-gradient(180deg,#6fb9d8,#72b6cf 48%,#7ec2d8);transform:skewY(-2deg);box-shadow:inset 0 20px 35px rgba(255,255,255,.22)}
+.scenic-river:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(168deg,rgba(255,255,255,.18) 0 2px,transparent 2px 19px)}
+.scenic-park{position:absolute;left:-5%;right:-5%;top:2710px;height:620px;background:linear-gradient(180deg,#7ebd75 0,#5f9f61 34%,#4e8956 100%);clip-path:polygon(0 5%,17% 0,33% 8%,48% 1%,65% 7%,79% 0,100% 8%,100% 100%,0 100%)}
+.scenic-road{position:absolute;left:14%;right:8%;top:2815px;height:450px;background:#8f979c;clip-path:polygon(44% 0,61% 0,100% 100%,0 100%);opacity:.9}
+.scenic-road:after{content:"";position:absolute;left:49%;top:20px;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#fff7c7 0 20px,transparent 20px 48px);transform:rotate(-3deg);transform-origin:top}
+.scenic-trees{position:absolute;left:0;right:0;top:2725px;font-size:34px;letter-spacing:16px;white-space:nowrap;opacity:.95}
+
+/* cabin interior overlay: steel frame, handrail, glass reflections */
+body.elevator-fullscreen .cabin-frame{z-index:8;background:linear-gradient(90deg,rgba(9,22,31,.12),transparent 10% 90%,rgba(9,22,31,.12));box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+body.elevator-fullscreen .rail.left{left:8px;transform:none;width:10px;background:linear-gradient(90deg,#26343d,#9caeb8 48%,#344650);box-shadow:1px 0 rgba(255,255,255,.28)}
+body.elevator-fullscreen .rail.right{right:8px;width:10px;opacity:1;background:linear-gradient(90deg,#26343d,#9caeb8 48%,#344650)}
+body.elevator-fullscreen .cabin-frame:before{content:"";position:absolute;left:23px;right:23px;bottom:34px;height:8px;border-radius:999px;background:linear-gradient(180deg,#d6e0e5,#6f7e87 46%,#becbd2);box-shadow:0 4px 8px rgba(0,0,0,.28)}
+body.elevator-fullscreen .cabin-frame:after{content:"";position:absolute;inset:0;background:linear-gradient(116deg,transparent 0 18%,rgba(255,255,255,.16) 19% 24%,transparent 25% 66%,rgba(255,255,255,.08) 67% 71%,transparent 72%);pointer-events:none}
+body.elevator-fullscreen .door{background:linear-gradient(90deg,rgba(59,77,89,.56),rgba(191,207,217,.25),rgba(54,73,86,.52));border-color:rgba(228,239,246,.3);backdrop-filter:blur(2px)}
+body.elevator-fullscreen .cabin-label{bottom:6px;background:rgba(5,17,27,.58);color:#d7e8f2;border:1px solid rgba(255,255,255,.2);font-size:10px;backdrop-filter:blur(8px)}
+
+body.elevator-fullscreen .elevator-msg{margin:0;padding:7px 10px;min-height:34px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#d6e8f4;font-size:13px;box-shadow:none}
+
+/* compact real-elevator button panel: smaller buttons, larger numerals, no page scrolling */
+body.elevator-fullscreen .floor-panel{display:grid;grid-template-columns:repeat(5,1fr);justify-items:center;align-items:center;gap:5px 4px;margin:0;padding:7px 8px;border-radius:18px;background:linear-gradient(145deg,#3d464d,#22292e);border:1px solid #56626a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 5px 12px rgba(0,0,0,.2)}
+body.elevator-fullscreen .floor-key{width:40px;height:40px;aspect-ratio:auto;border:1px solid #8b969c;border-radius:50%;padding:0;font-size:20px;font-weight:950;line-height:1;background:radial-gradient(circle at 35% 28%,#fbfcfc 0,#d6dade 53%,#899197 100%);color:#111a20;box-shadow:0 2px 4px rgba(0,0,0,.34),inset 0 0 0 2px rgba(255,255,255,.55)}
+body.elevator-fullscreen .floor-key.here{background:radial-gradient(circle at 35% 28%,#fff9b7 0,#ffd64d 56%,#ad7d00 100%);color:#2b2100;box-shadow:0 0 0 3px rgba(255,214,77,.16),0 2px 4px rgba(0,0,0,.35),inset 0 0 0 2px rgba(255,255,255,.52)}
+body.elevator-fullscreen .controls{margin:0}
+body.elevator-fullscreen #elevatorHome{min-height:34px;padding:0 14px;border-radius:12px;background:rgba(255,255,255,.09);color:#d5e7f2;border:1px solid rgba(255,255,255,.12);font-size:12px}
+
+@media(max-width:430px){
+  body.elevator-fullscreen .elevator-shell{height:calc(100dvh - 58px - var(--safeT) - var(--safeB));grid-template-rows:auto minmax(170px,1fr) auto auto auto;padding:7px 8px;gap:5px;border-radius:22px}
+  body.elevator-fullscreen .elevator-display{width:116px;min-height:48px}
+  body.elevator-fullscreen .elevator-display strong{font-size:44px}
+  body.elevator-fullscreen .floor-key{width:36px;height:36px;font-size:19px}
+  body.elevator-fullscreen .floor-panel{gap:4px 2px;padding:6px}
+  body.elevator-fullscreen .glass-cabin{min-height:170px;border-radius:19px}
+}
+@media(max-width:350px){
+  body.elevator-fullscreen .floor-key{width:33px;height:33px;font-size:17px}
+  body.elevator-fullscreen .floor-panel{grid-template-columns:repeat(5,1fr)}
+}
+@media(max-height:700px){
+  body.elevator-fullscreen .subhead small{display:none}
+  body.elevator-fullscreen .elevator-shell{height:calc(100dvh - 52px - var(--safeT) - var(--safeB));grid-template-rows:auto minmax(145px,1fr) auto auto auto}
+  body.elevator-fullscreen .elevator-display{min-height:44px;width:108px}
+  body.elevator-fullscreen .elevator-display strong{font-size:40px}
+  body.elevator-fullscreen .floor-key{width:32px;height:32px;font-size:17px}
+  body.elevator-fullscreen .floor-panel{padding:4px 8px;gap:3px}
+  body.elevator-fullscreen .elevator-msg{padding:5px 8px;min-height:30px}
+  body.elevator-fullscreen #elevatorHome{min-height:30px}
+}
