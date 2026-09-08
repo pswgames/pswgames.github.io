@@ -1,10 +1,8 @@
 (()=>{'use strict';
 const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
 const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
-const FLOOR_TRAVEL_MS=1500;
+const FLOOR_TRAVEL_MS=1000;
 const DOOR_MS=1500;
-const PHOTO_LOW_Y=-390;
-const PHOTO_HIGH_Y=-30;
 const smoothElevator={current:1,moving:false,raf:0,startTime:0,startFloor:1,targetFloor:1,duration:0,queued:null};
 const ua=navigator.userAgent||'';
 const isIOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -46,21 +44,25 @@ function setMode(dest,{native=false}={}){
   else if(MENU.has(dest))tryExitNativeFullscreen();
 }
 function scenicMarkup(){return`<div class="scenic-world" aria-hidden="true"></div>`}
-function trackY(floor){
-  const f=Math.max(1,Math.min(20,Number(floor)||1));
-  const ratio=(f-1)/19;
-  return PHOTO_LOW_Y+(PHOTO_HIGH_Y-PHOTO_LOW_Y)*ratio;
-}
 function eased(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 function setTextIfChanged(el,value){if(el&&el.textContent!==String(value))el.textContent=String(value)}
 function syncElevatorDom(floorFloat,final=false){
   const floorEl=document.querySelector('#elevatorFloor');
   const arrow=document.querySelector('#elevatorArrow');
   const track=document.querySelector('#floorTrack');
+  const photo=document.querySelector('.photo-landscape');
   const msg=document.querySelector('#elevatorMsg');
   const shown=Math.max(1,Math.min(20,Math.round(floorFloat)));
+  const ratio=Math.max(0,Math.min(1,(floorFloat-1)/19));
   setTextIfChanged(floorEl,shown);
-  if(track){track.style.transition='none';track.style.transform=`translate3d(0,${trackY(floorFloat)}px,0)`}
+  if(track){
+    track.style.transition='none';
+    track.style.transform='translate3d(0,0,0)';
+  }
+  if(photo){
+    const y=72-(ratio*44);
+    photo.style.backgroundPosition=`center ${y}%`;
+  }
   document.querySelectorAll('.floor-key').forEach(b=>b.classList.toggle('here',+b.dataset.floor===shown));
   if(arrow)setTextIfChanged(arrow,smoothElevator.moving?(smoothElevator.targetFloor>smoothElevator.startFloor?'▲':'▼'):'•');
   if(msg&&smoothElevator.moving&&!final){
