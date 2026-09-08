@@ -1,10 +1,5 @@
 (()=>{'use strict';
-function photoLandscape(){return `<div class="realistic-landscape photo-landscape" aria-hidden="true">
-  <i class="city-strip city-strip-1"></i>
-  <i class="city-strip city-strip-2"></i>
-  <i class="city-strip city-strip-3"></i>
-  <i class="city-strip city-strip-4"></i>
-</div>`}
+function photoLandscape(){return `<div class="realistic-landscape photo-landscape" aria-hidden="true"></div>`}
 function enhance(){
   const shell=document.querySelector('.elevator-shell');
   if(!shell)return;
