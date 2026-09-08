@@ -1,8 +1,10 @@
 (()=>{'use strict';
 const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
 const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
-const FLOOR_TRAVEL_MS=2000;
-const DOOR_MS=1200;
+const FLOOR_TRAVEL_MS=1500;
+const DOOR_MS=1500;
+const PHOTO_LOW_Y=-390;
+const PHOTO_HIGH_Y=-30;
 const smoothElevator={current:1,moving:false,raf:0,startTime:0,startFloor:1,targetFloor:1,duration:0,queued:null};
 const ua=navigator.userAgent||'';
 const isIOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -43,8 +45,12 @@ function setMode(dest,{native=false}={}){
   if(immersive&&native)tryEnterNativeFullscreen();
   else if(MENU.has(dest))tryExitNativeFullscreen();
 }
-function scenicMarkup(){return`<div class="scenic-world" aria-hidden="true"><div class="scenic-cloud c1"></div><div class="scenic-cloud c2"></div><div class="scenic-cloud c3"></div><div class="scenic-haze"></div><div class="scenic-ridge"></div><div class="scenic-skyline"><div class="scenic-building b1"></div><div class="scenic-building b2"></div><div class="scenic-building b3"></div><div class="scenic-building b4 crown"></div><div class="scenic-building b5"></div><div class="scenic-building b6"></div><div class="scenic-building b7"></div><div class="scenic-building b8"></div></div><div class="scenic-river"></div><div class="scenic-park"></div><div class="scenic-road"></div><div class="scenic-trees">🌳 🌲 🌳 🌲 🌳 🌲 🌳 🌲 🌳</div></div>`}
-function trackY(floor){return -(30-floor)*92}
+function scenicMarkup(){return`<div class="scenic-world" aria-hidden="true"></div>`}
+function trackY(floor){
+  const f=Math.max(1,Math.min(20,Number(floor)||1));
+  const ratio=(f-1)/19;
+  return PHOTO_LOW_Y+(PHOTO_HIGH_Y-PHOTO_LOW_Y)*ratio;
+}
 function eased(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
 function setTextIfChanged(el,value){if(el&&el.textContent!==String(value))el.textContent=String(value)}
 function syncElevatorDom(floorFloat,final=false){
@@ -147,13 +153,6 @@ document.addEventListener('click',e=>{
     e.preventDefault();
     e.stopImmediatePropagation();
     startSmoothElevator(+floorBtn.dataset.floor);
-    return;
-  }
-  const homeBtn=e.target.closest('#elevatorHome');
-  if(homeBtn&&document.querySelector('.elevator-shell')){
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    startSmoothElevator(1);
     return;
   }
 },true);
