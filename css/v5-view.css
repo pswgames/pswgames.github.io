@@ -1,19 +1,54 @@
-/* v5.11.0: tablet-first tiled HD elevator panorama */
-body.elevator-fullscreen .elevator-shell{grid-template-rows:auto minmax(300px,1fr) auto auto!important;gap:7px!important}
-body.elevator-fullscreen .glass-cabin{min-height:300px!important;border:1px solid rgba(225,241,250,.22)!important;background:rgba(185,226,246,.012)!important;box-shadow:0 18px 42px rgba(0,0,0,.32),inset 0 0 0 1px rgba(255,255,255,.08)!important}
-body.elevator-fullscreen .outside-view{position:absolute!important;inset:0!important;overflow:hidden!important;background-color:#78c8ee!important;background-image:url('/assets/elevator-city-tablet.avif?v=5.11.0'),url('/assets/elevator-city-real.jpg?v=5.11.0')!important;background-repeat:no-repeat,no-repeat!important;background-size:cover,cover!important;background-position:center 100%,center 100%;image-rendering:auto;backface-visibility:hidden;transform:translateZ(0)}
-body.elevator-fullscreen .elevator-photo-strip{position:absolute;left:0;top:0;width:100%;z-index:0;pointer-events:none;will-change:transform;transform:translate3d(0,0,0);backface-visibility:hidden}
+/* v5.12.0 — one responsive elevator layout; no fixed minimum cabin that clips the keys. */
+body.elevator-fullscreen{overflow:hidden;background:#07131f}
+body.elevator-fullscreen .main{display:flex;flex-direction:column;gap:6px;height:100vh;height:100dvh;min-height:0;max-width:none;overflow:hidden;padding:calc(6px + var(--safeT)) calc(10px + env(safe-area-inset-right,0px)) calc(8px + var(--safeB)) calc(10px + env(safe-area-inset-left,0px));background:radial-gradient(circle at 50% 0,#19344c,#07131f 95%)}
+body.elevator-fullscreen .subhead{flex:none;width:100%;max-width:1120px;min-height:44px;margin:0 auto;color:#f5fbff}
+body.elevator-fullscreen .subhead small{color:#b5c9d8}
+body.elevator-fullscreen .subhead .back-btn{flex:none;background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.2);box-shadow:none}
+body.elevator-fullscreen .elevator-shell{flex:1;min-height:0;min-width:0;width:100%;max-width:780px;margin:0 auto;padding:10px;display:grid;grid-template-areas:'display' 'view' 'status' 'panel';grid-template-rows:56px minmax(0,1fr) auto auto;gap:8px;overflow:hidden;border-radius:24px;background:linear-gradient(155deg,#192836,#07121d);border:1px solid rgba(183,212,231,.18);box-shadow:0 16px 45px rgba(0,0,0,.3)}
+body.elevator-fullscreen .elevator-display{grid-area:display;align-self:stretch;justify-self:center;width:132px;min-height:0;margin:0;border-radius:14px;background:linear-gradient(#070b0f,#111820);border:1px solid #35424d;box-shadow:inset 0 0 0 2px #05080b;gap:5px}
+body.elevator-fullscreen .elevator-display span{width:20px;font-size:20px;color:#59e39b;text-shadow:0 0 8px #59e39b66}
+body.elevator-fullscreen .elevator-display strong{font-size:48px;letter-spacing:-.06em;font-variant-numeric:tabular-nums;color:#ff5b50;text-shadow:0 0 13px #ff5b5066}
+body.elevator-fullscreen .elevator-display small{font-size:14px;margin-bottom:10px;color:#e9a39e}
+body.elevator-fullscreen .glass-cabin{grid-area:view;height:auto;min-height:0;min-width:0;isolation:isolate;border:1px solid rgba(225,241,250,.22);border-radius:19px;background:#78c8ee;box-shadow:0 12px 28px rgba(0,0,0,.24)}
+body.elevator-fullscreen .outside-view{position:absolute;inset:0;overflow:hidden;background-color:#78c8ee;background-image:url('/assets/elevator-city-tablet.avif?v=5.12.0'),url('/assets/elevator-city-real.jpg?v=5.12.0');background-repeat:no-repeat;background-position:center 100%;background-size:cover;transform:translateZ(0)}
+body.elevator-fullscreen .elevator-photo-strip{position:absolute;top:0;z-index:0;visibility:hidden;pointer-events:none;will-change:transform;backface-visibility:hidden}
+body.elevator-fullscreen .elevator-photo-strip.ready{visibility:visible}
 body.elevator-fullscreen .elevator-photo-strip img{display:block;width:100%;height:auto;margin:0;border:0;pointer-events:none;user-select:none;-webkit-user-drag:none}
-body.elevator-fullscreen .elevator-photo-strip img+img{margin-top:-1px}
-body.elevator-fullscreen .outside-view:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(110deg,rgba(255,255,255,.035),transparent 22%,transparent 78%,rgba(255,255,255,.012))}
-body.elevator-fullscreen .floor-track{display:none!important}
-body.elevator-fullscreen .outside-floor,body.elevator-fullscreen .scenic-world,body.elevator-fullscreen .photo-landscape,body.elevator-fullscreen .realistic-landscape{display:none!important}
-body.elevator-fullscreen .sky-deco{display:none!important}
-body.elevator-fullscreen .door{background:linear-gradient(105deg,rgba(255,255,255,.007),rgba(255,255,255,.000) 48%,rgba(205,232,245,.004))!important;border-color:rgba(238,248,255,.04)!important;backdrop-filter:none!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.003)!important}
-body.elevator-fullscreen .cabin-frame{z-index:8;background:linear-gradient(90deg,rgba(6,17,25,.018),transparent 5% 95%,rgba(6,17,25,.018))!important}
-body.elevator-fullscreen .cabin-frame:after{background:linear-gradient(116deg,transparent 0 22%,rgba(255,255,255,.018) 23% 24%,transparent 25% 74%,rgba(255,255,255,.006) 75% 76%,transparent 77%)!important}
-body.elevator-fullscreen .controls{display:none!important}
-@media(min-width:700px){body.elevator-fullscreen .elevator-shell{max-width:780px!important;grid-template-rows:auto minmax(320px,1fr) auto auto!important}body.elevator-fullscreen .glass-cabin{min-height:clamp(320px,44dvh,500px)!important}}
-@media(min-width:700px) and (orientation:landscape){body.elevator-fullscreen .glass-cabin{min-height:clamp(300px,43dvh,390px)!important}}
-@media(max-width:430px){body.elevator-fullscreen .elevator-shell{grid-template-rows:auto minmax(285px,1fr) auto auto!important}body.elevator-fullscreen .glass-cabin{min-height:285px!important}}
-@media(max-height:720px){body.elevator-fullscreen .elevator-shell{grid-template-rows:auto minmax(235px,1fr) auto auto!important}body.elevator-fullscreen .glass-cabin{min-height:235px!important}}
+body.elevator-fullscreen .outside-view:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(110deg,#ffffff09,transparent 22% 78%,#ffffff03)}
+body.elevator-fullscreen .glass-cabin.moving:after{display:none}
+body.elevator-fullscreen .cabin-frame{z-index:8;background:linear-gradient(90deg,#06111909,transparent 5% 95%,#06111909)}
+body.elevator-fullscreen .rail.left{left:8px;transform:none;width:8px;background:linear-gradient(90deg,#26343d,#9caeb8 48%,#344650)}
+body.elevator-fullscreen .rail.right{right:8px;width:8px;opacity:1;background:linear-gradient(90deg,#26343d,#9caeb8 48%,#344650)}
+body.elevator-fullscreen .cabin-frame:before{content:'';position:absolute;left:18px;right:18px;bottom:32px;height:7px;border-radius:99px;background:linear-gradient(#d6e0e5,#6f7e87 46%,#becbd2);box-shadow:0 3px 6px #0004}
+body.elevator-fullscreen .door{background:linear-gradient(105deg,#ffffff08,transparent 48%,#cde8f504);border-color:#eef8ff25;backdrop-filter:none;transition:transform 1.5s cubic-bezier(.45,0,.2,1)}
+body.elevator-fullscreen .cabin-label{bottom:5px;padding:4px 9px;background:#05111ba8;color:#d7e8f2;border:1px solid #ffffff33;font-size:10px}
+body.elevator-fullscreen .elevator-msg{grid-area:status;display:flex;align-items:center;justify-content:center;min-height:36px;min-width:0;margin:0;padding:7px 10px;border-radius:12px;border:1px solid #ffffff1f;background:#ffffff0c;color:#e4f1f9;font-size:13px;line-height:1.35;overflow-wrap:anywhere;text-align:center;box-shadow:none}
+body.elevator-fullscreen .floor-panel{grid-area:panel;min-height:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;align-items:center;gap:8px 6px;padding:10px;border-radius:18px;background:linear-gradient(145deg,#3d464d,#22292e);border:1px solid #56626a;box-shadow:inset 0 0 0 1px #ffffff14}
+body.elevator-fullscreen .floor-key{width:52px;height:52px;min-width:44px;min-height:44px;aspect-ratio:auto;padding:0;border:1px solid #8b969c;border-radius:50%;font-size:25px;font-weight:950;line-height:1;background:radial-gradient(circle at 35% 28%,#fbfcfc,#d6dade 53%,#899197);color:#111a20;box-shadow:0 2px 4px #0005,inset 0 0 0 2px #ffffff8c;touch-action:manipulation}
+body.elevator-fullscreen .floor-key.here{background:radial-gradient(circle at 35% 28%,#fff9b7,#ffd64d 56%,#ad7d00);color:#2b2100}
+body.elevator-fullscreen .floor-key.selected:not(.here){border-color:#ffd75b;box-shadow:0 0 0 3px #ffd75b88,inset 0 0 0 2px #ffffff8c}
+body.elevator-fullscreen .floor-key.queued{border-color:#80d4ff;box-shadow:0 0 0 3px #80d4ffaa,inset 0 0 0 2px #ffffff8c}
+body.elevator-fullscreen .floor-key:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-width:600px){
+ body.elevator-fullscreen .subhead h1{font-size:23px}
+ body.elevator-fullscreen .elevator-shell{padding:8px;gap:6px;grid-template-rows:52px minmax(0,1fr) auto auto}
+ body.elevator-fullscreen .floor-key{width:44px;height:44px;font-size:22px}
+ body.elevator-fullscreen .floor-panel{padding:8px;gap:6px}
+ body.elevator-fullscreen .elevator-msg{font-size:12px;min-height:34px;padding:6px}
+}
+@media(orientation:landscape) and (min-width:600px){
+ body.elevator-fullscreen .elevator-shell{max-width:1120px;grid-template-columns:minmax(0,1fr) 280px;grid-template-rows:56px minmax(0,1fr) auto;grid-template-areas:'view display' 'view panel' 'status status'}
+ body.elevator-fullscreen .floor-panel{align-content:center;gap:14px 6px;padding:10px 8px}
+ body.elevator-fullscreen .floor-key{width:46px;height:46px;font-size:24px}
+}
+@media(orientation:landscape) and (max-height:600px) and (min-width:600px){
+ body.elevator-fullscreen .main{gap:4px;padding-top:calc(4px + var(--safeT));padding-bottom:calc(4px + var(--safeB))}
+ body.elevator-fullscreen .subhead small{display:none}
+ body.elevator-fullscreen .subhead h1{font-size:21px}
+ body.elevator-fullscreen .elevator-shell{grid-template-columns:minmax(0,1fr) 260px;grid-template-rows:44px minmax(0,1fr) auto;padding:6px;gap:5px;border-radius:18px}
+ body.elevator-fullscreen .elevator-display strong{font-size:39px}
+ body.elevator-fullscreen .floor-panel{gap:4px;padding:5px}
+ body.elevator-fullscreen .floor-key{width:44px;height:44px;font-size:22px}
+ body.elevator-fullscreen .elevator-msg{font-size:12px;min-height:28px;padding:4px}
+}
+@media(max-width:360px){body.elevator-fullscreen .main{padding-left:6px;padding-right:6px}body.elevator-fullscreen .subhead small{font-size:10px}body.elevator-fullscreen .floor-panel{gap:4px;padding:6px}}
