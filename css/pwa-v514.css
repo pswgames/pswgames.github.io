@@ -1,0 +1,11 @@
+/* v5.14.0 — installed-window polish shared across the whole app. */
+html{background:#F7FBFF}
+html,body{overscroll-behavior:none}
+body{-webkit-touch-callout:none}
+button{user-select:none;-webkit-user-select:none}
+@media (display-mode:standalone){
+  html,body,.app{min-height:100vh;min-height:100dvh}
+  body{background:#F7FBFF}
+}
+body.seowoo-standalone .appbar{padding-top:calc(9px + env(safe-area-inset-top,0px))}
+body.seowoo-standalone .bottom-nav{padding-bottom:calc(7px + env(safe-area-inset-bottom,0px))}
