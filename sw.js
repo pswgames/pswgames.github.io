@@ -1,6 +1,31 @@
-const VERSION='seowoo-v5.11.0';
-const CORE=['/','/index.html','/css/app.css?v=5.11.0','/css/v4.css?v=5.11.0','/css/v5.css?v=5.11.0','/css/v5-motion.css?v=5.11.0','/css/v5-view.css?v=5.11.0','/data/content.js?v=5.11.0','/js/core.js?v=5.11.0','/js/games.js?v=5.11.0','/js/app-v4.js?v=5.11.0','/js/v5.js?v=5.11.0','/js/v5-panorama.js?v=5.11.0','/assets/elevator-city-tablet.avif?v=5.11.0','/assets/elevator-city-tile-0.avif?v=5.11.0','/assets/elevator-city-tile-1.avif?v=5.11.0','/assets/elevator-city-tile-2.avif?v=5.11.0','/assets/elevator-city-tile-3.avif?v=5.11.0','/assets/elevator-city-tile-4.avif?v=5.11.0','/assets/elevator-city-real.jpg?v=5.11.0','/manifest.webmanifest','/icons/icon-192.png','/icons/icon-512.png'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(CORE)));self.skipWaiting()});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==VERSION).map(k=>caches.delete(k)))));self.clients.claim()});
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==location.origin)return;if(e.request.mode==='navigate'){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const cp=r.clone();caches.open(VERSION).then(c=>c.put('/index.html',cp));return r}).catch(()=>caches.match('/index.html')));return}e.respondWith(caches.match(e.request).then(hit=>hit||fetch(e.request).then(r=>{if(r&&r.ok){const cp=r.clone();caches.open(VERSION).then(c=>c.put(e.request,cp))}return r})))});
-self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING')self.skipWaiting()});
+/* v5.12.0: matching app shell and asset cache; game records remain in localStorage. */
+const VERSION = 'seowoo-v5.12.0';
+const CORE = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png',
+  ...['/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/data/content.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/assets/elevator-city-tablet.avif','/assets/elevator-city-real.jpg', ...[0,1,2,3,4].map(i => `/assets/elevator-city-tile-${i}.avif`)].map(path => `${path}?v=5.12.0`)];
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(VERSION).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('seowoo-') && key !== VERSION).map(key => caches.delete(key)))).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', event => {
+  const request = event.request, url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request, {cache: 'no-store'}).then(response => {
+      if (!response.ok) throw new Error('Navigation unavailable');
+      const copy = response.clone();
+      event.waitUntil(caches.open(VERSION).then(cache => cache.put('/index.html', copy)));
+      return response;
+    }).catch(() => caches.open(VERSION).then(cache => cache.match('/index.html'))));
+    return;
+  }
+  event.respondWith(caches.open(VERSION).then(async cache => {
+    const hit = await cache.match(request);
+    if (hit) return hit;
+    const response = await fetch(request);
+    if (response.ok) event.waitUntil(cache.put(request, response.clone()));
+    return response;
+  }));
+});
+self.addEventListener('message', event => { if (event.data === 'SKIP_WAITING') self.skipWaiting(); });
