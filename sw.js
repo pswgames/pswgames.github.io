@@ -20,7 +20,7 @@ const CORE=[
   '/js/v5-panorama.js',
   '/js/v5.js',
   '/js/app-v4.js',
-  '/js/pwa-v515.js'
+  '/js/pwa-v5152.js'
 ];
 
 self.addEventListener('install',event=>{
