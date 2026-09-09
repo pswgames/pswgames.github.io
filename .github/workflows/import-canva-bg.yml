@@ -9,43 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch Canva design preview and build WebP
+      - name: Capture Canva design with Chrome
         shell: bash
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq imagemagick python3 >/dev/null
+          which google-chrome || which chromium || true
+          google-chrome --version || chromium --version || true
+          BROWSER=$(command -v google-chrome || command -v chromium)
+          "$BROWSER" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1024,1536 --force-device-scale-factor=1 --virtual-time-budget=15000 --screenshot=assets/canva-capture.png 'https://www.canva.com/d/CLeUK_mwmvjJeiF'
+          file assets/canva-capture.png
           python3 - <<'PY'
-          import html, re, urllib.request
-          url='https://www.canva.com/d/CLeUK_mwmvjJeiF'
-          req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
-          data=urllib.request.urlopen(req,timeout=30).read().decode('utf-8','ignore')
-          pats=[r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']']
-          img=None
-          for p in pats:
-            m=re.search(p,data,re.I)
-            if m: img=html.unescape(m.group(1)); break
-          if not img:
-            raise SystemExit('og:image not found')
-          print('IMAGE_URL='+img)
-          req=urllib.request.Request(img,headers={'User-Agent':'Mozilla/5.0'})
-          open('/tmp/canva-preview','wb').write(urllib.request.urlopen(req,timeout=60).read())
+          from PIL import Image
+          im=Image.open('assets/canva-capture.png')
+          print('capture',im.size)
           PY
-          file /tmp/canva-preview
-          identify /tmp/canva-preview
-          dims=$(identify -format '%w %h' /tmp/canva-preview)
-          set -- $dims
-          test "$1" -ge 700
-          test "$2" -ge 1000
-          convert /tmp/canva-preview -strip -quality 88 assets/elevator-city-ultra.webp
-          identify assets/elevator-city-ultra.webp
-          convert -size 512x512 xc:'#72C7F2' \( icons/icon-512.png -resize 360x360 \) -gravity center -composite icons/icon-maskable-512.png
-          rm -f .github/workflows/import-canva-bg.yml
-      - name: Commit imported assets
+      - name: Commit capture for inspection
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Import generated high-resolution elevator background'
+          git add assets/canva-capture.png
+          git commit -m 'Capture generated background preview for import'
           git push
