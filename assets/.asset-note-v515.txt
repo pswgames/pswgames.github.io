@@ -1,0 +1,1 @@
+v5.15.0 switches the elevator panorama to a standalone high-resolution WebP asset with UI rendered in HTML/CSS layers.
