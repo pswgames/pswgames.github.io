@@ -1,0 +1,32 @@
+name: Assemble ultra elevator background
+on:
+  push:
+    branches: [ultra-bg-transfer-temp]
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble high quality WebP and maskable icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .transfer/part-00.b64 .transfer/part-01.b64 .transfer/part-02.b64 .transfer/part-03.b64 | base64 -d > assets/elevator-city-ultra.webp
+          test "$(stat -c%s assets/elevator-city-ultra.webp)" -gt 500000
+          file assets/elevator-city-ultra.webp | grep -qi webp
+          identify assets/elevator-city-ultra.webp
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq imagemagick >/dev/null
+          convert -size 512x512 xc:'#72C7F2' \( icons/icon-512.png -resize 360x360 \) -gravity center -composite icons/icon-maskable-512.png
+          identify icons/icon-maskable-512.png
+          rm -rf .transfer .github/workflows/assemble-ultra-bg.yml
+      - name: Commit assembled assets
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Assemble ultra elevator background and maskable PWA icon'
+          git push
