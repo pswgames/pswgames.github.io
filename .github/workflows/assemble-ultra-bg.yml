@@ -13,10 +13,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          : > assets/elevator-city-ultra.webp
-          for f in .transfer/part-00.b64 .transfer/part-01.b64 .transfer/part-02.b64 .transfer/part-03.b64; do
-            base64 -d "$f" >> assets/elevator-city-ultra.webp
-          done
+          cat .transfer/part-00.b64 .transfer/part-01.b64 .transfer/part-02.b64 .transfer/part-03.b64 > assets/elevator-city-ultra.webp
           bytes=$(stat -c%s assets/elevator-city-ultra.webp)
           echo "assembled bytes=$bytes"
           test "$bytes" -gt 500000
