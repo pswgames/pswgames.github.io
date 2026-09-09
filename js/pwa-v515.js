@@ -1,8 +1,7 @@
-/* v5.15.1 — Android/Chrome installable PWA flow with explicit readiness state. */
+/* v5.15.2 — stable Android/Chrome PWA install flow without forced refresh loops. */
 (()=>{
   'use strict';
   let deferred=null;
-  let refreshing=false;
   const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
   const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
   const isAndroidChrome=()=>/Android/i.test(navigator.userAgent)&&/Chrome\//i.test(navigator.userAgent)&&!/EdgA|OPR\//i.test(navigator.userAgent);
@@ -27,12 +26,11 @@
     document.querySelector('#installBtn')?.setAttribute('hidden','');
   });
 
+  // Do not reload on service-worker controller changes. A newly activated worker
+  // takes control in the background and the current play screen must remain intact.
   if('serviceWorker' in navigator){
-    navigator.serviceWorker.ready.then(reg=>reg.update().catch(()=>{})).catch(()=>{});
     navigator.serviceWorker.addEventListener('controllerchange',()=>{
-      if(refreshing) return;
-      refreshing=true;
-      setTimeout(()=>location.reload(),80);
+      document.documentElement.dataset.swUpdated='1';
     });
   }
 
@@ -74,7 +72,7 @@
         action.textContent='서우 놀이터 앱 설치';
         action.onclick=promptInstall;
       }else if(isAndroidChrome()){
-        steps.innerHTML='<div class="install-step">Chrome이 설치 가능 여부를 확인하고 있어요.</div><div class="install-step">이 화면을 <b>한 번 이상 눌러서 사용</b>하고 약 <b>30초 이상</b> 연 뒤 다시 설치 버튼을 눌러줘. 설치 조건이 충족되면 "바로가기 추가"가 아니라 <b>앱 설치</b>가 활성화돼요.</div><div class="install-step">기존에 Chrome 마크가 붙은 바로가기는 삭제해도 돼요.</div>';
+        steps.innerHTML='<div class="install-step">Chrome이 설치 가능 여부를 확인하고 있어요.</div><div class="install-step">잠시 사용한 뒤 다시 설치 버튼을 눌러줘. 설치 조건이 충족되면 <b>앱 설치</b>가 활성화돼요.</div>';
         action.textContent='확인';
         action.onclick=close;
       }else{
