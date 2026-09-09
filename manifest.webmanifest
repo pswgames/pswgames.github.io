@@ -4,7 +4,7 @@
   "short_name": "서우놀이터",
   "description": "숫자·말글·생각·생활습관·음악을 즐기는 서우의 놀이 공간",
   "lang": "ko-KR",
-  "start_url": "/?source=pwa&sv=5.15.1",
+  "start_url": "/?source=pwa&sv=5.15.2",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
