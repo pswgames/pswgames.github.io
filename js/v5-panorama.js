@@ -1,8 +1,7 @@
-/* v5.14.0 — one coherent panorama with faster visual travel and tablet-safe resize. */
+/* v5.14.2 — external WebP panorama with tablet-safe resize; external image only. */
 (()=>{
   'use strict';
-  const chunks=window.__SEOWOO_PANO||[];
-  const SRC=chunks.length?'data:image/webp;base64,'+chunks.join(''):'/assets/elevator-city-tablet.avif?v=5.14.0';
+  const SRC='/assets/elevator-city-hq.webp?v=5.14.2';
   window.SeowooPanorama={
     mount(view){
       const img=document.createElement('img');
@@ -10,7 +9,7 @@
       let floor=1,alive=true,shift=0,raf=0,observer=null,loaded=false;
       view.replaceChildren(img);view.style.backgroundImage=`url('${SRC}')`;
       function paint(){if(!alive)return;const progress=Math.max(0,Math.min(1,(floor-1)/19));const y=-shift*(1-progress);img.style.transform=`translate3d(-50%,${y.toFixed(2)}px,0) scale(1.018)`;view.style.setProperty('--panorama-progress',progress.toFixed(4))}
-      function resize(){if(!alive||!view.isConnected)return;const vw=view.clientWidth,vh=view.clientHeight;if(!vw||!vh)return;const iw=img.naturalWidth||700,ih=img.naturalHeight||1244;const minTravel=Math.max(vh*.38,230);const cover=Math.max(vw/iw,(vh+minTravel)/ih);const scale=cover*(window.innerWidth>window.innerHeight?1.08:1.04);const w=iw*scale,h=ih*scale;img.style.width=`${w}px`;img.style.height=`${h}px`;shift=Math.max(0,h-vh);paint()}
+      function resize(){if(!alive||!view.isConnected)return;const vw=view.clientWidth,vh=view.clientHeight;if(!vw||!vh)return;const iw=img.naturalWidth||1400,ih=img.naturalHeight||2488;const minTravel=Math.max(vh*.38,230);const cover=Math.max(vw/iw,(vh+minTravel)/ih);const scale=cover*(window.innerWidth>window.innerHeight?1.08:1.04);const w=iw*scale,h=ih*scale;img.style.width=`${w}px`;img.style.height=`${h}px`;shift=Math.max(0,h-vh);paint()}
       function requestResize(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;resize()})}
       img.addEventListener('load',()=>{loaded=true;view.classList.add('panorama-ready');resize()},{once:true});
       img.addEventListener('error',()=>{view.classList.add('panorama-fallback')},{once:true});
