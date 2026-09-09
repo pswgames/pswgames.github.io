@@ -1,0 +1,28 @@
+name: Build maskable PWA icon
+on:
+  push:
+    branches: [pwa-v515-temp]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build safe-zone maskable icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq imagemagick >/dev/null
+          convert -size 512x512 xc:'#72C7F2' \( icons/icon-512.png -resize 360x360 \) -gravity center -composite icons/icon-maskable-512.png
+          identify icons/icon-maskable-512.png
+          rm -f .github/workflows/build-maskable.yml
+      - name: Commit icon
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Add dedicated maskable PWA icon'
+          git push
