@@ -1,10 +1,11 @@
 (()=>{'use strict';
 const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
 const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
-const FLOOR_TRAVEL_MS=2000;
+const FLOOR_TRAVEL_MS=1750;
 const DOOR_MS=1500;
-const BG_START=98;
-const BG_END=2;
+const BG_START=100;
+const BG_END=0;
+const BG_LEAD=.055;
 const smoothElevator={current:1,moving:false,raf:0,startTime:0,startFloor:1,targetFloor:1,duration:0,queued:null};
 const ua=navigator.userAgent||'';
 const isIOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -13,17 +14,18 @@ function tryEnterNativeFullscreen(){if(isIOS||isStandalone)return;try{if(documen
 function tryExitNativeFullscreen(){try{if(document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
 function stopSmoothMotion(){if(smoothElevator.raf)cancelAnimationFrame(smoothElevator.raf);smoothElevator.raf=0;smoothElevator.moving=false;smoothElevator.queued=null}
 function setMode(dest,{native=false}={}){const immersive=IMMERSIVE.has(dest),prev=document.body.dataset.playRoute||'';if(prev==='elevator'&&dest!=='elevator')stopSmoothMotion();document.body.classList.toggle('game-fullscreen',immersive);document.body.classList.toggle('elevator-fullscreen',dest==='elevator');document.body.dataset.playRoute=dest||'';if(immersive&&native)tryEnterNativeFullscreen();else if(MENU.has(dest))tryExitNativeFullscreen()}
-function eased(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+function elevatorMotion(t){const a=.18,v=1/(1-a);if(t<=a)return .5*(v/a)*t*t;if(t<1-a)return .5*v*a+v*(t-a);const u=1-t;return 1-.5*(v/a)*u*u}
+function backgroundMotion(raw,travel){return Math.max(0,Math.min(1,travel+BG_LEAD*Math.sin(Math.PI*raw)))}
 function setTextIfChanged(el,value){if(el&&el.textContent!==String(value))el.textContent=String(value)}
 function backgroundY(floorFloat){const ratio=Math.max(0,Math.min(1,(floorFloat-1)/19));return BG_START-(BG_START-BG_END)*ratio}
-function syncElevatorDom(floorFloat,final=false){
+function syncElevatorDom(floorFloat,final=false,bgFloorFloat=floorFloat){
   const floorEl=document.querySelector('#elevatorFloor');
   const arrow=document.querySelector('#elevatorArrow');
   const view=document.querySelector('.outside-view');
   const msg=document.querySelector('#elevatorMsg');
   const shown=Math.max(1,Math.min(20,Math.round(floorFloat)));
   setTextIfChanged(floorEl,shown);
-  if(view){view.style.backgroundPosition=`center ${backgroundY(floorFloat)}%`}
+  if(view){const y=backgroundY(bgFloorFloat);view.style.backgroundPosition=`center ${y}%,center ${y}%`}
   document.querySelectorAll('.floor-key').forEach(b=>b.classList.toggle('here',+b.dataset.floor===shown));
   if(arrow)setTextIfChanged(arrow,smoothElevator.moving?(smoothElevator.targetFloor>smoothElevator.startFloor?'▲':'▼'):'•');
   if(msg&&smoothElevator.moving&&!final){const dir=smoothElevator.targetFloor>smoothElevator.startFloor?'올라가는':'내려가는';setTextIfChanged(msg,`${smoothElevator.targetFloor}층으로 ${dir} 중 · 현재 ${shown}층`)}
@@ -38,7 +40,17 @@ function finishSmoothElevator(){
   const K=window.SeowooCore;if(K&&K.audio){K.audio.success();K.audio.speak(`${smoothElevator.current}층 입니다`)}
   const queued=smoothElevator.queued;smoothElevator.queued=null;if(queued&&queued!==smoothElevator.current)setTimeout(()=>startSmoothElevator(queued),DOOR_MS+300)
 }
-function stepSmoothElevator(now){if(!smoothElevator.moving||!document.querySelector('.elevator-shell')){stopSmoothMotion();return}const raw=Math.min(1,(now-smoothElevator.startTime)/smoothElevator.duration);const p=eased(raw);const floor=smoothElevator.startFloor+(smoothElevator.targetFloor-smoothElevator.startFloor)*p;syncElevatorDom(floor,false);if(raw<1)smoothElevator.raf=requestAnimationFrame(stepSmoothElevator);else finishSmoothElevator()}
+function stepSmoothElevator(now){
+  if(!smoothElevator.moving||!document.querySelector('.elevator-shell')){stopSmoothMotion();return}
+  const raw=Math.min(1,(now-smoothElevator.startTime)/smoothElevator.duration);
+  const travel=elevatorMotion(raw);
+  const bgTravel=backgroundMotion(raw,travel);
+  const delta=smoothElevator.targetFloor-smoothElevator.startFloor;
+  const floor=smoothElevator.startFloor+delta*travel;
+  const bgFloor=smoothElevator.startFloor+delta*bgTravel;
+  syncElevatorDom(floor,false,bgFloor);
+  if(raw<1)smoothElevator.raf=requestAnimationFrame(stepSmoothElevator);else finishSmoothElevator()
+}
 function startSmoothElevator(target){
   target=Math.max(1,Math.min(20,Number(target)||1));
   if(smoothElevator.moving){smoothElevator.queued=target;return}
