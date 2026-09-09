@@ -1,6 +1,6 @@
-/* v5.14.2 — network-first updates + offline shell, including external elevator WebP. */
-const VERSION='seowoo-v5.14.2';
-const V='5.14.2';
+/* v5.14.3 — network-first updates + offline shell, including ultra-sharp external elevator WebP. */
+const VERSION='seowoo-v5.14.3';
+const V='5.14.3';
 const CORE=[
   '/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png',
   '/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/elevator-reference-v1.css','/css/pwa-v514.css',
