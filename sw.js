@@ -1,5 +1,5 @@
-/* v5.15.1 — resilient standalone PWA service worker. */
-const VERSION='seowoo-static-5.15.1';
+/* v5.15.2 — stable standalone PWA service worker; no per-navigation update loop. */
+const VERSION='seowoo-static-5.15.2';
 const CORE=[
   '/',
   '/index.html',
@@ -76,7 +76,6 @@ self.addEventListener('fetch',event=>{
   if(url.origin!==self.location.origin) return;
 
   if(request.mode==='navigate'){
-    event.waitUntil(self.registration.update().catch(()=>{}));
     event.respondWith(networkFirstNavigation(request));
     return;
   }
