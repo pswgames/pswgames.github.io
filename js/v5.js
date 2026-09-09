@@ -1,79 +1,148 @@
-(()=>{'use strict';
-const IMMERSIVE=new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
-const MENU=new Set(['home','numbers','language','think','music','treasure','parent']);
-const FLOOR_TRAVEL_MS=1750;
-const DOOR_MS=1500;
-const BG_START=100;
-const BG_END=0;
-const BG_LEAD=.055;
-const smoothElevator={current:1,moving:false,raf:0,startTime:0,startFloor:1,targetFloor:1,duration:0,queued:null};
-const ua=navigator.userAgent||'';
-const isIOS=/iPad|iPhone|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
-const isStandalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
-function tryEnterNativeFullscreen(){if(isIOS||isStandalone)return;try{if(document.fullscreenElement)return;const el=document.documentElement;if(el.requestFullscreen){const p=el.requestFullscreen({navigationUI:'hide'});if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
-function tryExitNativeFullscreen(){try{if(document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();if(p&&p.catch)p.catch(()=>{})}}catch(e){}}
-function stopSmoothMotion(){if(smoothElevator.raf)cancelAnimationFrame(smoothElevator.raf);smoothElevator.raf=0;smoothElevator.moving=false;smoothElevator.queued=null}
-function setMode(dest,{native=false}={}){const immersive=IMMERSIVE.has(dest),prev=document.body.dataset.playRoute||'';if(prev==='elevator'&&dest!=='elevator')stopSmoothMotion();document.body.classList.toggle('game-fullscreen',immersive);document.body.classList.toggle('elevator-fullscreen',dest==='elevator');document.body.dataset.playRoute=dest||'';if(immersive&&native)tryEnterNativeFullscreen();else if(MENU.has(dest))tryExitNativeFullscreen()}
-function elevatorMotion(t){const a=.18,v=1/(1-a);if(t<=a)return .5*(v/a)*t*t;if(t<1-a)return .5*v*a+v*(t-a);const u=1-t;return 1-.5*(v/a)*u*u}
-function backgroundMotion(raw,travel){return Math.max(0,Math.min(1,travel+BG_LEAD*Math.sin(Math.PI*raw)))}
-function setTextIfChanged(el,value){if(el&&el.textContent!==String(value))el.textContent=String(value)}
-function backgroundY(floorFloat){const ratio=Math.max(0,Math.min(1,(floorFloat-1)/19));return BG_START-(BG_START-BG_END)*ratio}
-function syncElevatorDom(floorFloat,final=false,bgFloorFloat=floorFloat){
-  const floorEl=document.querySelector('#elevatorFloor');
-  const arrow=document.querySelector('#elevatorArrow');
-  const view=document.querySelector('.outside-view');
-  const msg=document.querySelector('#elevatorMsg');
-  const shown=Math.max(1,Math.min(20,Math.round(floorFloat)));
-  setTextIfChanged(floorEl,shown);
-  if(view){const y=backgroundY(bgFloorFloat);view.style.backgroundPosition=`center ${y}%,center ${y}%`}
-  document.querySelectorAll('.floor-key').forEach(b=>b.classList.toggle('here',+b.dataset.floor===shown));
-  if(arrow)setTextIfChanged(arrow,smoothElevator.moving?(smoothElevator.targetFloor>smoothElevator.startFloor?'▲':'▼'):'•');
-  if(msg&&smoothElevator.moving&&!final){const dir=smoothElevator.targetFloor>smoothElevator.startFloor?'올라가는':'내려가는';setTextIfChanged(msg,`${smoothElevator.targetFloor}층으로 ${dir} 중 · 현재 ${shown}층`)}
-}
-function finishSmoothElevator(){
-  if(smoothElevator.raf)cancelAnimationFrame(smoothElevator.raf);
-  smoothElevator.raf=0;smoothElevator.current=smoothElevator.targetFloor;smoothElevator.moving=false;
-  syncElevatorDom(smoothElevator.current,true);
-  document.querySelector('.glass-cabin')?.classList.remove('moving');
-  document.querySelector('.cabin-frame')?.classList.remove('doors-closed');
-  const msg=document.querySelector('#elevatorMsg');if(msg)setTextIfChanged(msg,`딩동! ${smoothElevator.current}층에 도착했어요!`);
-  const K=window.SeowooCore;if(K&&K.audio){K.audio.success();K.audio.speak(`${smoothElevator.current}층 입니다`)}
-  const queued=smoothElevator.queued;smoothElevator.queued=null;if(queued&&queued!==smoothElevator.current)setTimeout(()=>startSmoothElevator(queued),DOOR_MS+300)
-}
-function stepSmoothElevator(now){
-  if(!smoothElevator.moving||!document.querySelector('.elevator-shell')){stopSmoothMotion();return}
-  const raw=Math.min(1,(now-smoothElevator.startTime)/smoothElevator.duration);
-  const travel=elevatorMotion(raw);
-  const bgTravel=backgroundMotion(raw,travel);
-  const delta=smoothElevator.targetFloor-smoothElevator.startFloor;
-  const floor=smoothElevator.startFloor+delta*travel;
-  const bgFloor=smoothElevator.startFloor+delta*bgTravel;
-  syncElevatorDom(floor,false,bgFloor);
-  if(raw<1)smoothElevator.raf=requestAnimationFrame(stepSmoothElevator);else finishSmoothElevator()
-}
-function startSmoothElevator(target){
-  target=Math.max(1,Math.min(20,Number(target)||1));
-  if(smoothElevator.moving){smoothElevator.queued=target;return}
-  if(target===smoothElevator.current){const K=window.SeowooCore;if(K&&K.audio){K.audio.success();K.audio.speak(`${target}층 입니다`)}return}
-  smoothElevator.startFloor=smoothElevator.current;smoothElevator.targetFloor=target;smoothElevator.moving=true;
-  const goingUp=target>smoothElevator.startFloor;const distance=Math.abs(target-smoothElevator.startFloor);
-  smoothElevator.duration=Math.max(FLOOR_TRAVEL_MS,distance*FLOOR_TRAVEL_MS);
-  document.querySelector('.glass-cabin')?.classList.add('moving');
-  document.querySelector('.cabin-frame')?.classList.add('doors-closed');
-  const msg=document.querySelector('#elevatorMsg');if(msg)setTextIfChanged(msg,`${target}층으로 ${goingUp?'올라갑니다':'내려갑니다'}`);
-  const K=window.SeowooCore;if(K&&K.audio)K.audio.speak(`${target}층, ${goingUp?'올라갑니다':'내려갑니다'}`);
-  setTimeout(()=>{if(smoothElevator.moving&&document.querySelector('.elevator-shell')){smoothElevator.startTime=performance.now();smoothElevator.raf=requestAnimationFrame(stepSmoothElevator)}},DOOR_MS)
-}
-function upgradeElevator(){
-  document.querySelector('#floorTrack')?.remove();
-  document.querySelector('.glass-cabin')?.classList.add('premium-panorama');
-  document.querySelectorAll('.floor-key').forEach(btn=>{const f=btn.textContent.trim();btn.setAttribute('aria-label',`${f}층`);btn.title=`${f}층`});
-  syncElevatorDom(smoothElevator.current,true)
-}
-function detectCurrentScreen(){const main=document.querySelector('#main');if(!main)return;if(main.querySelector('.elevator-shell')){upgradeElevator();if(document.body.dataset.playRoute!=='elevator')setMode('elevator');return}if(main.querySelector('.bathroom-scene')&&document.body.dataset.playRoute!=='potty')setMode('potty')}
-document.addEventListener('click',e=>{const floorBtn=e.target.closest('.floor-key');if(floorBtn&&document.querySelector('.elevator-shell')){e.preventDefault();e.stopImmediatePropagation();startSmoothElevator(+floorBtn.dataset.floor);return}},true);
-document.addEventListener('click',e=>{const target=e.target.closest('[data-go]');if(!target)return;const dest=target.dataset.go;if(IMMERSIVE.has(dest)||MENU.has(dest))setMode(dest,{native:IMMERSIVE.has(dest)})},true);
-document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&IMMERSIVE.has(document.body.dataset.playRoute||''))document.body.classList.add('game-fullscreen')});
-const main=document.querySelector('#main');if(main){let scheduled=false;new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;detectCurrentScreen()})}).observe(main,{childList:true})}
-window.addEventListener('pageshow',detectCurrentScreen);setTimeout(detectCurrentScreen,0);
+/* v5.12.0 — one elevator clock; route and visibility-safe lifecycle. */
+(() => {
+  'use strict';
+  const IMMERSIVE = new Set(['numberBoard','quantity','numberOrder','finger','elevator','alphabet','englishWords','koreanWords','hangul','color','shape','memory','potty','together']);
+  const FLOOR_MS = 1750, RAMP_MS = 250, DOOR_MS = 1500, DWELL_MS = 300;
+  const clampFloor = n => Math.max(1, Math.min(20, Number(n) || 1));
+  const state = { current: 1, position: 1, start: 1, target: 1, queued: null, phase: 'idle', phaseStart: 0, duration: 0, raf: 0, pausedAt: null };
+  let dom = null, panorama = null;
+  const audio = () => window.SeowooCore?.audio;
+  function text(el, value) { if (el && el.textContent !== String(value)) el.textContent = String(value); }
+  function schedule() {
+    if (dom && state.phase !== 'idle' && state.pausedAt === null && !document.hidden && !state.raf) state.raf = requestAnimationFrame(tick);
+  }
+  function paint() {
+    if (!dom) return;
+    const travelling = state.phase === 'travel';
+    dom.shell.dataset.phase = state.phase;
+    dom.shell.dataset.position = state.position.toFixed(4);
+    dom.shell.dataset.target = String(state.target);
+    text(dom.floor, state.current);
+    text(dom.arrow, state.phase === 'closing' || travelling ? (state.target > state.start ? '▲' : '▼') : '•');
+    dom.cabin.classList.toggle('moving', travelling);
+    dom.frame.classList.toggle('doors-closed', state.phase === 'closing' || travelling);
+    dom.keys.forEach(key => {
+      const floor = +key.dataset.floor;
+      key.classList.toggle('here', floor === state.current);
+      key.classList.toggle('selected', state.phase !== 'idle' && floor === state.target);
+      key.classList.toggle('queued', floor === state.queued);
+      key.setAttribute('aria-pressed', String((state.phase !== 'idle' && floor === state.target) || floor === state.queued));
+      if (floor === state.current) key.setAttribute('aria-current', 'true'); else key.removeAttribute('aria-current');
+    });
+    let message = `${state.current}층이에요. 어디로 갈까?`;
+    if (state.phase === 'closing') message = `${state.target}층으로 출발해요 · 문이 닫혀요`;
+    else if (travelling) message = `${state.target}층으로 ${state.target > state.start ? '올라가는' : '내려가는'} 중 · 현재 ${state.current}층`;
+    else if (state.phase === 'opening' || state.phase === 'waiting') message = `딩동! ${state.current}층에 도착했어요!`;
+    if (state.queued !== null) message += ` · 다음 ${state.queued}층`;
+    text(dom.message, message);
+    panorama?.setFloor(state.position);
+  }
+  function begin(target) {
+    if (!dom) return;
+    state.start = state.current; state.target = target; state.position = state.current;
+    state.queued = null; state.phase = 'closing'; state.phaseStart = performance.now();
+    // Constant cruise speed; only 250 ms at each end is used for acceleration/deceleration.
+    state.duration = Math.abs(target - state.start) * FLOOR_MS + RAMP_MS;
+    paint(); audio()?.unlock(); audio()?.speak(`${target}층, ${target > state.start ? '올라갑니다' : '내려갑니다'}`); schedule();
+  }
+  function select(target) {
+    if (!dom) return;
+    target = Math.round(clampFloor(target));
+    if (state.phase !== 'idle') {
+      state.queued = target === state.target ? null : target;
+      paint(); return;
+    }
+    if (target === state.current) { audio()?.success(); audio()?.speak(`${target}층 입니다`); return; }
+    begin(target);
+  }
+  function travelled(ms) {
+    const distance = Math.abs(state.target - state.start);
+    if (ms <= RAMP_MS) return ms * ms / (2 * RAMP_MS * FLOOR_MS);
+    if (ms >= state.duration - RAMP_MS) return distance - Math.pow(state.duration - ms, 2) / (2 * RAMP_MS * FLOOR_MS);
+    return (ms - RAMP_MS / 2) / FLOOR_MS;
+  }
+  function tick(now) {
+    state.raf = 0;
+    if (!dom || !dom.shell.isConnected) { unmount(); return; }
+    if (document.hidden || state.pausedAt !== null) return;
+    const elapsed = Math.max(0, now - state.phaseStart);
+    if (state.phase === 'closing' && elapsed >= DOOR_MS) {
+      state.phase = 'travel'; state.phaseStart += DOOR_MS;
+    }
+    if (state.phase === 'travel') {
+      const ms = Math.min(state.duration, Math.max(0, now - state.phaseStart));
+      const direction = Math.sign(state.target - state.start), distance = Math.abs(state.target - state.start);
+      const moved = Math.max(0, Math.min(distance, travelled(ms)));
+      state.position = state.start + direction * moved;
+      // Do not announce the destination half a floor before the cabin stops.
+      state.current = state.start + direction * Math.min(distance - 1, Math.floor(moved + 1e-7));
+      if (ms >= state.duration) {
+        state.current = state.target; state.position = state.target;
+        state.phase = 'opening'; state.phaseStart = now;
+        audio()?.success(); audio()?.speak(`${state.current}층 입니다`);
+      }
+    } else if (state.phase === 'opening' && elapsed >= DOOR_MS) {
+      state.phase = 'waiting'; state.phaseStart = now;
+    } else if (state.phase === 'waiting' && elapsed >= DWELL_MS) {
+      const next = state.queued;
+      state.queued = null; state.phase = 'idle';
+      if (next !== null && next !== state.current) { begin(next); return; }
+    }
+    paint(); schedule();
+  }
+  function unmount() {
+    if (state.raf) cancelAnimationFrame(state.raf);
+    state.raf = 0;
+    // Leaving a game cancels ALL pending travel and door phases; no delayed restart.
+    if (dom) dom.shell.removeEventListener('click', onFloorClick);
+    panorama?.destroy(); panorama = null; dom = null;
+    state.current = Math.round(clampFloor(state.position)); state.position = state.current;
+    state.target = state.current; state.phase = 'idle'; state.queued = null; state.pausedAt = null;
+  }
+  function onFloorClick(event) {
+    const key = event.target.closest('[data-floor]');
+    if (key && dom?.shell.contains(key)) select(key.dataset.floor);
+  }
+  function mount(shell) {
+    if (!shell || shell === dom?.shell) return;
+    unmount();
+    dom = { shell, floor: shell.querySelector('#elevatorFloor'), arrow: shell.querySelector('#elevatorArrow'), message: shell.querySelector('#elevatorMsg'), cabin: shell.querySelector('.glass-cabin'), frame: shell.querySelector('.cabin-frame'), keys: [...shell.querySelectorAll('[data-floor]')] };
+    shell.addEventListener('click', onFloorClick);
+    panorama = window.SeowooPanorama.mount(shell.querySelector('.outside-view'));
+    paint();
+  }
+  function pause() {
+    if (!dom || state.pausedAt !== null) return;
+    state.pausedAt = performance.now();
+    if (state.raf) cancelAnimationFrame(state.raf);
+    state.raf = 0;
+  }
+  function resume() {
+    if (!dom || document.hidden) return;
+    if (state.pausedAt !== null) state.phaseStart += performance.now() - state.pausedAt;
+    state.pausedAt = null; panorama?.resize(); schedule();
+  }
+  document.addEventListener('visibilitychange', () => document.hidden ? pause() : resume());
+  window.addEventListener('pagehide', pause);
+  window.addEventListener('pageshow', resume);
+  window.SeowooElevator = { mount, unmount, select, get current() { return state.current; } };
+
+  const isIOS = /iPad|iPhone|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function setMode(route, native = false) {
+    if (route !== 'elevator') unmount();
+    const immersive = IMMERSIVE.has(route);
+    document.body.classList.toggle('game-fullscreen', immersive);
+    document.body.classList.toggle('elevator-fullscreen', route === 'elevator');
+    document.body.dataset.playRoute = route;
+    if (immersive && native && !isIOS && !matchMedia('(display-mode: standalone)').matches) {
+      try { const result = document.documentElement.requestFullscreen?.({ navigationUI: 'hide' }); result?.catch(() => {}); } catch (_) {}
+    } else if (!immersive && document.fullscreenElement) {
+      try { document.exitFullscreen()?.catch(() => {}); } catch (_) {}
+    }
+  }
+  document.addEventListener('click', event => {
+    const target = event.target.closest('[data-go]');
+    if (target) setMode(target.dataset.go, true);
+  }, true);
+  window.addEventListener('seowoo:route', event => setMode(event.detail.route));
 })();
