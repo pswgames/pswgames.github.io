@@ -1,10 +1,18 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 chcp 65001 >nul
-set "ADMIN=io.github.pswgames.seowoo/.SeowooDeviceAdminReceiver"
+set "PKG=io.github.pswgames.seowoo"
+set "STATE=%~dp0seowoo_child_user_id.txt"
 
 echo.
-echo [서우 놀이터 Y700 테스트 Device Owner 해제]
+echo ============================================================
+echo  서우 놀이터 Y700 보조사용자 제거 / 원상복구
+echo ============================================================
+echo.
+echo 이 작업은 Seowoo 보조 사용자만 제거합니다.
+echo Owner 사용자의 Google 계정, 게임, 결제정보, 앱 데이터는 건드리지 않습니다.
+echo.
+
 where adb >nul 2>nul
 if errorlevel 1 (
   echo [오류] adb를 찾을 수 없습니다.
@@ -12,19 +20,46 @@ if errorlevel 1 (
   exit /b 1
 )
 
-adb devices
-echo.
-echo Y700가 연결되고 USB 디버깅이 허용되어 있는지 확인하세요.
-pause
-
-adb shell dpm remove-active-admin --user 0 %ADMIN%
-if errorlevel 1 (
-  echo.
-  echo 해제에 실패했습니다. 현재 설치된 앱이 testOnly 빌드인지, Device Owner인지 확인해 주세요.
+if not exist "%STATE%" (
+  echo [오류] seowoo_child_user_id.txt 기록을 찾을 수 없습니다.
+  echo adb shell pm list users 로 Seowoo 사용자 ID를 확인한 뒤 수동 정리가 필요할 수 있습니다.
   pause
   exit /b 2
 )
 
+set /p CHILD_USER=<"%STATE%"
+if not defined CHILD_USER (
+  echo [오류] 보조 사용자 ID가 비어 있습니다.
+  pause
+  exit /b 3
+)
+
+echo 제거할 Seowoo 사용자 ID: !CHILD_USER!
+adb devices
+pause
+
+echo [1/3] Owner 사용자로 복귀
+adb shell am switch-user 0
+if errorlevel 1 (
+  echo [오류] Owner 사용자 전환에 실패했습니다.
+  pause
+  exit /b 4
+)
+timeout /t 2 /nobreak >nul
+
+echo [2/3] Seowoo 보조 사용자 제거
+adb shell pm remove-user !CHILD_USER!
+if errorlevel 1 (
+  echo [오류] Seowoo 사용자 제거에 실패했습니다.
+  echo Owner 데이터에는 아무 변경도 하지 않았습니다.
+  pause
+  exit /b 5
+)
+
+echo [3/3] 로컬 기록 정리
+del "%STATE%" >nul 2>nul
+
 echo.
-echo Device Owner 해제 완료. 이제 앱 삭제/업데이트 테스트가 가능합니다.
+echo 원상복구 완료.
+echo 기존 Owner 사용자의 Google 계정/게임/결제 환경은 그대로입니다.
 pause
