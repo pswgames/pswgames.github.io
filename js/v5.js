@@ -6,7 +6,7 @@ const FLOOR_MS=1750,RAMP_MS=600,DOOR_MS=1450,PRE_CLOSE_MS=350,POST_CLOSE_MS=180,
 const clamp=n=>Math.max(1,Math.min(20,Math.round(Number(n)||1)));
 const clamp01=n=>Math.max(0,Math.min(1,n));
 let initial=1;try{initial=clamp(sessionStorage.getItem('seowoo-floor'))}catch{}
-const state={current:initial,position:initial,start:initial,target:initial,queued:null,phase:'idle',at:0,duration:0,raf:0,paused:null,door:0,doorFrom:0,doorTo:0,doorDuration:DOOR_MS,closeMode:'manual'};
+const state={current:initial,position:initial,start:initial,target:initial,queued:null,phase:'idle',at:0,duration:0,raf:0,paused:null,door:0,doorFrom:0,doorTo:0,doorDuration:DOOR_MS,closeMode:'manual',openHeld:false};
 let dom=null,panorama=null,lastPaint='';const audio=()=>window.SeowooCore?.audio;
 const save=()=>{try{sessionStorage.setItem('seowoo-floor',state.current)}catch{}};
 const setText=(el,t)=>{if(el&&el.textContent!==String(t))el.textContent=t};
@@ -40,17 +40,23 @@ function doorLabel(){
  if(state.phase==='preclose'||state.phase==='closing')return'문이 닫혀요';
  if(state.phase==='opening')return'문이 열려요';
  if(state.phase==='closed')return'문이 닫혀 있어요';
+ if(state.openHeld)return'열림 버튼을 누르는 동안 문이 열려 있어요';
  return`${state.current}층`;
 }
 function updateControls(){
  if(!dom)return;const moving=state.phase==='travel';
- if(dom.open){dom.open.disabled=moving;dom.open.setAttribute('aria-disabled',String(moving));}
- const closeDisabled=moving||state.phase==='closing'||state.phase==='closed'||state.phase==='arrival';
+ if(dom.open){
+  dom.open.disabled=moving;
+  dom.open.setAttribute('aria-disabled',String(moving));
+  dom.open.setAttribute('aria-pressed',String(state.openHeld));
+  dom.open.classList.toggle('held',state.openHeld);
+ }
+ const closeDisabled=moving||state.phase==='closing'||state.phase==='closed'||state.phase==='arrival'||state.openHeld;
  if(dom.close){dom.close.disabled=closeDisabled;dom.close.setAttribute('aria-disabled',String(closeDisabled));}
 }
 function paint(){
  if(!dom)return;
- const signature=[state.phase,state.current,state.target,state.queued,state.closeMode].join(':');
+ const signature=[state.phase,state.current,state.target,state.queued,state.closeMode,state.openHeld].join(':');
  if(signature!==lastPaint){lastPaint=signature;dom.shell.dataset.phase=state.phase;dom.shell.dataset.target=state.target;
  setText(dom.floor,state.current);setText(dom.arrow,['preclose','closing','travel'].includes(state.phase)&&state.target!==state.start?(state.target>state.start?'▲':'▼'):'•');
  setText(dom.message,doorLabel());
@@ -93,7 +99,7 @@ function requestOpen(quiet=false){
  return false;
 }
 function requestClose(){
- if(!dom)return false;audio()?.button();const now=performance.now();
+ if(!dom||state.openHeld)return false;audio()?.button();const now=performance.now();
  if(state.phase==='travel'||state.phase==='arrival'||state.phase==='closing'||state.phase==='closed')return false;
  if(state.phase==='preclose'){
   audio()?.doorClose();animateDoor(1,now,'trip');return true;
@@ -121,27 +127,73 @@ function tick(now){
  }
  else if(state.phase==='arrival'&&elapsed>=ARRIVAL_MS){audio()?.playVoice('arrival-'+state.current);audio()?.doorOpen();state.door=1;animateDoor(0,now,'arrival')}
  else if(state.phase==='opening'&&elapsed>=state.doorDuration){state.door=0;phase('waiting',now)}
- else if(state.phase==='waiting'&&elapsed>=DOOR_HOLD_MS){const next=state.queued;state.queued=null;phase('idle',now);if(next!==null&&next!==state.current)begin(next)}
+ else if(state.phase==='waiting'&&!state.openHeld&&elapsed>=DOOR_HOLD_MS){const next=state.queued;state.queued=null;phase('idle',now);if(next!==null&&next!==state.current)begin(next)}
  paint();schedule();
 }
 function ensureDoorControls(shell){
  const panel=shell.querySelector('.floor-panel');if(!panel)return{open:null,close:null};
  let controls=panel.querySelector('.door-controls');
- if(!controls){controls=document.createElement('div');controls.className='door-controls';controls.setAttribute('role','group');controls.setAttribute('aria-label','엘리베이터 문 조작');controls.innerHTML='<button type="button" class="door-control door-open" data-door-action="open" aria-label="엘리베이터 문 열기"><span class="door-symbol" aria-hidden="true">◁&nbsp;&nbsp;▷</span><small>열림</small></button><button type="button" class="door-control door-close" data-door-action="close" aria-label="엘리베이터 문 닫기"><span class="door-symbol" aria-hidden="true">▷&nbsp;&nbsp;◁</span><small>닫힘</small></button>';panel.append(controls)}
+ if(!controls){controls=document.createElement('div');controls.className='door-controls';controls.setAttribute('role','group');controls.setAttribute('aria-label','엘리베이터 문 조작');controls.innerHTML='<button type="button" class="door-control door-open" data-door-action="open" aria-label="엘리베이터 문 열기" aria-pressed="false"><span class="door-symbol" aria-hidden="true">◁&nbsp;&nbsp;▷</span><small>열림</small></button><button type="button" class="door-control door-close" data-door-action="close" aria-label="엘리베이터 문 닫기"><span class="door-symbol" aria-hidden="true">▷&nbsp;&nbsp;◁</span><small>닫힘</small></button>';panel.append(controls)}
  return{open:controls.querySelector('[data-door-action="open"]'),close:controls.querySelector('[data-door-action="close"]')};
 }
-function unmount(){if(state.raf)cancelAnimationFrame(state.raf);state.raf=0;if(dom){dom.shell.removeEventListener('click',onClick);audio()?.stopAll()}panorama?.destroy();dom=null;panorama=null;state.current=clamp(state.position);state.position=state.current;state.target=state.current;state.phase='idle';state.queued=null;state.paused=null;state.door=0;state.doorFrom=0;state.doorTo=0;state.closeMode='manual';lastPaint='';save()}
+function suppressNativeGesture(e){if(dom?.shell?.contains(e.target))e.preventDefault()}
+function openHoldStart(e){
+ if(!dom?.open||e.currentTarget!==dom.open||dom.open.disabled)return;
+ if(typeof e.button==='number'&&e.button!==0)return;
+ e.preventDefault();state.openHeld=true;
+ try{dom.open.setPointerCapture(e.pointerId)}catch{}
+ requestOpen();paint();
+}
+function openHoldEnd(e){
+ if(!dom?.open||!state.openHeld)return;
+ e?.preventDefault?.();state.openHeld=false;
+ try{if(e&&dom.open.hasPointerCapture?.(e.pointerId))dom.open.releasePointerCapture(e.pointerId)}catch{}
+ if(state.phase==='waiting')phase('waiting',performance.now());else paint();
+}
+function unmount(){
+ if(state.raf)cancelAnimationFrame(state.raf);state.raf=0;
+ if(dom){
+  dom.shell.removeEventListener('click',onClick);
+  dom.shell.removeEventListener('contextmenu',suppressNativeGesture);
+  dom.shell.removeEventListener('dragstart',suppressNativeGesture);
+  dom.shell.removeEventListener('selectstart',suppressNativeGesture);
+  dom.open?.removeEventListener('pointerdown',openHoldStart);
+  dom.open?.removeEventListener('pointerup',openHoldEnd);
+  dom.open?.removeEventListener('pointercancel',openHoldEnd);
+  dom.open?.removeEventListener('lostpointercapture',openHoldEnd);
+  audio()?.stopAll();
+ }
+ panorama?.destroy();dom=null;panorama=null;state.current=clamp(state.position);state.position=state.current;state.target=state.current;state.phase='idle';state.queued=null;state.paused=null;state.door=0;state.doorFrom=0;state.doorTo=0;state.closeMode='manual';state.openHeld=false;lastPaint='';save()
+}
 function onClick(e){
- const door=e.target.closest('[data-door-action]');if(door&&dom?.shell.contains(door)){door.dataset.doorAction==='open'?requestOpen():requestClose();return}
+ const door=e.target.closest('[data-door-action]');
+ if(door&&dom?.shell.contains(door)){
+  if(door.dataset.doorAction==='open'){if(e.detail===0)requestOpen();return}
+  requestClose();return
+ }
  const key=e.target.closest('[data-floor]');if(key&&dom?.shell.contains(key))select(key.dataset.floor)
 }
 function mount(shell){
  if(!shell||dom?.shell===shell)return;unmount();const controls=ensureDoorControls(shell);
  dom={shell,floor:shell.querySelector('#elevatorFloor'),arrow:shell.querySelector('#elevatorArrow'),message:shell.querySelector('#elevatorMsg'),left:shell.querySelector('.door-l'),right:shell.querySelector('.door-r'),keys:[...shell.querySelectorAll('[data-floor]')],open:controls.open,close:controls.close};
- shell.addEventListener('click',onClick);panorama=window.SeowooPanorama.mount(shell.querySelector('.outside-view'));audio()?.preload(['closing','up','down','arrival-'+state.current]);state.door=0;paint()
+ shell.addEventListener('click',onClick);
+ shell.addEventListener('contextmenu',suppressNativeGesture);
+ shell.addEventListener('dragstart',suppressNativeGesture);
+ shell.addEventListener('selectstart',suppressNativeGesture);
+ dom.open?.addEventListener('pointerdown',openHoldStart);
+ dom.open?.addEventListener('pointerup',openHoldEnd);
+ dom.open?.addEventListener('pointercancel',openHoldEnd);
+ dom.open?.addEventListener('lostpointercapture',openHoldEnd);
+ panorama=window.SeowooPanorama.mount(shell.querySelector('.outside-view'));
+ const panoImage=shell.querySelector('.elevator-panorama-image');if(panoImage)panoImage.draggable=false;
+ audio()?.preload(['closing','up','down','arrival-'+state.current]);state.door=0;state.openHeld=false;paint()
 }
-function pause(){save();if(!dom||state.paused!==null)return;state.paused=performance.now();cancelAnimationFrame(state.raf);state.raf=0;audio()?.stopAll()}
-function resume(){if(!dom||document.hidden)return;if(state.paused!==null){state.at+=performance.now()-state.paused;state.paused=null;if(state.phase==='travel')audio()?.motorStart()}panorama?.resize();paint();schedule()}
+function pause(){
+ save();if(!dom||state.paused!==null)return;
+ state.openHeld=false;if(dom.open){dom.open.classList.remove('held');dom.open.setAttribute('aria-pressed','false')}
+ state.paused=performance.now();cancelAnimationFrame(state.raf);state.raf=0;audio()?.stopAll()
+}
+function resume(){if(!dom||document.hidden)return;if(state.paused!==null){state.at+=performance.now()-state.paused;state.paused=null;if(state.phase==='travel')audio()?.motorStart();if(state.phase==='waiting')state.at=performance.now()}panorama?.resize();paint();schedule()}
 document.addEventListener('visibilitychange',()=>document.hidden?pause():resume());window.addEventListener('pagehide',pause);window.addEventListener('pageshow',resume);
 window.SeowooElevator={mount,unmount,select,openDoor:requestOpen,closeDoor:requestClose,get current(){return state.current},get phase(){return state.phase},get position(){return state.position}};
 function setMode(route){if(route!=='elevator'){unmount();if(!IMMERSIVE.has(route)&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})}document.body.classList.toggle('game-fullscreen',IMMERSIVE.has(route));document.body.classList.toggle('elevator-fullscreen',route==='elevator');document.body.dataset.playRoute=route}
