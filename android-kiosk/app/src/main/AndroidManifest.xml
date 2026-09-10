@@ -31,11 +31,16 @@
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:lockTaskMode="if_whitelisted"
+            android:lockTaskMode="normal"
             android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
