@@ -7,6 +7,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setMediaPlaybackRequiresUserGesture(true);
-        settings.setUserAgentString(settings.getUserAgentString() + " SeowooKiosk/1.2");
+        settings.setUserAgentString(settings.getUserAgentString() + " SeowooKiosk/1.2.1");
         WebView.setWebContentsDebuggingEnabled(false);
 
         webView.addJavascriptInterface(new NativeKioskBridge(), "SeowooNativeKiosk");
@@ -112,11 +113,26 @@ public class MainActivity extends Activity {
     private boolean isStrictKioskReady() {
         if (!isPolicyOwnerReady()) return false;
         configureKioskPolicy();
+        try { return devicePolicyManager.isLockTaskPermitted(getPackageName()); }
+        catch (Exception ignored) { return false; }
+    }
+
+    private void setKioskHome(boolean enabled) {
+        if (!isPolicyOwnerReady()) return;
         try {
-            return devicePolicyManager.isLockTaskPermitted(getPackageName());
-        } catch (Exception ignored) {
-            return false;
-        }
+            if (enabled) {
+                IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
+                filter.addCategory(Intent.CATEGORY_HOME);
+                filter.addCategory(Intent.CATEGORY_DEFAULT);
+                devicePolicyManager.addPersistentPreferredActivity(
+                    adminComponent,
+                    filter,
+                    new ComponentName(this, MainActivity.class)
+                );
+            } else {
+                devicePolicyManager.clearPackagePersistentPreferredActivities(adminComponent, getPackageName());
+            }
+        } catch (SecurityException | IllegalArgumentException ignored) {}
     }
 
     private int lockTaskState() {
@@ -138,6 +154,7 @@ public class MainActivity extends Activity {
             return;
         }
         kioskRequested = true;
+        setKioskHome(true);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         hideSystemBars();
         try { startLockTask(); } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {}
@@ -149,6 +166,7 @@ public class MainActivity extends Activity {
         try {
             if (lockTaskState() != ActivityManager.LOCK_TASK_MODE_NONE) stopLockTask();
         } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {}
+        setKioskHome(false);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         showSystemBars();
         dispatchNativeStatus();
@@ -159,10 +177,8 @@ public class MainActivity extends Activity {
     }
 
     private void openUserSwitcher() {
-        try {
-            Intent intent = new Intent(ACTION_USER_SETTINGS_COMPAT);
-            startActivity(intent);
-        } catch (Exception first) {
+        try { startActivity(new Intent(ACTION_USER_SETTINGS_COMPAT)); }
+        catch (Exception first) {
             try { startActivity(new Intent(Settings.ACTION_SETTINGS)); } catch (Exception ignored) {}
         }
     }
