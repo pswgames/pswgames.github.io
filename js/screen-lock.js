@@ -1,19 +1,19 @@
-/* Seowoo Playground child lock. PWA containment only; OS home/app-switcher require device kiosk/guided-access mode. */
+/* Seowoo Playground parent PIN lock. PWA containment only; true OS kiosk needs device-level lock task/guided access. */
 (()=>{
 'use strict';
 
 const STORAGE_KEY='seowoo-screen-lock-v1';
-const HOLD_MS=5000;
+const CREDENTIAL_KEY='seowoo-screen-lock-pin-v2';
+const PIN_RE=/^\d{4,8}$/;
+const encoder=new TextEncoder();
 let locked=false;
-let holdTimer=0;
-let holdPointer=null;
-let holdCompleted=false;
 let wakeLock=null;
 let historyGuard=false;
 let lockFullscreenOwned=false;
+let failedAttempts=0;
+let blockedUntil=0;
 const nativeOpen=window.open.bind(window);
 
-const body=()=>document.body;
 const toast=msg=>{try{window.SeowooCore?.toast?.(msg)}catch{}};
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 
@@ -23,228 +23,179 @@ function readLocked(){
 function saveLocked(){
   try{localStorage.setItem(STORAGE_KEY,locked?'1':'0')}catch{}
 }
+function readCredential(){
+  try{
+    const raw=localStorage.getItem(CREDENTIAL_KEY);if(!raw)return null;
+    const data=JSON.parse(raw);
+    return data&&data.v===2&&typeof data.salt==='string'&&typeof data.hash==='string'?data:null;
+  }catch{return null}
+}
+function bytesToHex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function digestPin(pin,salt){
+  if(!crypto?.subtle)throw new Error('secure-crypto-unavailable');
+  const digest=await crypto.subtle.digest('SHA-256',encoder.encode(`seowoo-parent-pin-v2:${salt}:${pin}`));
+  return bytesToHex(new Uint8Array(digest));
+}
+function newSalt(){
+  const bytes=new Uint8Array(16);crypto.getRandomValues(bytes);return bytesToHex(bytes);
+}
+async function saveCredential(pin){
+  const salt=newSalt(),hash=await digestPin(pin,salt);
+  localStorage.setItem(CREDENTIAL_KEY,JSON.stringify({v:2,salt,hash}));
+}
+async function verifyPin(pin){
+  const cred=readCredential();if(!cred)return false;
+  const hash=await digestPin(pin,cred.salt);
+  return hash===cred.hash;
+}
 function lockMarkup(id,compact=false){
-  return `<button id="${id}" type="button" class="screen-lock-toggle${compact?' compact':''}" aria-pressed="false" aria-label="화면 잠금 꺼짐. 5초간 누르면 켜짐">
+  return `<button id="${id}" type="button" class="screen-lock-toggle${compact?' compact':''}" aria-pressed="false" aria-label="화면 잠금 꺼짐. 눌러서 부모 비밀번호 입력">
     <svg class="screen-lock-svg" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="5" y="10" width="14" height="10" rx="3"></rect><path class="lock-shackle" d="M8 10V7a4 4 0 0 1 8 0v3"></path>
     </svg>
     <span class="screen-lock-label">${compact?'잠금':'화면잠금'}</span>
     <strong class="screen-lock-state">OFF</strong>
-    <i class="screen-lock-progress" aria-hidden="true"></i>
   </button>`;
 }
 function ensureFloating(){
   let host=document.querySelector('#screenLockFloatHost');
   if(host)return host.querySelector('.screen-lock-toggle');
-  host=document.createElement('div');
-  host.id='screenLockFloatHost';
-  host.className='screen-lock-float-host';
-  host.innerHTML=lockMarkup('screenLockFloat',true);
-  document.body.append(host);
+  host=document.createElement('div');host.id='screenLockFloatHost';host.className='screen-lock-float-host';
+  host.innerHTML=lockMarkup('screenLockFloat',true);document.body.append(host);
   return host.querySelector('.screen-lock-toggle');
 }
-function buttons(){
-  return [...document.querySelectorAll('.screen-lock-toggle')];
+function ensureDialog(){
+  let dlg=document.querySelector('#screenLockDialog');if(dlg)return dlg;
+  dlg=document.createElement('dialog');dlg.id='screenLockDialog';dlg.className='screen-lock-dialog';
+  dlg.innerHTML=`<form class="screen-lock-card" novalidate>
+    <div class="screen-lock-dialog-icon" aria-hidden="true">🔒</div>
+    <h2 id="screenLockDialogTitle">부모 비밀번호</h2>
+    <p id="screenLockDialogText"></p>
+    <label class="screen-lock-field"><span>비밀번호</span><input id="screenLockPin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" pattern="[0-9]*" aria-describedby="screenLockError"></label>
+    <label class="screen-lock-field" id="screenLockConfirmWrap" hidden><span>비밀번호 확인</span><input id="screenLockPinConfirm" type="password" inputmode="numeric" autocomplete="off" maxlength="8" pattern="[0-9]*"></label>
+    <div id="screenLockError" class="screen-lock-error" role="alert"></div>
+    <div class="screen-lock-dialog-actions"><button type="button" class="screen-lock-cancel">취소</button><button type="submit" class="screen-lock-submit">확인</button></div>
+  </form>`;
+  document.body.append(dlg);
+  dlg.addEventListener('cancel',e=>{e.preventDefault();closeDialog()});
+  dlg.querySelector('.screen-lock-cancel').addEventListener('click',closeDialog);
+  dlg.querySelector('form').addEventListener('submit',handlePinSubmit);
+  return dlg;
 }
+function buttons(){return [...document.querySelectorAll('.screen-lock-toggle')]}
 function syncButtons(){
   for(const btn of buttons()){
-    btn.classList.toggle('on',locked);
-    btn.setAttribute('aria-pressed',String(locked));
-    btn.setAttribute('aria-label',locked?'화면 잠금 켜짐. 5초간 누르면 꺼짐':'화면 잠금 꺼짐. 5초간 누르면 켜짐');
-    const state=btn.querySelector('.screen-lock-state');
-    if(state)state.textContent=locked?'ON':'OFF';
+    btn.classList.toggle('on',locked);btn.setAttribute('aria-pressed',String(locked));
+    btn.setAttribute('aria-label',locked?'화면 잠금 켜짐. 눌러서 부모 비밀번호 입력 후 해제':'화면 잠금 꺼짐. 눌러서 부모 비밀번호 입력 후 잠금');
+    const state=btn.querySelector('.screen-lock-state');if(state)state.textContent=locked?'ON':'OFF';
   }
 }
 async function acquireWakeLock(){
   if(!locked||document.visibilityState!=='visible'||!('wakeLock' in navigator))return;
-  try{
-    wakeLock=await navigator.wakeLock.request('screen');
-    wakeLock.addEventListener?.('release',()=>{wakeLock=null},{once:true});
-  }catch{}
+  try{wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener?.('release',()=>{wakeLock=null},{once:true})}catch{}
 }
-async function releaseWakeLock(){
-  try{await wakeLock?.release()}catch{}
-  wakeLock=null;
-}
+async function releaseWakeLock(){try{await wakeLock?.release()}catch{}wakeLock=null}
 function armHistoryGuard(){
   if(historyGuard)return;
-  try{
-    history.pushState({...((history.state&&typeof history.state==='object')?history.state:{}),seowooLockGuard:true},'',location.href);
-    historyGuard=true;
-  }catch{}
+  try{history.pushState({...((history.state&&typeof history.state==='object')?history.state:{}),seowooLockGuard:true},'',location.href);historyGuard=true}catch{}
 }
 function releaseHistoryGuard(){
-  if(!historyGuard)return;
-  historyGuard=false;
-  try{
-    if(history.state?.seowooLockGuard)history.back();
-  }catch{}
+  if(!historyGuard)return;historyGuard=false;
+  try{if(history.state?.seowooLockGuard)history.back()}catch{}
 }
 function applyState(announce=false){
-  document.documentElement.classList.toggle('screen-locked',locked);
-  document.body.classList.toggle('screen-locked',locked);
-  document.documentElement.dataset.screenLock=locked?'on':'off';
-  syncButtons();
-  if(locked){
-    armHistoryGuard();
-    acquireWakeLock();
-  }else{
-    releaseHistoryGuard();
-    releaseWakeLock();
-  }
+  document.documentElement.classList.toggle('screen-locked',locked);document.body.classList.toggle('screen-locked',locked);
+  document.documentElement.dataset.screenLock=locked?'on':'off';syncButtons();
+  if(locked){armHistoryGuard();acquireWakeLock()}else{releaseHistoryGuard();releaseWakeLock()}
   window.dispatchEvent(new CustomEvent('seowoo:screenlock',{detail:{locked}}));
-  if(announce)toast(locked?'화면 잠금 ON · 5초간 누르면 해제돼요':'화면 잠금 OFF');
+  if(announce)toast(locked?'화면 잠금 ON · 해제하려면 부모 비밀번호가 필요해요':'화면 잠금 OFF');
 }
 function setLocked(next,announce=true){
-  if(locked===next)return;
-  locked=next;
-  saveLocked();
-  applyState(announce);
+  if(locked===next)return;locked=next;saveLocked();applyState(announce);
   try{navigator.vibrate?.(locked?[45,55,80]:[80,45,45])}catch{}
 }
 async function requestFullscreenContainment(){
   if(!locked||standalone()||document.fullscreenElement||!document.documentElement.requestFullscreen)return;
-  try{
-    await document.documentElement.requestFullscreen({navigationUI:'hide'});
-    lockFullscreenOwned=true;
-  }catch{}
+  try{await document.documentElement.requestFullscreen({navigationUI:'hide'});lockFullscreenOwned=true}catch{}
 }
 async function releaseFullscreenContainment(){
-  if(!lockFullscreenOwned)return;
-  lockFullscreenOwned=false;
+  if(!lockFullscreenOwned)return;lockFullscreenOwned=false;
   try{if(document.fullscreenElement)await document.exitFullscreen()}catch{}
 }
-function clearHold(btn){
-  clearTimeout(holdTimer);
-  holdTimer=0;
-  holdPointer=null;
-  btn?.classList.remove('holding');
-  btn?.closest?.('.screen-lock-float-host')?.classList.remove('hold-active');
+function showError(msg){const dlg=ensureDialog(),el=dlg.querySelector('#screenLockError');el.textContent=msg;dlg.querySelector('#screenLockPin')?.focus()}
+function closeDialog(){
+  const dlg=document.querySelector('#screenLockDialog');if(!dlg)return;
+  try{dlg.close()}catch{}
+  dlg.querySelector('form')?.reset();const err=dlg.querySelector('#screenLockError');if(err)err.textContent='';
 }
-function startHold(e){
-  const btn=e.currentTarget;
-  if(btn.disabled)return;
-  if(typeof e.button==='number'&&e.button!==0)return;
-  e.preventDefault();
-  clearTimeout(holdTimer);
-  holdPointer=e.pointerId;
-  holdCompleted=false;
-  btn.classList.add('holding');
-  btn.closest('.screen-lock-float-host')?.classList.add('hold-active');
-  try{btn.setPointerCapture(e.pointerId)}catch{}
-  holdTimer=setTimeout(()=>{
-    holdTimer=0;
-    holdCompleted=true;
-    setLocked(!locked,true);
-  },HOLD_MS);
-}
-function endHold(e){
-  const btn=e.currentTarget;
-  if(holdPointer!==null&&e.pointerId!==holdPointer)return;
-  e.preventDefault();
-  const completed=holdCompleted;
-  const nowLocked=locked;
-  clearHold(btn);
-  holdCompleted=false;
-  try{if(btn.hasPointerCapture?.(e.pointerId))btn.releasePointerCapture(e.pointerId)}catch{}
-  if(completed){
-    if(nowLocked)requestFullscreenContainment();
-    else releaseFullscreenContainment();
+function openPinDialog(){
+  const dlg=ensureDialog(),setup=!readCredential(),title=dlg.querySelector('#screenLockDialogTitle'),text=dlg.querySelector('#screenLockDialogText');
+  const confirmWrap=dlg.querySelector('#screenLockConfirmWrap'),submit=dlg.querySelector('.screen-lock-submit');
+  dlg.dataset.mode=setup?'setup':'verify';
+  if(setup){
+    title.textContent='부모 비밀번호 설정';
+    text.textContent=locked?'새 4~8자리 숫자 비밀번호를 설정하면 기존 잠금을 해제할 수 있어요.':'화면잠금에 사용할 4~8자리 숫자 비밀번호를 정해줘.';
+    confirmWrap.hidden=false;submit.textContent=locked?'설정 후 잠금 해제':'설정 후 잠금 켜기';
+  }else{
+    title.textContent=locked?'화면잠금 해제':'화면잠금 켜기';
+    text.textContent=locked?'부모 비밀번호를 입력하면 태블릿을 다시 정상적으로 사용할 수 있어요.':'부모 비밀번호를 입력하면 서우놀이터 화면잠금이 켜져요.';
+    confirmWrap.hidden=true;submit.textContent=locked?'잠금 해제':'잠금 켜기';
   }
+  dlg.querySelector('#screenLockError').textContent='';dlg.querySelector('form').reset();
+  if(!dlg.open)dlg.showModal();setTimeout(()=>dlg.querySelector('#screenLockPin')?.focus(),20);
 }
-function cancelHold(e){
-  const btn=e.currentTarget;
-  if(holdPointer!==null&&e.pointerId!==holdPointer)return;
-  clearHold(btn);
-  holdCompleted=false;
+async function handlePinSubmit(e){
+  e.preventDefault();const dlg=ensureDialog(),pin=dlg.querySelector('#screenLockPin').value.trim(),mode=dlg.dataset.mode;
+  if(Date.now()<blockedUntil){showError(`비밀번호를 여러 번 틀렸어. ${Math.ceil((blockedUntil-Date.now())/1000)}초 후 다시 시도해줘.`);return}
+  if(!PIN_RE.test(pin)){showError('4~8자리 숫자로 입력해줘.');return}
+  const submit=dlg.querySelector('.screen-lock-submit');submit.disabled=true;
+  try{
+    if(mode==='setup'){
+      const confirm=dlg.querySelector('#screenLockPinConfirm').value.trim();if(pin!==confirm){showError('비밀번호가 서로 달라. 다시 확인해줘.');return}
+      await saveCredential(pin);failedAttempts=0;closeDialog();const next=!locked;setLocked(next,true);if(next)requestFullscreenContainment();else releaseFullscreenContainment();return;
+    }
+    const ok=await verifyPin(pin);
+    if(!ok){
+      failedAttempts++;if(failedAttempts>=5){blockedUntil=Date.now()+30000;failedAttempts=0;showError('비밀번호를 5번 틀렸어. 30초 후 다시 시도해줘.')}else showError(`비밀번호가 맞지 않아. (${failedAttempts}/5)`);return;
+    }
+    failedAttempts=0;blockedUntil=0;closeDialog();const next=!locked;setLocked(next,true);if(next)requestFullscreenContainment();else releaseFullscreenContainment();
+  }catch(err){showError('비밀번호 처리 중 오류가 났어. 앱을 다시 열고 시도해줘.')}finally{submit.disabled=false}
 }
 function bindButton(btn){
-  if(!btn||btn.dataset.screenLockBound==='1')return;
-  btn.dataset.screenLockBound='1';
-  btn.addEventListener('pointerdown',startHold);
-  btn.addEventListener('pointerup',endHold);
-  btn.addEventListener('pointercancel',cancelHold);
-  btn.addEventListener('lostpointercapture',cancelHold);
-  btn.addEventListener('contextmenu',e=>e.preventDefault());
-  btn.addEventListener('dragstart',e=>e.preventDefault());
-  btn.addEventListener('click',e=>e.preventDefault());
+  if(!btn||btn.dataset.screenLockBound==='1')return;btn.dataset.screenLockBound='1';
+  btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openPinDialog()});
+  btn.addEventListener('contextmenu',e=>e.preventDefault());btn.addEventListener('dragstart',e=>e.preventDefault());
 }
 function blockExternalClick(e){
-  if(!locked)return;
-  const a=e.target.closest?.('a[href],area[href]');
-  if(!a)return;
-  let url;
-  try{url=new URL(a.href,location.href)}catch{return}
-  if(url.origin!==location.origin||a.target==='_blank'||a.hasAttribute('download')){
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    toast('화면 잠금 중이라 서우 놀이터 밖으로 나갈 수 없어요');
-  }
+  if(!locked)return;const a=e.target.closest?.('a[href],area[href]');if(!a)return;
+  let url;try{url=new URL(a.href,location.href)}catch{return}
+  if(url.origin!==location.origin||a.target==='_blank'||a.hasAttribute('download')){e.preventDefault();e.stopImmediatePropagation();toast('화면 잠금 중이라 서우 놀이터 밖으로 나갈 수 없어요')}
 }
-function blockNativeGesture(e){
-  if(!locked)return;
-  e.preventDefault();
-}
+function blockNativeGesture(e){if(locked)e.preventDefault()}
 function onPopState(){
-  if(!locked)return;
-  try{
-    history.pushState({seowooLockGuard:true},'',location.href);
-    historyGuard=true;
-  }catch{}
-  toast('화면 잠금 중이에요');
+  if(!locked)return;try{history.pushState({seowooLockGuard:true},'',location.href);historyGuard=true}catch{}toast('화면 잠금 중이에요')
 }
 function onKeyDown(e){
-  if(!locked)return;
-  const browserBack=(e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))||e.key==='BrowserBack'||e.key==='BrowserForward';
-  if(browserBack){
-    e.preventDefault();
-    e.stopImmediatePropagation();
-  }
+  if(!locked)return;const browserBack=(e.altKey&&(e.key==='ArrowLeft'||e.key==='ArrowRight'))||e.key==='BrowserBack'||e.key==='BrowserForward';
+  if(browserBack){e.preventDefault();e.stopImmediatePropagation()}
 }
 function maybeReenterFullscreen(){
-  if(!locked||standalone()||document.fullscreenElement||!document.documentElement.requestFullscreen)return;
-  requestFullscreenContainment();
+  if(!locked||standalone()||document.fullscreenElement||!document.documentElement.requestFullscreen)return;requestFullscreenContainment()
 }
 function installGlobalGuards(){
-  document.addEventListener('click',blockExternalClick,true);
-  document.addEventListener('auxclick',blockExternalClick,true);
-  document.addEventListener('contextmenu',blockNativeGesture,true);
-  document.addEventListener('dragstart',blockNativeGesture,true);
-  document.addEventListener('selectstart',blockNativeGesture,true);
-  document.addEventListener('keydown',onKeyDown,true);
-  window.addEventListener('popstate',onPopState);
-  document.addEventListener('visibilitychange',()=>{
-    if(document.visibilityState==='visible'&&locked)acquireWakeLock();
-  });
-  document.addEventListener('fullscreenchange',()=>{
-    if(!document.fullscreenElement)lockFullscreenOwned=false;
-  });
-  document.addEventListener('pointerdown',e=>{
-    if(locked&&!e.target.closest?.('.screen-lock-toggle'))maybeReenterFullscreen();
-  },true);
-  window.open=(...args)=>{
-    if(locked){
-      toast('화면 잠금 중이라 새 창을 열 수 없어요');
-      return null;
-    }
-    return nativeOpen(...args);
-  };
+  document.addEventListener('click',blockExternalClick,true);document.addEventListener('auxclick',blockExternalClick,true);
+  document.addEventListener('contextmenu',blockNativeGesture,true);document.addEventListener('dragstart',blockNativeGesture,true);document.addEventListener('selectstart',blockNativeGesture,true);
+  document.addEventListener('keydown',onKeyDown,true);window.addEventListener('popstate',onPopState);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&locked)acquireWakeLock()});
+  document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)lockFullscreenOwned=false});
+  document.addEventListener('pointerdown',e=>{if(locked&&!e.target.closest?.('.screen-lock-toggle,.screen-lock-dialog'))maybeReenterFullscreen()},true);
+  window.open=(...args)=>{if(locked){toast('화면 잠금 중이라 새 창을 열 수 없어요');return null}return nativeOpen(...args)};
 }
 function init(){
-  const headerBtn=document.querySelector('#screenLockBtn');
-  const floatBtn=ensureFloating();
-  bindButton(headerBtn);
-  bindButton(floatBtn);
-  installGlobalGuards();
-  locked=readLocked();
-  applyState(false);
+  const headerBtn=document.querySelector('#screenLockBtn'),floatBtn=ensureFloating();ensureDialog();bindButton(headerBtn);bindButton(floatBtn);installGlobalGuards();
+  locked=readLocked();applyState(false)
 }
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
-else init();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 
-window.SeowooScreenLock={
-  get locked(){return locked},
-  lock(){setLocked(true)},
-  unlock(){setLocked(false)}
-};
+window.SeowooScreenLock={get locked(){return locked},open:openPinDialog,hasPassword(){return!!readCredential()}};
 })();
