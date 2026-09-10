@@ -1,7 +1,0 @@
-/* v5.6 elevator motion tuning */
-body.elevator-fullscreen .door{
-  transition:transform 1.5s cubic-bezier(.45,0,.2,1)!important;
-}
-body.elevator-fullscreen .glass-cabin.moving:after{
-  animation-duration:1.6s!important;
-}

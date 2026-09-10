@@ -15,9 +15,14 @@
 - `index.html` 앱 셸/PWA 진입점
 - `css/app.css` UI
 - `data/content.js` 확장 가능한 학습/음악 데이터
-- `js/core.js` 상태·저장·음향·난이도
+- `js/core.js` 상태·저장·난이도
+- `js/audio.js` 음성·효과음·음악 채널
+- `audio/catalog.js` 녹음 대본과 선택적 음원 경로
 - `js/games.js` 선택형/기억/수개념 게임
-- `js/app.js` 화면·라우팅·생활습관·음악·보호자 설정
+- `js/app-v4.js` 화면·라우팅·생활습관·음악·보호자 설정
 - `sw.js` 오프라인 캐시
 
 놀이기록은 서버로 전송하지 않고 해당 기기 `localStorage`에 저장합니다.
+## 6.0 검증과 알려진 한계
+
+[개선 내용과 QA](PREMIUM_RELEASE.md)를 참고하세요. 실제 고품질 음원은 아직 제공되지 않아 기기 TTS fallback을 사용합니다. 정적 앱은 빌드 없이 배포됩니다. 개발 검증은 `npm install` 후 `npm test`로 실행하며 Chrome이 필요합니다.
