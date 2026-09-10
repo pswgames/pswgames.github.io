@@ -33,6 +33,16 @@ const routes=['home','numbers','numberBoard','quantity','numberOrder','finger','
  await page.clock.runFor(6000);assert.equal(await page.evaluate(()=>SeowooElevator.phase),'idle');
  await page.locator('[data-floor="1"]').click();await page.clock.runFor(13000);assert.equal(await page.evaluate(()=>SeowooElevator.current),1);
  results.push({check:'closed-before-travel, intermediate floor, queue and descent',status:'pass'});
+ const open=page.locator('[data-door-action="open"]');
+ const blocked=await open.evaluate(el=>!el.dispatchEvent(new MouseEvent('contextmenu',{bubbles:true,cancelable:true})));assert(blocked,'elevator context menu must be suppressed');
+ const panelBg=await page.locator('.floor-panel').evaluate(el=>getComputedStyle(el).backgroundColor);assert(panelBg.includes('0.05'),`floor panel is not 95% transparent: ${panelBg}`);
+ await open.dispatchEvent('pointerdown',{pointerId:41,pointerType:'touch',isPrimary:true,button:0});
+ assert.equal(await page.evaluate(()=>SeowooElevator.phase),'waiting');assert.equal(await open.getAttribute('aria-pressed'),'true');
+ await page.clock.runFor(4000);assert.equal(await page.evaluate(()=>SeowooElevator.phase),'waiting','holding OPEN must keep the door open');
+ await open.dispatchEvent('pointerup',{pointerId:41,pointerType:'touch',isPrimary:true,button:0});
+ assert.equal(await open.getAttribute('aria-pressed'),'false');await page.clock.runFor(1100);assert.equal(await page.evaluate(()=>SeowooElevator.phase),'waiting');
+ await page.clock.runFor(200);assert.equal(await page.evaluate(()=>SeowooElevator.phase),'idle');
+ results.push({check:'hold-to-open, native long-press menu suppression and 95% transparent floor panel',status:'pass'});
  await page.evaluate(()=>SeowooApp.go('quantity'));
  const value=await page.locator('.object-cloud').evaluate(e=>[...e.textContent].length);
  const choicesBefore=await page.evaluate(()=>SeowooCore.state.stats.totalChoices);
