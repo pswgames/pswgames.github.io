@@ -1,4 +1,4 @@
-/* Seowoo Playground parent PIN lock. Android wrapper requires Device Owner for strict Y700 kiosk mode. */
+/* Seowoo Playground parent PIN lock. Android wrapper supports strict kiosk through a policy owner, including a Profile Owner in a dedicated secondary user. */
 (()=>{
 'use strict';
 
@@ -22,9 +22,15 @@ function nativeStrictReady(){
   const bridge=nativeBridge();if(!bridge)return null;
   try{
     if(typeof bridge.strictReady==='function')return bridge.strictReady()===true;
+    if(typeof bridge.isProfileOwner==='function'&&bridge.isProfileOwner()===true)return true;
     if(typeof bridge.isDeviceOwner==='function')return bridge.isDeviceOwner()===true;
   }catch{}
   return false;
+}
+function nativePolicyRole(){
+  const bridge=nativeBridge();if(!bridge)return 'web-only';
+  try{if(typeof bridge.policyRole==='function')return bridge.policyRole()||'none'}catch{}
+  return 'none';
 }
 function syncNativeKiosk(){
   const bridge=nativeBridge();if(!bridge)return false;
@@ -85,8 +91,9 @@ function applyState(announce=false){
   document.documentElement.classList.toggle('screen-locked',locked);document.body.classList.toggle('screen-locked',locked);document.documentElement.dataset.screenLock=locked?'on':'off';syncButtons();
   const nativeActive=syncNativeKiosk();if(locked){armHistoryGuard();acquireWakeLock()}else{releaseHistoryGuard();releaseWakeLock()}
   const ready=nativeStrictReady();document.documentElement.dataset.nativeKiosk=ready===true?'strict':ready===false?'setup-required':'web-only';
-  window.dispatchEvent(new CustomEvent('seowoo:screenlock',{detail:{locked,nativeStrictReady:ready}}));
-  if(announce)toast(locked?'완전 잠금 ON · 부모 비밀번호로만 해제할 수 있어요':'화면 잠금 OFF');
+  document.documentElement.dataset.nativePolicyRole=nativePolicyRole();
+  window.dispatchEvent(new CustomEvent('seowoo:screenlock',{detail:{locked,nativeStrictReady:ready,policyRole:nativePolicyRole()}}));
+  if(announce)toast(locked?'완전 잠금 ON · 부모 비밀번호로만 해제할 수 있어요':'화면 잠금 OFF · 부모 사용자로 돌아가면 원래 태블릿을 그대로 쓸 수 있어요');
 }
 function setLocked(next,announce=true){if(locked===next)return;locked=next;saveLocked();applyState(announce);try{navigator.vibrate?.(locked?[45,55,80]:[80,45,45])}catch{}}
 async function requestFullscreenContainment(){if(!locked||standalone()||document.fullscreenElement||!document.documentElement.requestFullscreen)return;try{await document.documentElement.requestFullscreen({navigationUI:'hide'});lockFullscreenOwned=true}catch{}}
@@ -98,7 +105,7 @@ function openPinDialog(){
   const dlg=ensureDialog(),setup=!readCredential(),title=dlg.querySelector('#screenLockDialogTitle'),text=dlg.querySelector('#screenLockDialogText'),confirmWrap=dlg.querySelector('#screenLockConfirmWrap'),submit=dlg.querySelector('.screen-lock-submit');
   dlg.dataset.mode=setup?'setup':'verify';
   if(setup){title.textContent='부모 비밀번호 설정';text.textContent=locked?'새 4~8자리 숫자 비밀번호를 설정하면 기존 잠금을 해제할 수 있어요.':'화면잠금에 사용할 4~8자리 숫자 비밀번호를 정해줘.';confirmWrap.hidden=false;submit.textContent=locked?'설정 후 잠금 해제':'설정 후 잠금 켜기'}
-  else{title.textContent=locked?'화면잠금 해제':'화면잠금 켜기';text.textContent=locked?'부모 비밀번호를 입력하면 태블릿을 다시 정상적으로 사용할 수 있어요.':strictLockBlocked()?'Y700 완전잠금 설정이 아직 필요해. 비밀번호 확인 후에는 잠금 대신 설정 안내가 표시돼.':'부모 비밀번호를 입력하면 홈·최근앱·제어센터까지 막는 완전잠금이 켜져요.';confirmWrap.hidden=true;submit.textContent=locked?'잠금 해제':'잠금 켜기'}
+  else{title.textContent=locked?'화면잠금 해제':'화면잠금 켜기';text.textContent=locked?'부모 비밀번호를 입력하면 잠금이 풀리고 부모 사용자로 돌아갈 수 있는 화면이 열려요.':strictLockBlocked()?'Y700에 서우 전용 사용자 설정이 아직 필요해. 메인 구글계정은 건드리지 않는 보조 사용자 방식으로 설정해야 해.':'부모 비밀번호를 입력하면 홈·최근앱·제어센터까지 막는 완전잠금이 켜져요.';confirmWrap.hidden=true;submit.textContent=locked?'잠금 해제':'잠금 켜기'}
   dlg.querySelector('#screenLockError').textContent='';dlg.querySelector('form').reset();if(!dlg.open)dlg.showModal();setTimeout(()=>dlg.querySelector('#screenLockPin')?.focus(),20);
 }
 async function handlePinSubmit(e){
@@ -109,12 +116,12 @@ async function handlePinSubmit(e){
   try{
     if(mode==='setup'){
       const confirm=dlg.querySelector('#screenLockPinConfirm').value.trim();if(pin!==confirm){showError('비밀번호가 서로 달라. 다시 확인해줘.');return}
-      if(!locked&&strictLockBlocked()){showError('Y700 완전잠금 준비가 안 됐어. 먼저 이 앱을 Device Owner로 1회 설정해야 잠금 ON이 가능해.');return}
+      if(!locked&&strictLockBlocked()){showError('Y700 서우 전용 사용자 설정이 아직 안 됐어. PC에서 보조 사용자를 만든 뒤 이 앱을 그 사용자의 Profile Owner로 1회 등록해줘. 메인 구글계정/게임 데이터는 건드리지 않아.');return}
       await saveCredential(pin);failedAttempts=0;closeDialog();const next=!locked;setLocked(next,true);if(next&&!nativeBridge())requestFullscreenContainment();else if(!next)releaseFullscreenContainment();return;
     }
     const ok=await verifyPin(pin);
     if(!ok){failedAttempts++;if(failedAttempts>=5){blockedUntil=Date.now()+30000;failedAttempts=0;showError('비밀번호를 5번 틀렸어. 30초 후 다시 시도해줘.')}else showError(`비밀번호가 맞지 않아. (${failedAttempts}/5)`);return}
-    if(!locked&&strictLockBlocked()){showError('Y700 완전잠금 준비가 안 됐어. 이 APK를 Device Owner로 설정한 뒤 다시 눌러줘.');return}
+    if(!locked&&strictLockBlocked()){showError('Y700 서우 전용 사용자 설정이 아직 안 됐어. 메인 사용자를 초기화하지 말고, 보조 사용자 + Profile Owner 설정을 먼저 진행해줘.');return}
     failedAttempts=0;blockedUntil=0;closeDialog();const next=!locked;setLocked(next,true);if(next&&!nativeBridge())requestFullscreenContainment();else if(!next)releaseFullscreenContainment();
   }catch{showError('비밀번호 처리 중 오류가 났어. 앱을 다시 열고 시도해줘.')}finally{submit.disabled=false}
 }
@@ -131,8 +138,8 @@ function installGlobalGuards(){
 }
 function init(){
   const headerBtn=document.querySelector('#screenLockBtn'),floatBtn=ensureFloating();ensureDialog();bindButton(headerBtn);bindButton(floatBtn);installGlobalGuards();
-  locked=readLocked();if(locked&&nativeBridge()&&nativeStrictReady()!==true){locked=false;saveLocked();toast('Y700 완전잠금 설정이 필요해서 기존 임시 잠금을 해제했어.')}applyState(false)
+  locked=readLocked();if(locked&&nativeBridge()&&nativeStrictReady()!==true){locked=false;saveLocked();toast('Y700 서우 전용 사용자 설정이 필요해서 기존 임시 잠금을 해제했어.')}applyState(false)
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-window.SeowooScreenLock={get locked(){return locked},open:openPinDialog,hasPassword(){return!!readCredential()},get strictReady(){return nativeStrictReady()}};
+window.SeowooScreenLock={get locked(){return locked},open:openPinDialog,hasPassword(){return!!readCredential()},get strictReady(){return nativeStrictReady()},get policyRole(){return nativePolicyRole()}};
 })();
