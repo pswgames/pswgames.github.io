@@ -2,7 +2,7 @@ const http=require('http'),fs=require('fs'),path=require('path'),assert=require(
 const {chromium}=require('playwright');
 (async()=>{
  let release='a';const root=path.resolve('.');
- const server=http.createServer((req,res)=>{const url=new URL(req.url,'http://localhost'),p=path.join(root,url.pathname==='/'?'index.html':url.pathname);try{if(release==='c'&&url.pathname==='/js/audio.js')throw Error('simulated missing asset');let b=fs.readFileSync(p);if(url.pathname==='/sw.js')b=Buffer.from(b.toString().replace('seowoo-static-6.1.0',`seowoo-static-test-${release}`));const type=p.endsWith('.js')?'text/javascript':p.endsWith('.html')?'text/html':p.endsWith('.css')?'text/css':'application/octet-stream';res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-store'});res.end(b)}catch{res.writeHead(404);res.end()}});await new Promise(r=>server.listen(4174,'127.0.0.1',r));
+ const server=http.createServer((req,res)=>{const url=new URL(req.url,'http://localhost'),p=path.join(root,url.pathname==='/'?'index.html':url.pathname);try{if(release==='c'&&url.pathname==='/js/audio.js')throw Error('simulated missing asset');let b=fs.readFileSync(p);if(url.pathname==='/sw.js')b=Buffer.from(b.toString().replace('seowoo-static-6.2.0',`seowoo-static-test-${release}`));const type=p.endsWith('.js')?'text/javascript':p.endsWith('.html')?'text/html':p.endsWith('.css')?'text/css':'application/octet-stream';res.writeHead(200,{'Content-Type':type,'Cache-Control':'no-store'});res.end(b)}catch{res.writeHead(404);res.end()}});await new Promise(r=>server.listen(4174,'127.0.0.1',r));
  const b=await chromium.launch({channel:'chrome',headless:true}),ctx=await b.newContext(),p=await ctx.newPage();
  await p.goto('http://127.0.0.1:4174');await p.evaluate(()=>navigator.serviceWorker.ready);await p.reload();await p.evaluate(()=>{SeowooApp.go('elevator');window.sentinel='old-runtime'});
  release='b';await p.evaluate(async()=>{const r=await navigator.serviceWorker.getRegistration();void r.update()});
@@ -11,7 +11,6 @@ const {chromium}=require('playwright');
  assert.equal(await p.evaluate(()=>window.sentinel),undefined,'worker activation should refresh the old runtime exactly once');
  await ctx.setOffline(true);await p.reload();assert.equal(await p.locator('.category-card').count(),7);await p.waitForFunction(()=>document.body.dataset.playRoute==='elevator');
  await ctx.setOffline(false);
- // A failed precache must leave the active version intact and must not refresh the client.
  release='c';await p.evaluate(()=>{window.sentinel='keep-runtime'});
  const failed=await p.evaluate(async()=>{const r=await navigator.serviceWorker.ready;const outcome=new Promise(resolve=>r.addEventListener('updatefound',()=>{const w=r.installing;w.addEventListener('statechange',()=>{if(w.state==='redundant')resolve('rejected')})},{once:true}));await r.update();return outcome});
  assert.equal(failed,'rejected');assert.equal(await p.evaluate(()=>window.sentinel),'keep-runtime');
