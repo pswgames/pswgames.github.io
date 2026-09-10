@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = 'SeowooPlaygroundKiosk'
 include ':app'
+include ':checker'
