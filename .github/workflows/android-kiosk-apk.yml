@@ -35,8 +35,8 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
-        run: gradle -p android-kiosk --no-daemon assembleDebug
+      - name: Build debug APKs
+        run: gradle -p android-kiosk --no-daemon :app:assembleDebug :checker:assembleDebug
 
       - name: Prepare Y700 no-reset package
         shell: bash
@@ -44,10 +44,18 @@ jobs:
           set -euo pipefail
           mkdir -p android-kiosk/dist
           cp android-kiosk/app/build/outputs/apk/debug/app-debug.apk android-kiosk/dist/seowoo-playground-y700-kiosk-v1.2.0-test.apk
+          cp android-kiosk/checker/build/outputs/apk/debug/checker-debug.apk android-kiosk/dist/Y700_NO_RESET_CHECKER_v1.0.0.apk
           cp android-kiosk/tools/Y700_CHECK_NO_RESET_SUPPORT.bat android-kiosk/dist/
           cp android-kiosk/tools/Y700_SETUP_COMPLETE_LOCK.bat android-kiosk/dist/
           cp android-kiosk/tools/Y700_REMOVE_DEVICE_OWNER.bat android-kiosk/dist/Y700_REMOVE_SEOWOO_USER.bat
           cp android-kiosk/README.md android-kiosk/dist/README_Y700_NO_RESET.md
+
+      - name: Upload standalone checker APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Y700_NO_RESET_CHECKER_v1.0.0
+          path: android-kiosk/dist/Y700_NO_RESET_CHECKER_v1.0.0.apk
+          if-no-files-found: error
 
       - name: Upload Y700 no-reset package
         uses: actions/upload-artifact@v4
