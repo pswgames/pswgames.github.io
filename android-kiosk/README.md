@@ -1,54 +1,63 @@
-# 서우 놀이터 Android Kiosk — Y700 완전잠금
+# 서우 놀이터 Android Kiosk — Y700 무초기화 설계
 
-이 Android 앱은 `https://pswgames.github.io/`를 WebView로 실행하고, 웹의 부모 PIN 화면잠금과 Android Device Owner + Lock Task를 연결한다.
+## 목표
 
-## 목표 동작
+기존 Y700 Owner 사용자의 Google/Lenovo 계정, 게임, 결제정보, 게임 데이터를 그대로 보존하면서 서우에게 건넬 때만 서우 놀이터 밖으로 나가지 못하게 한다.
 
-Y700이 Device Owner 준비 상태일 때 앱에서 화면잠금을 ON 하면 다음 정책을 함께 적용한다.
+- 잠금 ON: 홈 / 최근 앱 / 알림·제어센터 등 System UI를 제한하는 Android Lock Task
+- 잠금 OFF: 부모 비밀번호 확인 후 Lock Task 종료, 사용자 전환 화면 표시
+- 부모는 Owner 사용자로 돌아가 기존 게임/Google 환경을 그대로 사용
 
-- 이 앱만 Lock Task 허용
-- `LOCK_TASK_FEATURE_NONE` 적용
-- 홈 / 최근 앱 / 알림·알림창 등 Lock Task SystemUI 기능 비활성
-- 상태바 비활성
-- 오버레이 창 생성 제한
-- 앱 내부 외부 이동 차단
-- 화면 유지
+## 핵심 구조
 
-화면잠금 OFF 시 `stopLockTask()`를 실행하고 상태바 제한과 오버레이 제한을 해제한다.
+Device Owner 방식은 기존 개인용 Y700에서 계정 제거 또는 공장초기화를 요구할 수 있으므로 기본 경로에서 사용하지 않는다.
 
-Device Owner가 아닌 상태에서는 보안상 애매한 일반 화면 고정으로 대체하지 않고, 앱의 화면잠금 ON 자체를 거부한다.
+대신 새 **Seowoo 보조 사용자(secondary user)** 를 만들고, 그 사용자 안에서만 이 앱을 **Profile Owner** 로 지정한다. Android는 사용자별 계정과 앱 데이터를 분리하므로 Owner 사용자 데이터는 별도로 유지된다.
 
-## Y700 최초 1회 설정
+Android 9 이상에서는 Device Owner가 없는 기기에서 Profile Owner도 `setLockTaskPackages()`와 `setLockTaskFeatures()`를 사용해 자신의 사용자 안에서 Lock Task를 구성할 수 있다.
 
-이번 빌드는 개발 중에도 되돌릴 수 있도록 `android:testOnly="true"`인 테스트 APK다. 따라서 APK 설치와 Device Owner 등록에 ADB가 필요하다.
+## 설치 순서
 
-1. Y700 개발자 옵션에서 USB 디버깅을 켠다.
-2. 가능하면 Device Owner 등록 전에 Google/Lenovo 계정, 보조 사용자, 업무 프로필을 제거한다.
-3. Windows에 Android Platform Tools를 준비한다.
-4. `Y700_SETUP_COMPLETE_LOCK.bat`와 APK를 같은 폴더에 놓고 실행한다.
-5. Device Owner 등록이 성공하면 앱을 열고 부모 비밀번호를 설정한 뒤 화면잠금을 ON 한다.
+1. `Y700_CHECK_NO_RESET_SUPPORT.bat`
+   - 기기 모델/Android/현재 사용자/최대 사용자 수를 조회한다.
+   - 설치·삭제·사용자 생성 등 변경 작업은 하지 않는다.
+2. 지원 판정이면 `Y700_SETUP_COMPLETE_LOCK.bat`
+   - 새 `Seowoo` 보조 사용자 생성
+   - 그 사용자에만 APK 설치
+   - 그 사용자에서만 앱을 Profile Owner로 등록
+   - Seowoo 사용자로 전환 후 앱 실행
+3. 앱에서 부모용 4~8자리 PIN을 설정하고 화면잠금 ON
 
-수동 명령은 다음과 같다.
+## 잠금 동작
 
-```bat
-adb uninstall io.github.pswgames.seowoo
-adb install -t -r seowoo-playground-y700-kiosk-v1.1.1-test.apk
-adb shell dpm set-device-owner io.github.pswgames.seowoo/.SeowooDeviceAdminReceiver
-adb shell am start -n io.github.pswgames.seowoo/.MainActivity
-```
+Profile Owner 준비가 완료된 경우 앱은 자신을 Lock Task 허용 목록에 넣고 `LOCK_TASK_FEATURE_NONE`으로 구성한다. 잠금 ON에서 `startLockTask()`를 호출하며, 허용되지 않은 앱으로 이동하거나 홈/최근 앱/알림 UI를 사용하는 것을 시스템 수준에서 제한한다.
 
-`set-device-owner`가 계정/사용자/기기 프로비저닝 상태 때문에 거부되면 앱이 임의로 우회할 수 없다. 계정과 추가 사용자를 제거한 뒤 다시 시도하고, 그래도 Android가 거부하는 기기 상태라면 공장 초기화 후 Device Owner를 프로비저닝해야 할 수 있다.
+잠금 OFF에서 `stopLockTask()`를 호출한 뒤 Android 사용자 설정 화면을 열어 Owner 사용자로 돌아가기 쉽게 한다. 일부 Lenovo CN 펌웨어에서 사용자 UI가 숨겨진 경우 Android 설정 화면만 열릴 수 있으며, 그 경우 잠금이 풀린 뒤 시스템 사용자 전환 UI 또는 ADB를 이용해 Owner로 전환할 수 있다.
 
-## 테스트 Device Owner 해제
+## 메인 사용자 데이터 안전성
 
-이번 APK는 testOnly이므로 다음 명령으로 Device Owner를 해제할 수 있다.
+설치 스크립트는 다음 작업을 하지 않는다.
 
-```bat
-adb shell dpm remove-active-admin --user 0 io.github.pswgames.seowoo/.SeowooDeviceAdminReceiver
-```
+- Google 계정 삭제
+- Lenovo 계정 삭제
+- 게임 앱 삭제
+- 게임 데이터 초기화
+- 결제정보 변경
+- 공장초기화
+- Device Owner 등록
 
-또는 `Y700_REMOVE_DEVICE_OWNER.bat`를 사용한다. Device Owner를 해제한 뒤 앱을 제거하거나 다음 테스트 APK를 설치하면 된다.
+설정 실패 시 새로 만든 Seowoo 사용자만 제거한다.
 
-## 주의
+## 원상복구
 
-GitHub Actions debug APK는 장기 배포용 고정 서명판이 아니다. Y700 실기기 동작이 확인되면 최종 단계에서 고정된 개인 서명키로 release APK를 만들어 장기 업데이트 가능한 형태로 전환하는 것이 맞다.
+`Y700_REMOVE_DEVICE_OWNER.bat` 파일명은 기존 배포와 호환을 위해 유지했지만, 현재 버전에서는 Device Owner를 제거하지 않는다. 저장된 `Seowoo` 사용자 ID를 읽어 Owner 사용자로 전환한 뒤 **Seowoo 보조 사용자만 삭제**한다.
+
+## Y700 펌웨어 차이
+
+Lenovo Y700은 세대/지역 ROM에 따라 설정 UI에서 다중 사용자 메뉴 노출 여부가 다를 수 있다. 따라서 UI 메뉴 존재 여부가 아니라 `adb shell pm get-max-users`와 실제 `pm create-user` 성공 여부를 기준으로 설치한다.
+
+현재 펌웨어가 최대 사용자 1명으로 제한되어 있거나 `pm create-user`를 거부하면 이 무초기화 방식은 중단하며 기존 Owner 데이터에는 아무 변경도 하지 않는다.
+
+## 빌드
+
+GitHub Actions의 `Build Android Kiosk APK` 워크플로가 테스트용 APK를 빌드한다. 테스트판은 `android:testOnly="true"`로 유지해 보조 사용자 제거/재설정 실험을 쉽게 한다.
