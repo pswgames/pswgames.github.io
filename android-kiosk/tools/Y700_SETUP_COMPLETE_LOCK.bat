@@ -11,7 +11,7 @@ echo ============================================================
 echo  서우 놀이터 Y700 완전잠금 - 무초기화 보조사용자 설치
 echo ============================================================
 echo.
-echo 이 방식은 현재 Owner 사용자의 Google/Lenovo 계정,
+echo 이 방식은 현재 부모 사용자의 Google/Lenovo 계정,
 echo 게임 앱, 결제정보, 게임 데이터를 삭제하거나 초기화하지 않습니다.
 echo 새 보조 사용자 "Seowoo" 안에만 서우 놀이터를 설치합니다.
 echo.
@@ -43,12 +43,20 @@ echo [1/7] Y700 연결 확인
 adb devices
 
 echo.
+echo 반드시 평소 게임과 Google 계정을 사용하는 부모 사용자 화면에서 실행하세요.
 echo Y700 화면에 USB 디버깅 허용 창이 뜨면 허용해 주세요.
 pause
 
-for /f "delims=" %%A in ('adb shell am get-current-user 2^>nul') do set "CURRENT_USER=%%A"
-echo 현재 Android 사용자 ID: !CURRENT_USER!
+set "OWNER_USER="
+for /f "delims=" %%A in ('adb shell am get-current-user 2^>nul') do set "OWNER_USER=%%A"
+if not defined OWNER_USER (
+  echo [오류] 현재 부모 사용자 ID를 읽지 못했습니다.
+  pause
+  exit /b 3
+)
+echo 부모 Android 사용자 ID: !OWNER_USER!
 
+set "MAX_USERS="
 for /f "tokens=4" %%A in ('adb shell pm get-max-users 2^>nul ^| findstr /i "Maximum supported users"') do set "MAX_USERS=%%A"
 if not defined MAX_USERS (
   echo [오류] Y700의 다중 사용자 지원 정보를 읽지 못했습니다.
@@ -72,7 +80,8 @@ set "CHILD_USER="
 for /f "tokens=5" %%A in ('adb shell pm create-user "Seowoo" 2^>nul ^| findstr /c:"Success: created user id"') do set "CHILD_USER=%%A"
 if not defined CHILD_USER goto :create_failed
 
-echo !CHILD_USER!>"%STATE%"
+>"%STATE%" echo OWNER_USER=!OWNER_USER!
+>>"%STATE%" echo CHILD_USER=!CHILD_USER!
 echo 생성된 Seowoo 사용자 ID: !CHILD_USER!
 
 echo [3/7] Seowoo 사용자에만 앱 설치
@@ -100,10 +109,10 @@ echo  설치 완료
 echo ============================================================
 echo 서우 사용자에서 앱의 화면잠금 ON을 누르면
  echo Android Lock Task가 홈/최근앱/알림·제어센터를 제한합니다.
-echo 잠금 OFF 후에는 사용자 전환 화면이 열리며,
-echo Owner 사용자로 돌아가면 기존 게임/Google 계정 환경을 그대로 사용합니다.
+echo 잠금 OFF 후에는 사용자 전환/설정 화면이 열리며,
+echo 원래 부모 사용자로 돌아가면 기존 게임/Google 계정 환경을 그대로 사용합니다.
 echo.
-echo 메인 Owner 사용자 데이터에는 변경을 가하지 않았습니다.
+echo 부모 사용자 데이터에는 변경을 가하지 않았습니다.
 pause
 exit /b 0
 
@@ -115,15 +124,15 @@ pause
 exit /b 5
 
 :rollback_after_switch
-adb shell am switch-user 0 >nul 2>nul
+adb shell am switch-user !OWNER_USER! >nul 2>nul
 
 :rollback
 echo.
 echo [롤백] 설정이 완료되지 않아 새 Seowoo 사용자만 제거합니다.
-adb shell am switch-user 0 >nul 2>nul
+adb shell am switch-user !OWNER_USER! >nul 2>nul
 timeout /t 2 /nobreak >nul
 if defined CHILD_USER adb shell pm remove-user !CHILD_USER! >nul 2>nul
 del "%STATE%" >nul 2>nul
-echo 기존 Owner 사용자의 Google 계정/게임 데이터는 변경하지 않았습니다.
+echo 기존 부모 사용자의 Google 계정/게임 데이터는 변경하지 않았습니다.
 pause
 exit /b 6
