@@ -1,11 +1,9 @@
-/* v6.1.0 — atomic precache with deterministic one-refresh updates. */
-const VERSION='seowoo-static-6.1.0';
+/* v6.2.0 — atomic precache with deterministic one-refresh updates. */
+const VERSION='seowoo-static-6.2.0';
 const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
- // A broken release never takes control: every required shell file must cache first.
  await cache.addAll(CORE.map(url=>new Request(url,{cache:'reload'})));
- // Once the complete shell is ready, do not leave an installed PWA pinned to the old worker.
  await self.skipWaiting();
 })()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
@@ -13,7 +11,6 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
  const stale=keys.filter(k=>k.startsWith('seowoo-')&&k!==VERSION);
  await Promise.all(stale.map(k=>caches.delete(k)));
  await self.clients.claim();
- // Existing clients may still be executing the old cached JS. Refresh them exactly once per worker activation.
  if(stale.length){
   const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
   await Promise.all(windows.map(async client=>{
@@ -27,7 +24,6 @@ self.addEventListener('fetch',event=>{
  const cache=await caches.open(VERSION);
  if(r.mode==='navigate')return (await cache.match('/index.html'))||fetch(r);
  const hit=await cache.match(r,{ignoreSearch:true});
- // Range requests must retain their HTTP semantics (not return an entire cached audio file).
  if(r.headers.has('range')){
   if(!hit)return fetch(r);
   const data=await hit.arrayBuffer(),range=/^bytes=(\d*)-(\d*)$/.exec(r.headers.get('range'));
