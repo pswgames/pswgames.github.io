@@ -1,14 +1,25 @@
-/* An update waits until all old app windows close. Required shell is atomic. */
-const VERSION='seowoo-static-6.0.0';
+/* v6.0.1 — atomic precache with deterministic one-refresh updates. */
+const VERSION='seowoo-static-6.0.1';
 const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/pwa-v5152.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
- // addAll rejects on a missing file; a broken release never replaces the working worker.
+ // A broken release never takes control: every required shell file must cache first.
  await cache.addAll(CORE.map(url=>new Request(url,{cache:'reload'})));
+ // Once the complete shell is ready, do not leave an installed PWA pinned to the old worker.
+ await self.skipWaiting();
 })()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
- const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('seowoo-')&&k!==VERSION).map(k=>caches.delete(k)));
+ const keys=await caches.keys();
+ const stale=keys.filter(k=>k.startsWith('seowoo-')&&k!==VERSION);
+ await Promise.all(stale.map(k=>caches.delete(k)));
  await self.clients.claim();
+ // Existing clients may still be executing the old cached JS. Refresh them exactly once per worker activation.
+ if(stale.length){
+  const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
+  await Promise.all(windows.map(async client=>{
+   try{const url=new URL(client.url);if(url.origin===self.location.origin)await client.navigate(client.url)}catch{}
+  }));
+ }
 })()));
 self.addEventListener('fetch',event=>{
  const r=event.request,url=new URL(r.url);if(r.method!=='GET'||url.origin!==self.location.origin||url.pathname==='/sw.js')return;
@@ -30,4 +41,8 @@ self.addEventListener('fetch',event=>{
  if(hit)return hit;
  const response=await fetch(r);if(response.ok&&/^\/(audio|assets|icons)\//.test(url.pathname))await cache.put(r,response.clone());return response;
  })());
+});
+self.addEventListener('message',event=>{
+ if(event.data==='SKIP_WAITING'||event.data?.type==='SKIP_WAITING')event.waitUntil(self.skipWaiting());
+ if(event.data?.type==='CHECK_UPDATE')event.waitUntil(self.registration.update().catch(()=>{}));
 });
