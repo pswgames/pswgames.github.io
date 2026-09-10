@@ -28,6 +28,7 @@ import android.webkit.WebViewClient;
 public class MainActivity extends Activity {
     private static final String APP_URL = "https://pswgames.github.io/";
     private static final String APP_HOST = "pswgames.github.io";
+    private static final String ACTION_USER_SETTINGS_COMPAT = "android.settings.USER_SETTINGS";
 
     private WebView webView;
     private DevicePolicyManager devicePolicyManager;
@@ -159,7 +160,7 @@ public class MainActivity extends Activity {
 
     private void openUserSwitcher() {
         try {
-            Intent intent = new Intent(Settings.ACTION_USER_SETTINGS);
+            Intent intent = new Intent(ACTION_USER_SETTINGS_COMPAT);
             startActivity(intent);
         } catch (Exception first) {
             try { startActivity(new Intent(Settings.ACTION_SETTINGS)); } catch (Exception ignored) {}
