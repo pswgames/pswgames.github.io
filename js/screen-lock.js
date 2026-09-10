@@ -14,6 +14,15 @@ let failedAttempts=0;
 let blockedUntil=0;
 const nativeOpen=window.open.bind(window);
 
+function nativeBridge(){
+  const bridge=window.SeowooNativeKiosk;
+  return bridge&&typeof bridge.lock==='function'&&typeof bridge.unlock==='function'?bridge:null;
+}
+function syncNativeKiosk(){
+  const bridge=nativeBridge();if(!bridge)return false;
+  try{locked?bridge.lock():bridge.unlock();return true}catch{return false}
+}
+
 const toast=msg=>{try{window.SeowooCore?.toast?.(msg)}catch{}};
 const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 
@@ -106,7 +115,9 @@ function releaseHistoryGuard(){
 function applyState(announce=false){
   document.documentElement.classList.toggle('screen-locked',locked);document.body.classList.toggle('screen-locked',locked);
   document.documentElement.dataset.screenLock=locked?'on':'off';syncButtons();
+  const nativeActive=syncNativeKiosk();
   if(locked){armHistoryGuard();acquireWakeLock()}else{releaseHistoryGuard();releaseWakeLock()}
+  document.documentElement.dataset.nativeKiosk=nativeActive?'available':'web-only';
   window.dispatchEvent(new CustomEvent('seowoo:screenlock',{detail:{locked}}));
   if(announce)toast(locked?'화면 잠금 ON · 해제하려면 부모 비밀번호가 필요해요':'화면 잠금 OFF');
 }
@@ -152,13 +163,13 @@ async function handlePinSubmit(e){
   try{
     if(mode==='setup'){
       const confirm=dlg.querySelector('#screenLockPinConfirm').value.trim();if(pin!==confirm){showError('비밀번호가 서로 달라. 다시 확인해줘.');return}
-      await saveCredential(pin);failedAttempts=0;closeDialog();const next=!locked;setLocked(next,true);if(next)requestFullscreenContainment();else releaseFullscreenContainment();return;
+      await saveCredential(pin);failedAttempts=0;closeDialog();const next=!locked;setLocked(next,true);if(next&&!nativeBridge())requestFullscreenContainment();else if(!next)releaseFullscreenContainment();return;
     }
     const ok=await verifyPin(pin);
     if(!ok){
       failedAttempts++;if(failedAttempts>=5){blockedUntil=Date.now()+30000;failedAttempts=0;showError('비밀번호를 5번 틀렸어. 30초 후 다시 시도해줘.')}else showError(`비밀번호가 맞지 않아. (${failedAttempts}/5)`);return;
     }
-    failedAttempts=0;blockedUntil=0;closeDialog();const next=!locked;setLocked(next,true);if(next)requestFullscreenContainment();else releaseFullscreenContainment();
+    failedAttempts=0;blockedUntil=0;closeDialog();const next=!locked;setLocked(next,true);if(next&&!nativeBridge())requestFullscreenContainment();else if(!next)releaseFullscreenContainment();
   }catch(err){showError('비밀번호 처리 중 오류가 났어. 앱을 다시 열고 시도해줘.')}finally{submit.disabled=false}
 }
 function bindButton(btn){

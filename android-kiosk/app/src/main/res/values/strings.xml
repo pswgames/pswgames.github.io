@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">서우 놀이터</string>
+    <string name="device_admin_description">서우 놀이터를 전용 키오스크 모드로 잠글 때 사용합니다.</string>
+</resources>
