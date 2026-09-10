@@ -43,7 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p android-kiosk/dist
-          cp android-kiosk/app/build/outputs/apk/debug/app-debug.apk android-kiosk/dist/seowoo-playground-y700-kiosk-v1.2.0-test.apk
+          cp android-kiosk/app/build/outputs/apk/debug/app-debug.apk android-kiosk/dist/seowoo-playground-y700-kiosk-v1.2.1-test.apk
           cp android-kiosk/checker/build/outputs/apk/debug/checker-debug.apk android-kiosk/dist/Y700_NO_RESET_CHECKER_v1.0.0.apk
           cp android-kiosk/tools/Y700_CHECK_NO_RESET_SUPPORT.bat android-kiosk/dist/
           cp android-kiosk/tools/Y700_SETUP_COMPLETE_LOCK.bat android-kiosk/dist/
@@ -54,12 +54,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Y700_NO_RESET_CHECKER_v1.0.0
-          path: android-kiosk/dist/Y700_NO_RESET_CHECKER_v1.0.0.apk
+          path: android-kiosk/checker/build/outputs/apk/debug/checker-debug.apk
           if-no-files-found: error
 
       - name: Upload Y700 no-reset package
         uses: actions/upload-artifact@v4
         with:
-          name: seowoo-y700-no-reset-profile-owner-v1.2.0
+          name: seowoo-y700-no-reset-profile-owner-v1.2.1
           path: android-kiosk/dist/*
           if-no-files-found: error
