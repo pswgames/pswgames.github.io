@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.UserManager;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
 
         devicePolicyManager = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
         adminComponent = new ComponentName(this, SeowooDeviceAdminReceiver.class);
-        configureDedicatedDeviceIfAvailable();
+        configureDedicatedDeviceIfAvailable(false);
 
         webView = new WebView(this);
         webView.setBackgroundColor(Color.rgb(247, 251, 255));
@@ -51,7 +52,7 @@ public class MainActivity extends Activity {
         settings.setAllowContentAccess(false);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setMediaPlaybackRequiresUserGesture(true);
-        settings.setUserAgentString(settings.getUserAgentString() + " SeowooKiosk/1.0");
+        settings.setUserAgentString(settings.getUserAgentString() + " SeowooKiosk/1.1");
         WebView.setWebContentsDebuggingEnabled(false);
 
         webView.addJavascriptInterface(new NativeKioskBridge(), "SeowooNativeKiosk");
@@ -60,16 +61,9 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri uri = request.getUrl();
-                if ("https".equalsIgnoreCase(uri.getScheme()) && APP_HOST.equalsIgnoreCase(uri.getHost())) {
-                    return false;
-                }
-                if (kioskRequested) {
-                    return true;
-                }
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                } catch (Exception ignored) {
-                }
+                if ("https".equalsIgnoreCase(uri.getScheme()) && APP_HOST.equalsIgnoreCase(uri.getHost())) return false;
+                if (kioskRequested) return true;
+                try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); } catch (Exception ignored) {}
                 return true;
             }
 
@@ -81,22 +75,24 @@ public class MainActivity extends Activity {
         });
 
         setContentView(webView);
-        if (savedInstanceState == null || webView.restoreState(savedInstanceState) == null) {
-            webView.loadUrl(APP_URL);
-        }
+        if (savedInstanceState == null || webView.restoreState(savedInstanceState) == null) webView.loadUrl(APP_URL);
     }
 
-    private void configureDedicatedDeviceIfAvailable() {
-        if (devicePolicyManager == null || !devicePolicyManager.isDeviceOwnerApp(getPackageName())) {
-            return;
-        }
+    private boolean isDeviceOwnerReady() {
+        return devicePolicyManager != null && devicePolicyManager.isDeviceOwnerApp(getPackageName());
+    }
+
+    private void configureDedicatedDeviceIfAvailable(boolean locked) {
+        if (!isDeviceOwnerReady()) return;
         try {
             devicePolicyManager.setLockTaskPackages(adminComponent, new String[]{getPackageName()});
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 devicePolicyManager.setLockTaskFeatures(adminComponent, DevicePolicyManager.LOCK_TASK_FEATURE_NONE);
             }
-        } catch (SecurityException ignored) {
-        }
+            devicePolicyManager.setStatusBarDisabled(adminComponent, locked);
+            if (locked) devicePolicyManager.addUserRestriction(adminComponent, UserManager.DISALLOW_CREATE_WINDOWS);
+            else devicePolicyManager.clearUserRestriction(adminComponent, UserManager.DISALLOW_CREATE_WINDOWS);
+        } catch (SecurityException | IllegalArgumentException ignored) {}
     }
 
     private int lockTaskState() {
@@ -112,25 +108,25 @@ public class MainActivity extends Activity {
     }
 
     private void enterKioskMode() {
+        if (!isDeviceOwnerReady()) {
+            kioskRequested = false;
+            dispatchNativeStatus();
+            return;
+        }
         kioskRequested = true;
-        configureDedicatedDeviceIfAvailable();
+        configureDedicatedDeviceIfAvailable(true);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         hideSystemBars();
-        try {
-            startLockTask();
-        } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {
-        }
+        try { startLockTask(); } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {}
         dispatchNativeStatus();
     }
 
     private void exitKioskMode() {
         kioskRequested = false;
         try {
-            if (lockTaskState() != ActivityManager.LOCK_TASK_MODE_NONE) {
-                stopLockTask();
-            }
-        } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {
-        }
+            if (lockTaskState() != ActivityManager.LOCK_TASK_MODE_NONE) stopLockTask();
+        } catch (IllegalArgumentException | IllegalStateException | SecurityException ignored) {}
+        configureDedicatedDeviceIfAvailable(false);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         showSystemBars();
         dispatchNativeStatus();
@@ -141,7 +137,7 @@ public class MainActivity extends Activity {
             WindowInsetsController controller = getWindow().getInsetsController();
             if (controller != null) {
                 controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_DEFAULT);
             }
         } else {
             getWindow().getDecorView().setSystemUiVisibility(
@@ -158,9 +154,7 @@ public class MainActivity extends Activity {
     private void showSystemBars() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowInsetsController controller = getWindow().getInsetsController();
-            if (controller != null) {
-                controller.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-            }
+            if (controller != null) controller.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         }
@@ -169,56 +163,36 @@ public class MainActivity extends Activity {
     private void dispatchNativeStatus() {
         if (webView == null) return;
         final String mode = lockTaskModeName();
-        final boolean deviceOwner = devicePolicyManager != null && devicePolicyManager.isDeviceOwnerApp(getPackageName());
-        final String script = "window.dispatchEvent(new CustomEvent('seowoo:nativekioskstatus',{detail:{available:true,mode:'" + mode + "',deviceOwner:" + deviceOwner + "}}));";
+        final boolean deviceOwner = isDeviceOwnerReady();
+        final String script = "window.dispatchEvent(new CustomEvent('seowoo:nativekioskstatus',{detail:{available:true,mode:'" + mode + "',deviceOwner:" + deviceOwner + ",strictReady:" + deviceOwner + "}}));";
         webView.post(() -> webView.evaluateJavascript(script, null));
     }
 
     public class NativeKioskBridge {
-        @JavascriptInterface
-        public void lock() {
-            runOnUiThread(MainActivity.this::enterKioskMode);
-        }
-
-        @JavascriptInterface
-        public void unlock() {
-            runOnUiThread(MainActivity.this::exitKioskMode);
-        }
-
-        @JavascriptInterface
-        public String mode() {
-            return lockTaskModeName();
-        }
-
-        @JavascriptInterface
-        public boolean isDeviceOwner() {
-            return devicePolicyManager != null && devicePolicyManager.isDeviceOwnerApp(getPackageName());
-        }
+        @JavascriptInterface public void lock() { runOnUiThread(MainActivity.this::enterKioskMode); }
+        @JavascriptInterface public void unlock() { runOnUiThread(MainActivity.this::exitKioskMode); }
+        @JavascriptInterface public String mode() { return lockTaskModeName(); }
+        @JavascriptInterface public boolean isDeviceOwner() { return isDeviceOwnerReady(); }
+        @JavascriptInterface public boolean strictReady() { return isDeviceOwnerReady(); }
     }
 
     @Override
     public void onBackPressed() {
-        if (kioskRequested || lockTaskState() != ActivityManager.LOCK_TASK_MODE_NONE) {
-            return;
-        }
-        if (webView != null && webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            super.onBackPressed();
-        }
+        if (kioskRequested || lockTaskState() == ActivityManager.LOCK_TASK_MODE_LOCKED) return;
+        if (webView != null && webView.canGoBack()) webView.goBack(); else super.onBackPressed();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (kioskRequested) hideSystemBars();
+        if (kioskRequested && isDeviceOwnerReady()) hideSystemBars();
         dispatchNativeStatus();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus && kioskRequested) hideSystemBars();
+        if (hasFocus && kioskRequested && isDeviceOwnerReady()) hideSystemBars();
     }
 
     @Override
