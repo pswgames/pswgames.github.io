@@ -28,7 +28,7 @@ if not exist "%STATE%" (
 
 set "OWNER_USER="
 set "CHILD_USER="
-for /f "tokens=1,2 delims==" %%A in (%STATE%) do (
+for /f "usebackq tokens=1,2 delims==" %%A in ("%STATE%") do (
   if /i "%%A"=="OWNER_USER" set "OWNER_USER=%%B"
   if /i "%%A"=="CHILD_USER" set "CHILD_USER=%%B"
 )
