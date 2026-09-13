@@ -1,4 +1,4 @@
-/* v5.15.2 — stable Android/Chrome PWA install flow without forced refresh loops. */
+/* v6.6.2 — stable install flow plus deterministic one-refresh service-worker updates. */
 (()=>{
   'use strict';
   let deferred=null;
@@ -27,8 +27,13 @@
   });
 
   if('serviceWorker' in navigator){
+    const hadController=!!navigator.serviceWorker.controller;
+    let updateReloading=false;
     navigator.serviceWorker.addEventListener('controllerchange',()=>{
       document.documentElement.dataset.swUpdated='1';
+      if(!hadController||updateReloading)return;
+      updateReloading=true;
+      location.reload();
     });
   }
 
