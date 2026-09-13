@@ -1,10 +1,15 @@
-/* v6.6.2 — atomic precache with deterministic one-refresh updates. */
-const VERSION='seowoo-static-6.6.2';
+/* v6.6.3 — atomic precache with deterministic one-refresh updates and failed-install cleanup. */
+const VERSION='seowoo-static-6.6.3';
 const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
- await cache.addAll(CORE.map(url=>new Request(url,{cache:'reload'})));
- await self.skipWaiting();
+ try{
+  await cache.addAll(CORE.map(url=>new Request(url,{cache:'reload'})));
+  await self.skipWaiting();
+ }catch(error){
+  await caches.delete(VERSION);
+  throw error;
+ }
 })()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
  const keys=await caches.keys();
