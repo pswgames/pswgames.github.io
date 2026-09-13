@@ -1,5 +1,5 @@
-/* v6.6.0 — atomic precache with deterministic one-refresh updates. */
-const VERSION='seowoo-static-6.6.0';
+/* v6.6.1 — atomic precache with deterministic one-refresh updates. */
+const VERSION='seowoo-static-6.6.1';
 const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
@@ -14,7 +14,12 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
  if(stale.length){
   const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
   await Promise.all(windows.map(async client=>{
-   try{const url=new URL(client.url);if(url.origin===self.location.origin)await client.navigate(client.url)}catch{}
+   try{
+    const url=new URL(client.url);
+    if(url.origin!==self.location.origin)return;
+    url.searchParams.set('__sw',VERSION);
+    await client.navigate(url.href);
+   }catch{}
   }));
  }
 })()));
