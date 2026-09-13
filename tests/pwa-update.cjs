@@ -7,6 +7,7 @@ const {chromium}=require('playwright');
  await p.goto('http://127.0.0.1:4174');await p.evaluate(()=>navigator.serviceWorker.ready);await p.reload();await p.evaluate(()=>{SeowooApp.go('elevator');window.sentinel='old-runtime'});
  release='b';await p.evaluate(async()=>{const r=await navigator.serviceWorker.getRegistration();void r.update()});
  await p.waitForFunction(async()=>{const keys=await caches.keys(),r=await navigator.serviceWorker.getRegistration();return keys.includes('seowoo-static-test-b')&&!keys.includes('seowoo-static-test-a')&&r?.active?.state==='activated'});
+ await p.waitForFunction(()=>window.sentinel===undefined);
  await p.waitForFunction(()=>document.body.dataset.playRoute==='elevator');
  assert.equal(await p.evaluate(()=>window.sentinel),undefined,'worker activation should refresh the old runtime exactly once');
  await ctx.setOffline(true);await p.reload();assert.equal(await p.locator('.category-card').count(),7);await p.waitForFunction(()=>document.body.dataset.playRoute==='elevator');
