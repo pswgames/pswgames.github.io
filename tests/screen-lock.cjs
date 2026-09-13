@@ -31,5 +31,5 @@ assert(setup.includes('pm create-user'));
 assert(setup.includes('am start-user -w'));
 assert(setup.includes('set-profile-owner --user'));
 assert(!setup.includes('set-device-owner'));
-assert(html.includes('app-version" content="6.6.1"'));
+assert(html.includes('app-version" content="6.6.2"'));
 console.log('SCREEN LOCK STATIC QA PASSED: PIN-only LockTask, Profile Owner, persistent child HOME recovery, no Device Owner/factory-reset path');
