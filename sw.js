@@ -1,6 +1,6 @@
-/* v6.8.0 — atomic precache with premium UI layer and offline city scenes. */
-const VERSION='seowoo-static-6.8.0';
-const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/css/v68-premium.css','/assets/elevator-city-v6.webp','/assets/elevator-scenes/city-01.svg','/assets/elevator-scenes/city-02.svg','/assets/elevator-scenes/city-03.svg','/assets/elevator-scenes/city-04.svg','/assets/elevator-scenes/city-05.svg','/assets/elevator-scenes/city-06.svg','/assets/elevator-scenes/city-07.svg','/assets/elevator-scenes/city-08.svg','/assets/elevator-scenes/city-09.svg','/assets/elevator-scenes/city-10.svg','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js','/js/v67-find.js','/js/v68-upgrade.js'];
+/* v6.8.1 — atomic precache with parent refresh controls; remote photo panoramas fall back to the local city scene offline. */
+const VERSION='seowoo-static-6.8.1';
+const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/css/v68-premium.css','/css/v681-hotfix.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js','/js/v67-find.js','/js/v68-upgrade.js','/js/v681-hotfix.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
  try{
