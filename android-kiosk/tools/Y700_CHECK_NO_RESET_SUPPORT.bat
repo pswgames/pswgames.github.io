@@ -41,7 +41,7 @@ for /f "delims=" %%A in ('"%ADB%" shell getprop ro.product.model 2^>nul') do set
 for /f "delims=" %%A in ('"%ADB%" shell getprop ro.build.version.release 2^>nul') do set "ANDROID=%%A"
 for /f "delims=" %%A in ('"%ADB%" shell getprop ro.build.version.incremental 2^>nul') do set "BUILD=%%A"
 for /f "delims=" %%A in ('"%ADB%" shell am get-current-user 2^>nul') do set "CURRENT_USER=%%A"
-for /f "tokens=4" %%A in ('"%ADB%" shell pm get-max-users 2^>nul ^| findstr /i "Maximum supported users"') do set "MAX_USERS=%%A"
+for /f "tokens=4" %%A in ('"%ADB%" shell pm get-max-users 2^>nul') do set "MAX_USERS=%%A"
 
 echo Model: !MODEL!
 echo Android: !ANDROID!
@@ -54,6 +54,14 @@ echo.
 echo.
 if not defined MAX_USERS (
   echo [UNKNOWN] Could not read Android multi-user capability.
+  echo Run this manually to verify: adb shell pm get-max-users
+  pause
+  exit /b 2
+)
+
+for /f "delims=0123456789" %%A in ("!MAX_USERS!") do set "NONNUM=%%A"
+if defined NONNUM (
+  echo [UNKNOWN] Unexpected max-user value: !MAX_USERS!
   pause
   exit /b 2
 )
