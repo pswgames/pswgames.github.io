@@ -57,6 +57,15 @@ jobs:
               except UnicodeDecodeError as exc:
                   raise SystemExit(f'{path}: non-ASCII byte at offset {exc.start}') from exc
               print(f'OK: {path}')
+
+          gradle = Path('android-kiosk/app/build.gradle').read_text()
+          setup = Path('android-kiosk/tools/Y700_SETUP_COMPLETE_LOCK.bat').read_text()
+          pkg = 'io.github.pswgames.seowoo.kiosk'
+          if f"applicationId '{pkg}'" not in gradle:
+              raise SystemExit('isolated kiosk applicationId is missing')
+          if f'set "PKG={pkg}"' not in setup:
+              raise SystemExit('setup BAT package ID does not match applicationId')
+          print('OK: isolated kiosk package IDs match')
           PY
 
       - name: Set up Gradle
@@ -72,7 +81,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p android-kiosk/dist
-          cp android-kiosk/app/build/outputs/apk/debug/app-debug.apk android-kiosk/dist/seowoo-playground-y700-kiosk-v1.2.1-test.apk
+          cp android-kiosk/app/build/outputs/apk/debug/app-debug.apk android-kiosk/dist/seowoo-playground-y700-kiosk-v1.2.2-test.apk
           cp android-kiosk/checker/build/outputs/apk/debug/checker-debug.apk android-kiosk/dist/Y700_NO_RESET_CHECKER_v1.0.0.apk
           cp android-kiosk/tools/Y700_CHECK_NO_RESET_SUPPORT.bat android-kiosk/dist/
           cp android-kiosk/tools/Y700_SETUP_COMPLETE_LOCK.bat android-kiosk/dist/
@@ -89,6 +98,6 @@ jobs:
       - name: Upload Y700 no-reset package
         uses: actions/upload-artifact@v4
         with:
-          name: seowoo-y700-no-reset-profile-owner-v1.2.1
+          name: seowoo-y700-no-reset-profile-owner-v1.2.2
           path: android-kiosk/dist/*
           if-no-files-found: error
