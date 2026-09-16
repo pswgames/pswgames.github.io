@@ -26,7 +26,7 @@
       img.className='elevator-panorama-image';img.alt='';img.decoding='async';img.draggable=false;img.src=scene.src;view.dataset.scene=String(scene.idx);
       let floor=1,alive=true,shift=0,raf=0,observer=null,loaded=false;
       const tracks=[document.createElement('div'),document.createElement('div')];tracks.forEach((e,i)=>e.className='shaft-track'+(i?' right':''));view.replaceChildren(img,...tracks);view.style.backgroundImage=`url('${scene.src}')`;
-      function paint(){if(!alive)return;const progress=Math.max(0,Math.min(1,(floor-1)/19));const fastProgress=1-Math.pow(1-progress,.92);const y=-shift*(1-fastProgress);img.style.transform=`translate3d(-50%,${y.toFixed(2)}px,0) scale(1.02)`;tracks.forEach(e=>e.style.transform=`translate3d(0,${((floor-1)*104)%208}px,0)`)}
+      function paint(){if(!alive)return;const progress=Math.max(0,Math.min(1,(floor-1)/19));const fastProgress=1-Math.pow(1-progress,1.08);const y=-shift*(1-fastProgress);img.style.transform=`translate3d(-50%,${y.toFixed(2)}px,0) scale(1.02)`;tracks.forEach(e=>e.style.transform=`translate3d(0,${((floor-1)*104)%208}px,0)`)}
       function resize(){if(!alive||!view.isConnected)return;const vw=view.clientWidth,vh=view.clientHeight;if(!vw||!vh)return;const iw=img.naturalWidth||1200,ih=img.naturalHeight||1800;const minTravel=Math.max(vh*.48,290);const cover=Math.max(vw/iw,(vh+minTravel)/ih);const scale=cover*(window.innerWidth>window.innerHeight?1.1:1.06);const w=iw*scale,h=ih*scale;img.style.width=`${w}px`;img.style.height=`${h}px`;shift=Math.max(0,h-vh);paint()}
       function requestResize(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;resize()})}
       img.addEventListener('load',()=>{loaded=true;view.classList.add('panorama-ready');resize()},{once:true});
