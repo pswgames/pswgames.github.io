@@ -20,7 +20,9 @@ const assert=require('assert');
 
   await page.evaluate(()=>SeowooApp.go('numbers'));
   assert.equal(await page.locator('.number-spark-hero').count(),1,'number hero missing');
-  assert.equal(await page.locator('.numbers-polished .tile').count(),5,'number tiles missing');
+  assert.equal(await page.locator('.numbers-polished .tile').count(),2,'simplified number tiles missing');
+  assert.equal(await page.locator('[data-go="quantity"]').count(),1,'quantity tile missing');
+  assert.equal(await page.locator('[data-go="numberOrder"]').count(),1,'number order tile missing');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'numbers overflow');
   await page.screenshot({path:'qa-artifacts/numbers-tablet.png'});
 
@@ -32,5 +34,5 @@ const assert=require('assert');
   assert.equal(await page.evaluate(()=>SeowooCore.state.stats.rounds),rounds+1,'together completion counted more than once');
   assert.equal(errors.length,0,errors.join('\n'));
   await browser.close();
-  console.log('POLISH QA PASSED: concise praise, number visual hero, together -> home');
+  console.log('POLISH QA PASSED: concise praise, simplified number play, together -> home');
 })().catch(e=>{console.error(e);process.exit(1)});
