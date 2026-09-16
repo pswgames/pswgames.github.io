@@ -7,7 +7,7 @@ const fs=require('fs'),assert=require('assert');
   assert(html.includes('app-version" content="6.8.0"'));
   assert(html.includes('/css/v68-premium.css?v=6.8.0'));
   assert(html.includes('/js/v68-upgrade.js?v=6.8.0'));
-  assert(upgrade.includes('data-seowoo-kiosk'));
+  assert(upgrade.includes('dataset.seowooKiosk'));
   assert(upgrade.includes('화면잠금 비밀번호 변경'));
   assert(upgrade.includes('consonant'));
   assert(upgrade.includes('vowel'));
