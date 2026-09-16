@@ -1,6 +1,6 @@
-/* v6.7.2 — atomic precache with deterministic one-refresh updates and failed-install cleanup. */
-const VERSION='seowoo-static-6.7.2';
-const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js','/js/v67-find.js'];
+/* v6.8.0 — atomic precache with premium UI layer and runtime city-scene caching. */
+const VERSION='seowoo-static-6.8.0';
+const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/css/v68-premium.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js','/js/v67-find.js','/js/v68-upgrade.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(VERSION);
  try{
