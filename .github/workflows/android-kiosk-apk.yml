@@ -16,19 +16,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(command -v sdkmanager)"
+          fi
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Validate Windows setup scripts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          files = [
+              Path('android-kiosk/tools/Y700_CHECK_NO_RESET_SUPPORT.bat'),
+              Path('android-kiosk/tools/Y700_SETUP_COMPLETE_LOCK.bat'),
+              Path('android-kiosk/tools/Y700_REMOVE_DEVICE_OWNER.bat'),
+          ]
+
+          for path in files:
+              data = path.read_bytes()
+              if data.startswith(b'\xef\xbb\xbf'):
+                  raise SystemExit(f'{path}: UTF-8 BOM is not allowed')
+              try:
+                  data.decode('ascii')
+              except UnicodeDecodeError as exc:
+                  raise SystemExit(f'{path}: non-ASCII byte at offset {exc.start}') from exc
+              print(f'OK: {path}')
+          PY
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
