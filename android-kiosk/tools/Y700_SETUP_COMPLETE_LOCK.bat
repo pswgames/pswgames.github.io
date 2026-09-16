@@ -7,11 +7,12 @@ set "APK=%~dp0seowoo-playground-y700-kiosk-v1.2.1-test.apk"
 set "STATE=%~dp0seowoo_child_user_id.txt"
 set "ADB=%~dp0adb.exe"
 if not exist "%ADB%" set "ADB=adb"
+set "TMPBASE=%TEMP%\seowoo_y700_%RANDOM%_%RANDOM%"
 
 echo.
 echo ============================================================
 echo  SEOWOO PLAYGROUND Y700 STRICT LOCK - NO RESET SETUP
- echo ============================================================
+echo ============================================================
 echo This setup creates a separate Android user named Seowoo.
 echo It does NOT factory-reset the tablet or remove the parent account.
 echo.
@@ -59,9 +60,10 @@ if not defined OWNER_USER (
 echo Parent Android user ID: !OWNER_USER!
 
 set "MAX_USERS="
-for /f "tokens=4" %%A in ('"%ADB%" shell pm get-max-users 2^>nul ^| findstr /i "Maximum supported users"') do set "MAX_USERS=%%A"
+for /f "tokens=4" %%A in ('"%ADB%" shell pm get-max-users 2^>nul') do set "MAX_USERS=%%A"
 if not defined MAX_USERS (
   echo [ERROR] Could not read multi-user capability.
+  echo Run manually: adb shell pm get-max-users
   pause
   exit /b 3
 )
@@ -73,21 +75,27 @@ if !MAX_USERS! LEQ 1 (
   exit /b 4
 )
 
-"%ADB%" shell dpm list-owners 2>nul | findstr /i "%PKG%" >nul
+"%ADB%" shell dpm list-owners > "%TMPBASE%_owners.txt" 2>nul
+findstr /i /c:"%PKG%" "%TMPBASE%_owners.txt" >nul 2>nul
 if not errorlevel 1 (
+  del "%TMPBASE%_owners.txt" >nul 2>nul
   echo [STOP] A Seowoo device/profile owner is already registered.
   echo No automatic removal was attempted.
   pause
   exit /b 5
 )
+del "%TMPBASE%_owners.txt" >nul 2>nul
 
-"%ADB%" shell pm list packages --user !OWNER_USER! %PKG% 2>nul | findstr /i "%PKG%" >nul
+"%ADB%" shell pm list packages --user !OWNER_USER! %PKG% > "%TMPBASE%_packages.txt" 2>nul
+findstr /i /c:"%PKG%" "%TMPBASE%_packages.txt" >nul 2>nul
 if not errorlevel 1 (
+  del "%TMPBASE%_packages.txt" >nul 2>nul
   echo [STOP] The native Seowoo kiosk package already exists in the parent user.
   echo To protect parent-user app data, this script will not uninstall or replace it.
   pause
   exit /b 5
 )
+del "%TMPBASE%_packages.txt" >nul 2>nul
 
 echo.
 echo PRE-FLIGHT PASSED.
@@ -102,8 +110,16 @@ if errorlevel 2 (
 echo.
 echo [2/8] Creating Seowoo secondary user...
 set "CHILD_USER="
-for /f "tokens=5" %%A in ('"%ADB%" shell pm create-user "Seowoo" 2^>nul ^| findstr /c:"Success: created user id"') do set "CHILD_USER=%%A"
-if not defined CHILD_USER goto :create_failed
+"%ADB%" shell pm create-user "Seowoo" > "%TMPBASE%_create.txt" 2>&1
+for /f "tokens=1,2,3,4,5" %%A in (%TMPBASE%_create.txt) do (
+  if /i "%%A %%B %%C %%D"=="Success: created user id" set "CHILD_USER=%%E"
+)
+if not defined CHILD_USER (
+  type "%TMPBASE%_create.txt"
+  del "%TMPBASE%_create.txt" >nul 2>nul
+  goto :create_failed
+)
+del "%TMPBASE%_create.txt" >nul 2>nul
 >"%STATE%" echo OWNER_USER=!OWNER_USER!
 >>"%STATE%" echo CHILD_USER=!CHILD_USER!
 echo Created Seowoo user ID: !CHILD_USER!
@@ -136,7 +152,7 @@ echo [8/8] Setup command sequence completed.
 echo.
 echo ============================================================
 echo  SETUP COMPLETE - DEVICE TEST REQUIRED
- echo ============================================================
+echo ============================================================
 echo 1. On the tablet, set a 4-8 digit parent PIN in Seowoo Playground.
 echo 2. Turn Screen Lock ON.
 echo 3. Test Home, Recents, notification shade, and edge gestures.
@@ -164,6 +180,7 @@ echo [ROLLBACK] Setup did not complete. Removing only the new Seowoo user...
 timeout /t 2 /nobreak >nul
 if defined CHILD_USER "%ADB%" shell pm remove-user !CHILD_USER! >nul 2>nul
 del "%STATE%" >nul 2>nul
+del "%TMPBASE%_create.txt" >nul 2>nul
 echo Rollback finished. Parent-user data was not deleted by this script.
 pause
 exit /b 7
