@@ -1,7 +1,7 @@
 {
   "name": "seowoo-playground",
   "private": true,
-  "version": "6.8.0",
+  "version": "6.8.1",
   "scripts": {
     "dev": "node scripts/serve.cjs",
     "test": "node scripts/verify.cjs"
