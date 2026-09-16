@@ -1,9 +1,10 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-set "PKG=io.github.pswgames.seowoo"
-set "ADMIN=io.github.pswgames.seowoo/.SeowooDeviceAdminReceiver"
-set "APK=%~dp0seowoo-playground-y700-kiosk-v1.2.1-test.apk"
+set "PKG=io.github.pswgames.seowoo.kiosk"
+set "ADMIN=io.github.pswgames.seowoo.kiosk/io.github.pswgames.seowoo.SeowooDeviceAdminReceiver"
+set "MAIN=io.github.pswgames.seowoo.kiosk/io.github.pswgames.seowoo.MainActivity"
+set "APK=%~dp0seowoo-playground-y700-kiosk-v1.2.2-test.apk"
 set "STATE=%~dp0seowoo_child_user_id.txt"
 set "ADB=%~dp0adb.exe"
 if not exist "%ADB%" set "ADB=adb"
@@ -11,10 +12,11 @@ set "TMPBASE=%TEMP%\seowoo_y700_%RANDOM%_%RANDOM%"
 
 echo.
 echo ============================================================
-echo  SEOWOO PLAYGROUND Y700 STRICT LOCK - NO RESET SETUP
+echo  SEOWOO PLAYGROUND Y700 STRICT LOCK - NO RESET SETUP v1.2.2
 echo ============================================================
 echo This setup creates a separate Android user named Seowoo.
 echo It does NOT factory-reset the tablet or remove the parent account.
+echo The kiosk app uses a separate package ID and will not replace the parent Seowoo app.
 echo.
 
 "%ADB%" version >nul 2>nul
@@ -27,7 +29,7 @@ if errorlevel 1 (
 
 if not exist "%APK%" (
   echo [ERROR] Required APK was not found in this folder:
-  echo seowoo-playground-y700-kiosk-v1.2.1-test.apk
+  echo seowoo-playground-y700-kiosk-v1.2.2-test.apk
   pause
   exit /b 1
 )
@@ -79,7 +81,7 @@ if !MAX_USERS! LEQ 1 (
 findstr /i /c:"%PKG%" "%TMPBASE%_owners.txt" >nul 2>nul
 if not errorlevel 1 (
   del "%TMPBASE%_owners.txt" >nul 2>nul
-  echo [STOP] A Seowoo device/profile owner is already registered.
+  echo [STOP] This kiosk package is already registered as a device/profile owner.
   echo No automatic removal was attempted.
   pause
   exit /b 5
@@ -90,8 +92,8 @@ del "%TMPBASE%_owners.txt" >nul 2>nul
 findstr /i /c:"%PKG%" "%TMPBASE%_packages.txt" >nul 2>nul
 if not errorlevel 1 (
   del "%TMPBASE%_packages.txt" >nul 2>nul
-  echo [STOP] The native Seowoo kiosk package already exists in the parent user.
-  echo To protect parent-user app data, this script will not uninstall or replace it.
+  echo [STOP] The isolated kiosk package already exists in the parent user.
+  echo It will not be replaced automatically.
   pause
   exit /b 5
 )
@@ -99,6 +101,8 @@ del "%TMPBASE%_packages.txt" >nul 2>nul
 
 echo.
 echo PRE-FLIGHT PASSED.
+echo The existing parent Seowoo package is allowed because this kiosk uses:
+echo   %PKG%
 echo The next step will create ONE new Android user named Seowoo.
 echo Parent Google/Lenovo accounts, games, purchases, and app data will not be deleted.
 choice /c YN /n /m "Continue with Seowoo user creation? [Y/N]: "
@@ -128,7 +132,7 @@ echo [3/8] Starting Seowoo user...
 "%ADB%" shell am start-user -w !CHILD_USER!
 if errorlevel 1 goto :rollback
 
-echo [4/8] Installing kiosk APK only for Seowoo user...
+echo [4/8] Installing isolated kiosk APK only for Seowoo user...
 "%ADB%" install --user !CHILD_USER! -t "%APK%"
 if errorlevel 1 goto :rollback
 
@@ -145,7 +149,7 @@ if errorlevel 1 goto :rollback_after_switch
 timeout /t 3 /nobreak >nul
 
 echo [7/8] Launching Seowoo Playground...
-"%ADB%" shell am start --user !CHILD_USER! -n %PKG%/.MainActivity
+"%ADB%" shell am start --user !CHILD_USER! -n %MAIN%
 if errorlevel 1 goto :rollback_after_switch
 
 echo [8/8] Setup command sequence completed.
