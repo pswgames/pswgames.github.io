@@ -128,69 +128,55 @@ del "%TMPBASE%_create.txt" >nul 2>nul
 >>"%STATE%" echo CHILD_USER=!CHILD_USER!
 echo Created Seowoo user ID: !CHILD_USER!
 
-echo [3/8] Starting Seowoo user...
+echo [3/8] Starting Seowoo user in background...
 "%ADB%" shell am start-user -w !CHILD_USER!
-if errorlevel 1 goto :rollback
+if errorlevel 1 goto :rollback_authorized
 
 echo [4/8] Installing isolated kiosk APK only for Seowoo user...
 "%ADB%" install --user !CHILD_USER! -t "%APK%"
-if errorlevel 1 goto :rollback
+if errorlevel 1 goto :rollback_authorized
 
 echo [5/8] Registering Profile Owner for Seowoo user...
 "%ADB%" shell dpm set-profile-owner --user !CHILD_USER! %ADMIN%
-if errorlevel 1 goto :rollback
+if errorlevel 1 goto :rollback_authorized
 
 echo Profile/Device owner status:
 "%ADB%" shell dpm list-owners
 
-echo [6/8] Switching to Seowoo user...
-"%ADB%" shell am switch-user !CHILD_USER!
-if errorlevel 1 goto :rollback
-timeout /t 3 /nobreak >nul
-
-echo.
-echo Android may require USB debugging authorization again after switching users.
-echo On the tablet, unlock the Seowoo user and approve the USB debugging prompt.
-echo Select Always allow from this computer if that option is shown.
-echo Press any key ONLY after the tablet prompt has been approved.
-pause >nul
-
-"%ADB%" get-state >nul 2>nul
-if errorlevel 1 goto :reauth_required
-
-echo [7/8] Launching Seowoo Playground...
+echo [6/8] Preparing Seowoo Playground before user switch...
+"%ADB%" shell cmd package set-home-activity --user !CHILD_USER! %MAIN%
+if errorlevel 1 goto :rollback_authorized
 "%ADB%" shell am start --user !CHILD_USER! -n %MAIN%
 if errorlevel 1 goto :rollback_authorized
+
+echo [7/8] Switching to Seowoo user...
+"%ADB%" shell am switch-user !CHILD_USER!
+if errorlevel 1 goto :switch_uncertain
 
 echo [8/8] Setup command sequence completed.
 echo.
 echo ============================================================
 echo  SETUP COMPLETE - DEVICE TEST REQUIRED
 echo ============================================================
-echo 1. On the tablet, set a 4-8 digit parent PIN in Seowoo Playground.
-echo 2. Turn Screen Lock ON.
-echo 3. Test Home, Recents, notification shade, and edge gestures.
-echo 4. Turn Screen Lock OFF using the parent PIN.
-echo 5. Confirm you can return to the original parent user.
+echo Secondary users cannot enable USB debugging by design.
+echo No further ADB authorization is required in Seowoo mode.
+echo 1. On the tablet, wait for Seowoo Playground to appear.
+echo 2. Set a 4-8 digit parent PIN.
+echo 3. Turn Screen Lock ON.
+echo 4. Test Home, Recents, notification shade, and edge gestures.
+echo 5. Turn Screen Lock OFF using the parent PIN and return to the parent user.
 echo.
 echo Keep Y700_REMOVE_SEOWOO_USER.bat for rollback.
 pause
 exit /b 0
 
-:reauth_required
+:switch_uncertain
 echo.
-echo [PAUSED - ADB NOT AUTHORIZED IN SEOWOO USER]
-echo The Seowoo user, kiosk APK, and Profile Owner were created successfully.
-echo Nothing will be removed automatically because ADB is not authorized right now.
-echo The recovery IDs were preserved in:
-echo   %STATE%
-echo.
-echo Approve USB debugging on the tablet, then run:
-echo   adb devices
-echo After it shows device, launch manually with:
-echo   adb shell am start --user !CHILD_USER! -n %MAIN%
-echo.
-echo To undo instead, return to the parent user and run Y700_REMOVE_SEOWOO_USER.bat.
+echo [PAUSED] The Seowoo user, kiosk APK, Profile Owner, and launcher were prepared.
+echo Android may have switched users before ADB disconnected.
+echo Do NOT rerun setup.
+echo Check the tablet screen. If Seowoo Playground is visible, continue on the tablet.
+echo Otherwise switch back to the parent user and inspect with adb shell pm list users.
 pause
 exit /b 8
 
@@ -203,8 +189,9 @@ exit /b 6
 
 :rollback_authorized
 echo.
-echo [ROLLBACK] Setup did not complete. ADB is authorized, so only the new Seowoo user will be removed.
-"%ADB%" shell am switch-user !OWNER_USER!
+echo [ROLLBACK] Setup did not complete before the user switch.
+echo Removing only the new Seowoo user...
+"%ADB%" shell am switch-user !OWNER_USER! >nul 2>nul
 if errorlevel 1 goto :rollback_failed
 timeout /t 2 /nobreak >nul
 "%ADB%" shell pm remove-user !CHILD_USER!
@@ -214,15 +201,10 @@ echo Rollback finished. Parent-user data was not deleted by this script.
 pause
 exit /b 7
 
-:rollback
-"%ADB%" get-state >nul 2>nul
-if errorlevel 1 goto :reauth_required
-goto :rollback_authorized
-
 :rollback_failed
 echo.
 echo [RECOVERY REQUIRED] Automatic rollback could not be verified.
 echo The state file was kept. Do NOT rerun setup yet.
-echo Re-authorize ADB and run Y700_REMOVE_SEOWOO_USER.bat.
+echo Return to the parent user, authorize ADB, and run Y700_REMOVE_SEOWOO_USER.bat.
 pause
 exit /b 9
