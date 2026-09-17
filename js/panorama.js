@@ -15,7 +15,60 @@
   ];
   let selected = "seoul",
     active = null;
+
+  function upgradeElevatorUi(view) {
+    const shell = view.closest(".elevator-shell");
+    const layout = shell?.closest(".elevator-layout");
+    const panel = shell?.querySelector(".floor-panel");
+    if (!shell || !layout || !panel) return;
+
+    layout.querySelector(".city-selector")?.remove();
+    const main = panel.querySelector(".floor-main");
+    if (main) {
+      main.innerHTML = Array.from(
+        { length: 20 },
+        (_, i) =>
+          `<button class="floor-key" data-floor="${i + 1}" aria-label="${i + 1}층">${i + 1}</button>`,
+      ).join("");
+    }
+    panel.querySelector(".more-floors")?.remove();
+
+    const message = shell.querySelector("#elevatorMsg");
+    if (message && /어디로/.test(message.textContent || "")) {
+      const floor = shell.querySelector("#elevatorFloor")?.textContent || "1";
+      message.textContent = `${floor}층`;
+    }
+
+    if (!document.getElementById("seowoo-elevator-v701")) {
+      const style = document.createElement("style");
+      style.id = "seowoo-elevator-v701";
+      style.textContent = `
+        .theme-elevator .elevator-layout{grid-template-columns:minmax(0,1fr);max-width:1380px}
+        .theme-elevator .elevator-shell{grid-template-columns:minmax(0,1fr) 230px}
+        .theme-elevator .glass-cabin{background:transparent;border-width:5px}
+        .theme-elevator .outside-view{inset:0}
+        .theme-elevator .cabin-frame{border-left-width:6px;border-right-width:6px}
+        .theme-elevator .cabin-label{display:none}
+        .theme-elevator .elevator-console{overflow:hidden;background:rgba(21,42,67,.76)}
+        .theme-elevator .floor-panel{flex:1;justify-content:center}
+        .theme-elevator .floor-main{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-content:center}
+        .theme-elevator .floor-key{min-height:46px;max-height:54px;font-size:21px}
+        .theme-elevator .more-floors,.theme-elevator .city-selector{display:none!important}
+        @media(max-width:900px){
+          .theme-elevator .elevator-shell{grid-template-columns:minmax(0,1fr) 190px}
+          .theme-elevator .floor-main{gap:6px}
+          .theme-elevator .floor-key{min-height:42px;font-size:19px}
+        }
+      `;
+      document.head.append(style);
+    }
+  }
+
   function mount(view) {
+    upgradeElevatorUi(view);
+    const pool = scenes.filter((scene) => scene.id !== selected);
+    selected = (pool[Math.floor(Math.random() * pool.length)] || scenes[0]).id;
+
     let floor = 1,
       travel = 0,
       offset = 0,
