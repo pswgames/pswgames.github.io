@@ -24,13 +24,10 @@
 
     layout.querySelector(".city-selector")?.remove();
     const main = panel.querySelector(".floor-main");
-    if (main) {
-      main.innerHTML = Array.from(
-        { length: 20 },
-        (_, i) =>
-          `<button class="floor-key" data-floor="${i + 1}" aria-label="${i + 1}층">${i + 1}</button>`,
-      ).join("");
-    }
+    const floorButtons = [...panel.querySelectorAll("[data-floor]")].sort(
+      (a, b) => Number(a.dataset.floor) - Number(b.dataset.floor),
+    );
+    if (main && floorButtons.length) main.replaceChildren(...floorButtons);
     panel.querySelector(".more-floors")?.remove();
 
     const message = shell.querySelector("#elevatorMsg");
