@@ -38,7 +38,14 @@ manifest.forEach((p) =>
 console.log(
   "PASS source syntax, HTML/CSS resources, offline manifest, external asset rules",
 );
-for (const test of ["audio", "regression", "elevator", "pwa", "migration"]) {
+for (const test of [
+  "audio",
+  "regression",
+  "elevator",
+  "panorama",
+  "pwa",
+  "migration",
+]) {
   const r = spawnSync(process.execPath, [`tests/${test}.cjs`], {
     stdio: "inherit",
   });
