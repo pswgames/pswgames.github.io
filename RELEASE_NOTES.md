@@ -1,11 +1,13 @@
-# Seowoo Playground Release Notes
+# 7.0.0 — 서우놀이터 리빌드
 
-## v6.8.0
-- Y700 native kiosk mode automatically hides the PWA install button.
-- Screen-lock setup now uses a single PIN entry; parent menu can change the PIN after current-PIN verification.
-- Potty Explorer receives a premium multi-step mission UI with progress, positive reinforcement, and hand-washing interactions.
-- Added consonant/vowel finder games for basic Hangul jamo practice.
-- Elevator backgrounds now rotate across 10 additional city/night scenes and use slightly faster visual travel.
-- Voice selection now prefers higher-quality Korean TTS voices and uses more natural pacing.
-- Global UI spacing, cards, touch targets, typography, and surfaces were refined for a more premium child-friendly product feel.
+레퍼런스의 서우·강아지와 파스텔 놀이 세계를 중심으로 홈과 여섯 활동, 보호자 메뉴를 다시 구성했습니다. 작은 페이지별 메뉴는 큰 활동 카드와 공통 내비게이션으로 정리했습니다.
 
+- 태블릿 가로/세로, 휴대폰에 맞춘 배치. 핵심 조작 48px 이상.
+- 해저 말글 네 모드, 하늘 숫자, 민트 도형, 라벤더 영어, 깨끗한 화장실 장면.
+- 로컬 도시 10개와 빨라진 유리 엘리베이터. 기존 문 조작·층 예약·20층 지원 유지.
+- 보호자 PIN 1회 입력, 기존 자격정보·놀이 기록 형식 유지.
+- 중복 정답 처리, 화면 전환 후 타이머, 물 내림 중 화면 이탈, 음성 취소 문제 방지.
+- 단일 토큰·공통 컴포넌트 체계. 누적 overlay/hotfix 파일을 교체.
+- 로컬 WebP 그림과 압축 한글 서체, 버전별 오프라인 캐시.
+
+검증 범위와 남은 실기기 확인은 `docs/QA.md`, 실행은 `README.md`를 참고하세요. 공개 사이트 반영은 검토 브랜치를 병합할 때 이루어집니다.

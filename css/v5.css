@@ -1,9 +1,0 @@
-/* Shared immersive game layout. Elevator styling lives only in v5-view.css. */
-body.game-fullscreen{overscroll-behavior:none;background:#f7fbff}
-body.game-fullscreen .app{width:100%;max-width:none;min-height:100vh;min-height:100dvh}
-body.game-fullscreen .appbar,body.game-fullscreen .bottom-nav{display:none!important}
-body.game-fullscreen .main{width:100%;max-width:980px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:calc(8px + var(--safeT)) 12px calc(12px + var(--safeB))}
-body.game-fullscreen .subhead{margin:0 0 8px;min-height:46px}
-body.game-fullscreen .subhead .back-btn{width:44px;height:44px;border-radius:15px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px)}
-body.game-fullscreen .subhead h1{font-size:clamp(22px,5.5vw,30px)}
-body.game-fullscreen .subhead small{font-size:11px}

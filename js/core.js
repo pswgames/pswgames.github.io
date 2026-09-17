@@ -1,9 +1,230 @@
-(()=>{'use strict';
-const C=window.SEOWOO_CONTENT;const STORE_KEY='seowoo-play-v3';const OLD_KEYS=['seowoo-play-v2','seowooPlayStatsV1'];const DEFAULT={version:3,settings:{voice:true,sound:true,difficulty:'auto',countMode:'both',breakMinutes:15,englishVoice:true},stats:{totalChoices:0,correct:0,rounds:0,firstTry:0,byGame:{},lastPlayed:null,sessionStarts:0},stickers:['star'],recent:[],music:{repeat:false,current:null}};
-function clone(v){return JSON.parse(JSON.stringify(v))}function mergeDeep(a,b){const o=clone(a);if(!b||typeof b!=='object')return o;Object.keys(b).forEach(k=>{if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])&&o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))o[k]=mergeDeep(o[k],b[k]);else o[k]=b[k]});return o}
-function migrate(){try{const raw=localStorage.getItem(STORE_KEY);if(raw)return mergeDeep(DEFAULT,JSON.parse(raw));let old=null;for(const k of OLD_KEYS){const r=localStorage.getItem(k);if(r){old=JSON.parse(r);break}}const s=clone(DEFAULT);if(old){s.stats.totalChoices=old.total||0;s.stats.correct=old.correct||0;s.stats.rounds=old.rounds||0;s.stats.firstTry=old.first||old.stars||0;s.stats.byGame=old.byGame||{}}return s}catch(e){return clone(DEFAULT)}}
-const state=migrate();function save(){state.stats.lastPlayed=new Date().toISOString();try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){}}function recordChoice(ok,first=false){state.stats.totalChoices++;if(ok)state.stats.correct++;if(ok&&first)state.stats.firstTry++;save()}function complete(game,meta={}){state.stats.rounds++;state.stats.byGame[game]=(state.stats.byGame[game]||0)+1;state.recent.unshift({game,at:Date.now(),...meta});state.recent=state.recent.slice(0,30);if(state.stats.rounds%2===0)awardSticker();save()}
-function awardSticker(forceId){const locked=C.stickers.filter(x=>!state.stickers.includes(x[0]));if(!locked.length)return null;const pick=forceId?C.stickers.find(x=>x[0]===forceId):locked[state.stats.rounds%locked.length];if(pick&&!state.stickers.includes(pick[0])){state.stickers.push(pick[0]);save();return pick}return null}function setting(k,v){if(arguments.length===1)return state.settings[k];state.settings[k]=v;save()}function reset(){try{localStorage.removeItem(STORE_KEY)}catch(e){}location.reload()}
-const audio=new window.SeowooAudioManager(state.settings);function koNative(n){if(n===100)return'백';const ones=['','하나','둘','셋','넷','다섯','여섯','일곱','여덟','아홉'];const tens=['','열','스물','서른','마흔','쉰','예순','일흔','여든','아흔'];if(n<10)return ones[n];if(n<20)return n===10?'열':'열'+ones[n-10];const t=Math.floor(n/10),o=n%10;return tens[t]+ones[o]}function koSino(n){if(n===100)return'백';const d=['','일','이','삼','사','오','육','칠','팔','구'];if(n<10)return d[n];if(n<20)return n===10?'십':'십'+d[n-10];const t=Math.floor(n/10),o=n%10;return(t===1?'십':d[t]+'십')+d[o]}function numberSpeech(n){const m=state.settings.countMode;if(m==='native')return koNative(n);if(m==='sino')return koSino(n);return`${koNative(n)}. ${koSino(n)}`}
-function difficultyLevel(game){if(state.settings.difficulty!=='auto')return Number(state.settings.difficulty);const played=state.stats.byGame[game]||0;const total=state.stats.totalChoices||0,rate=total?state.stats.correct/total:.75;if(played>=8&&rate>.8)return 3;if(played>=3&&rate>.65)return 2;return 1}function shuffle(a){return[...a].sort(()=>Math.random()-.5)}function rand(n){return Math.floor(Math.random()*n)}function toast(text){const el=document.querySelector('#toast');if(!el)return;el.textContent=text;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),1600)}function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const icons=['⭐','✨','🎉','💛'];for(let i=0;i<12;i++){const e=document.createElement('div');e.className='confetti';e.textContent=icons[i%icons.length];e.style.left=(45+Math.random()*10)+'vw';e.style.top='45vh';e.style.setProperty('--dx',(Math.random()*260-130)+'px');e.style.setProperty('--dy',(-80-Math.random()*220)+'px');document.body.appendChild(e);setTimeout(()=>e.remove(),950)}}
-window.SeowooCore={C,state,save,recordChoice,complete,awardSticker,setting,reset,audio,koNative,koSino,numberSpeech,difficultyLevel,shuffle,rand,toast,confetti};})();
+(() => {
+  "use strict";
+  const C = window.SEOWOO_CONTENT;
+  const STORE_KEY = "seowoo-play-v3";
+  const OLD_KEYS = ["seowoo-play-v2", "seowooPlayStatsV1"];
+  const DEFAULT = {
+    version: 3,
+    settings: {
+      voice: true,
+      sound: true,
+      difficulty: "auto",
+      countMode: "both",
+      breakMinutes: 15,
+      englishVoice: true,
+    },
+    stats: {
+      totalChoices: 0,
+      correct: 0,
+      rounds: 0,
+      firstTry: 0,
+      byGame: {},
+      lastPlayed: null,
+      sessionStarts: 0,
+    },
+    stickers: ["star"],
+    recent: [],
+    music: { repeat: false, current: null },
+  };
+  function clone(v) {
+    return JSON.parse(JSON.stringify(v));
+  }
+  function mergeDeep(a, b) {
+    const o = clone(a);
+    if (!b || typeof b !== "object") return o;
+    Object.keys(b).forEach((k) => {
+      if (
+        b[k] &&
+        typeof b[k] === "object" &&
+        !Array.isArray(b[k]) &&
+        o[k] &&
+        typeof o[k] === "object" &&
+        !Array.isArray(o[k])
+      )
+        o[k] = mergeDeep(o[k], b[k]);
+      else o[k] = b[k];
+    });
+    return o;
+  }
+  function migrate() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (raw) return mergeDeep(DEFAULT, JSON.parse(raw));
+      let old = null;
+      for (const k of OLD_KEYS) {
+        const r = localStorage.getItem(k);
+        if (r) {
+          old = JSON.parse(r);
+          break;
+        }
+      }
+      const s = clone(DEFAULT);
+      if (old) {
+        s.stats.totalChoices = old.total || 0;
+        s.stats.correct = old.correct || 0;
+        s.stats.rounds = old.rounds || 0;
+        s.stats.firstTry = old.first || old.stars || 0;
+        s.stats.byGame = old.byGame || {};
+      }
+      return s;
+    } catch (e) {
+      return clone(DEFAULT);
+    }
+  }
+  const state = migrate();
+  function save() {
+    state.stats.lastPlayed = new Date().toISOString();
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+  function recordChoice(ok, first = false) {
+    state.stats.totalChoices++;
+    if (ok) state.stats.correct++;
+    if (ok && first) state.stats.firstTry++;
+    save();
+  }
+  function complete(game, meta = {}) {
+    state.stats.rounds++;
+    state.stats.byGame[game] = (state.stats.byGame[game] || 0) + 1;
+    state.recent.unshift({ game, at: Date.now(), ...meta });
+    state.recent = state.recent.slice(0, 30);
+    if (state.stats.rounds % 2 === 0) awardSticker();
+    save();
+  }
+  function awardSticker(forceId) {
+    const locked = C.stickers.filter((x) => !state.stickers.includes(x[0]));
+    if (!locked.length) return null;
+    const pick = forceId
+      ? C.stickers.find((x) => x[0] === forceId)
+      : locked[state.stats.rounds % locked.length];
+    if (pick && !state.stickers.includes(pick[0])) {
+      state.stickers.push(pick[0]);
+      save();
+      return pick;
+    }
+    return null;
+  }
+  function setting(k, v) {
+    if (arguments.length === 1) return state.settings[k];
+    state.settings[k] = v;
+    save();
+  }
+  function reset() {
+    try {
+      localStorage.removeItem(STORE_KEY);
+    } catch (e) {}
+    location.reload();
+  }
+  const audio = new window.SeowooAudioManager(state.settings);
+  function koNative(n) {
+    if (n === 100) return "백";
+    const ones = [
+      "",
+      "하나",
+      "둘",
+      "셋",
+      "넷",
+      "다섯",
+      "여섯",
+      "일곱",
+      "여덟",
+      "아홉",
+    ];
+    const tens = [
+      "",
+      "열",
+      "스물",
+      "서른",
+      "마흔",
+      "쉰",
+      "예순",
+      "일흔",
+      "여든",
+      "아흔",
+    ];
+    if (n < 10) return ones[n];
+    if (n < 20) return n === 10 ? "열" : "열" + ones[n - 10];
+    const t = Math.floor(n / 10),
+      o = n % 10;
+    return tens[t] + ones[o];
+  }
+  function koSino(n) {
+    if (n === 100) return "백";
+    const d = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구"];
+    if (n < 10) return d[n];
+    if (n < 20) return n === 10 ? "십" : "십" + d[n - 10];
+    const t = Math.floor(n / 10),
+      o = n % 10;
+    return (t === 1 ? "십" : d[t] + "십") + d[o];
+  }
+  function numberSpeech(n) {
+    const m = state.settings.countMode;
+    if (m === "native") return koNative(n);
+    if (m === "sino") return koSino(n);
+    return `${koNative(n)}. ${koSino(n)}`;
+  }
+  function difficultyLevel(game) {
+    if (state.settings.difficulty !== "auto")
+      return Number(state.settings.difficulty);
+    const played = state.stats.byGame[game] || 0;
+    const total = state.stats.totalChoices || 0,
+      rate = total ? state.stats.correct / total : 0.75;
+    if (played >= 8 && rate > 0.8) return 3;
+    if (played >= 3 && rate > 0.65) return 2;
+    return 1;
+  }
+  function shuffle(a) {
+    const b = [...a];
+    for (let i = b.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [b[i], b[j]] = [b[j], b[i]];
+    }
+    return b;
+  }
+  function rand(n) {
+    return Math.floor(Math.random() * n);
+  }
+  function toast(text) {
+    const el = document.querySelector("#toast");
+    if (!el) return;
+    el.textContent = text;
+    el.classList.add("show");
+    clearTimeout(toast.t);
+    toast.t = setTimeout(() => el.classList.remove("show"), 1600);
+  }
+  function confetti() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const icons = ["⭐", "✨", "🎉", "💛"];
+    for (let i = 0; i < 12; i++) {
+      const e = document.createElement("div");
+      e.className = "confetti";
+      e.textContent = icons[i % icons.length];
+      e.style.left = 45 + Math.random() * 10 + "vw";
+      e.style.top = "45vh";
+      e.style.setProperty("--dx", Math.random() * 260 - 130 + "px");
+      e.style.setProperty("--dy", -80 - Math.random() * 220 + "px");
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 950);
+    }
+  }
+  window.SeowooCore = {
+    C,
+    state,
+    save,
+    recordChoice,
+    complete,
+    awardSticker,
+    setting,
+    reset,
+    audio,
+    koNative,
+    koSino,
+    numberSpeech,
+    difficultyLevel,
+    shuffle,
+    rand,
+    toast,
+    confetti,
+  };
+})();

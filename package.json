@@ -1,12 +1,15 @@
 {
   "name": "seowoo-playground",
+  "version": "7.0.0",
   "private": true,
-  "version": "6.8.1",
   "scripts": {
     "dev": "node scripts/serve.cjs",
-    "test": "node scripts/verify.cjs"
+    "test": "node scripts/verify.cjs",
+    "format": "prettier --write css/*.css js/*.js scripts/*.cjs tests/*.cjs index.html",
+    "build:offline": "node scripts/build-cache.cjs"
   },
   "devDependencies": {
-    "playwright": "1.62.1"
+    "jsdom": "30.0.1",
+    "prettier": "3.9.6"
   }
 }

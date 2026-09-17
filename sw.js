@@ -1,54 +1,7 @@
-/* v6.8.1 — atomic precache with parent refresh controls; remote photo panoramas fall back to the local city scene offline. */
-const VERSION='seowoo-static-6.8.1';
-const CORE=['/','/index.html','/manifest.webmanifest','/icons/icon-192-v515.png','/icons/icon-512-v515.png','/icons/icon-maskable-512-v515.png','/css/app.css','/css/v4.css','/css/v5.css','/css/v5-view.css','/css/pwa-v514.css','/css/screen-lock.css','/css/v66-ui.css','/css/v68-premium.css','/css/v681-hotfix.css','/assets/elevator-city-v6.webp','/data/content.js','/audio/catalog.js','/js/audio.js','/js/core.js','/js/games.js','/js/v5-panorama.js','/js/v5.js','/js/app-v4.js','/js/screen-lock.js','/js/pwa-v5152.js','/js/v66-polish.js','/js/v67-find.js','/js/v68-upgrade.js','/js/v681-hotfix.js'];
-self.addEventListener('install',event=>event.waitUntil((async()=>{
- const cache=await caches.open(VERSION);
- try{
-  await cache.addAll(CORE.map(url=>new Request(url,{cache:'reload'})));
-  await self.skipWaiting();
- }catch(error){
-  await caches.delete(VERSION);
-  throw error;
- }
-})()));
-self.addEventListener('activate',event=>event.waitUntil((async()=>{
- const keys=await caches.keys();
- const stale=keys.filter(k=>k.startsWith('seowoo-')&&k!==VERSION);
- await Promise.all(stale.map(k=>caches.delete(k)));
- await self.clients.claim();
- if(stale.length){
-  const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
-  await Promise.all(windows.map(async client=>{
-   try{
-    const url=new URL(client.url);
-    if(url.origin!==self.location.origin)return;
-    url.searchParams.set('__sw',VERSION);
-    await client.navigate(url.href);
-   }catch{}
-  }));
- }
-})()));
-self.addEventListener('fetch',event=>{
- const r=event.request,url=new URL(r.url);if(r.method!=='GET'||url.origin!==self.location.origin||url.pathname==='/sw.js')return;
- event.respondWith((async()=>{
- const cache=await caches.open(VERSION);
- if(r.mode==='navigate')return (await cache.match('/index.html'))||fetch(r);
- const hit=await cache.match(r,{ignoreSearch:true});
- if(r.headers.has('range')){
-  if(!hit)return fetch(r);
-  const data=await hit.arrayBuffer(),range=/^bytes=(\d*)-(\d*)$/.exec(r.headers.get('range'));
-  if(!range||(!range[1]&&!range[2]))return new Response(null,{status:416,headers:{'Content-Range':'bytes */'+data.byteLength}});
-  const start=range[1]?Number(range[1]):Math.max(0,data.byteLength-Number(range[2]));
-  const end=range[1]?(range[2]?Math.min(Number(range[2]),data.byteLength-1):data.byteLength-1):data.byteLength-1;
-  if(start>end||start>=data.byteLength)return new Response(null,{status:416,headers:{'Content-Range':'bytes */'+data.byteLength}});
-  const headers=new Headers(hit.headers);headers.set('Content-Range',`bytes ${start}-${end}/${data.byteLength}`);headers.set('Content-Length',String(end-start+1));headers.set('Accept-Ranges','bytes');
-  return new Response(data.slice(start,end+1),{status:206,headers});
- }
- if(hit)return hit;
- const response=await fetch(r);if(response.ok&&/^\/(audio|assets|icons)\//.test(url.pathname))await cache.put(r,response.clone());return response;
- })());
-});
-self.addEventListener('message',event=>{
- if(event.data==='SKIP_WAITING'||event.data?.type==='SKIP_WAITING')event.waitUntil(self.skipWaiting());
- if(event.data?.type==='CHECK_UPDATE')event.waitUntil(self.registration.update().catch(()=>{}));
-});
+/* Generated offline manifest; run node scripts/build-cache.cjs after changes. */
+const CACHE="seowoo-v7-c9a8648539";
+const FILES=["css/app.css","css/tokens.css","js/app.js","js/audio.js","js/core.js","js/elevator.js","js/panorama.js","js/pwa.js","js/screen-lock.js","data/content.js","audio/catalog.js","icons/icon-1024-v7.png","icons/icon-192-v7.png","icons/icon-512-v7.png","assets/art/activities.webp","assets/art/bathroom.webp","assets/art/english.webp","assets/art/hero.webp","assets/art/numbers.webp","assets/art/ocean-phone.webp","assets/art/ocean.webp","assets/art/potty-icons.webp","assets/art/shapes.webp","assets/cities/dawn.webp","assets/cities/dubai.webp","assets/cities/hongkong.webp","assets/cities/newyork.webp","assets/cities/osaka.webp","assets/cities/paris.webp","assets/cities/seoul-night.webp","assets/cities/singapore.webp","assets/cities/snow.webp","assets/cities/tokyo.webp","assets/fonts/Jua-Regular.woff2","assets/fonts/OFL.txt","index.html","manifest.webmanifest","assets/elevator-city-v6.webp"];
+self.addEventListener('install',e=>e.waitUntil((async()=>{try{const c=await caches.open(CACHE);await c.addAll(FILES.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()}catch(error){await caches.delete(CACHE);throw error}})()));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('seowoo-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('message',e=>{if(e.data==='SKIP_WAITING'||e.data?.type==='SKIP_WAITING')e.waitUntil(self.skipWaiting());if(e.data?.type==='CHECK_UPDATE')e.waitUntil(self.registration.update().catch(()=>{}))});
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin||new URL(e.request.url).pathname==='/sw.js')return;const url=new URL(e.request.url);const key=e.request.mode==='navigate'?'index.html':e.request;if(e.request.mode==='navigate'||/\.(js|css)$/.test(url.pathname)){e.respondWith(fetch(e.request,{cache:'no-cache'}).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(key,r.clone())}return r}).catch(()=>caches.match(key,{ignoreSearch:true})));return}e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(hit=>hit||fetch(e.request).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(e.request,r.clone())}return r}))) });

@@ -1,6 +1,46 @@
-const {spawn}=require('child_process'),fs=require('fs');
-fs.mkdirSync('qa-artifacts',{recursive:true});
-const server=spawn(process.execPath,['scripts/serve.cjs'],{stdio:['ignore','pipe','inherit']});
-const run=file=>new Promise((resolve,reject)=>{const p=spawn(process.execPath,[file],{stdio:'inherit'});p.on('error',reject);p.on('exit',code=>code===0?resolve():reject(Error(`${file}: ${code}`)))});
-server.stdout.once('data',async()=>{try{await run('tests/audio.cjs');await run('tests/polish.cjs');await run('tests/browser.cjs');await run('tests/screen-lock.cjs');await run('tests/v68.cjs');await run('tests/pwa-update.cjs')}catch(e){console.error(e);process.exitCode=1}finally{server.kill()}});
-server.on('error',e=>{console.error(e);process.exitCode=1});
+const fs = require("fs"),
+  path = require("path"),
+  assert = require("assert/strict"),
+  vm = require("vm"),
+  { spawnSync } = require("child_process");
+const root = path.resolve(__dirname, "..");
+process.chdir(root);
+for (const dir of ["js", "data", "audio"])
+  for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".js")))
+    new vm.Script(fs.readFileSync(path.join(dir, file), "utf8"), {
+      filename: file,
+    });
+const html = fs.readFileSync("index.html", "utf8");
+for (const [, file] of html.matchAll(/(?:src|href)="([^"#]+)"/g))
+  assert(fs.existsSync(file), `Missing ${file}`);
+for (const file of ["css/app.css", "css/tokens.css"])
+  for (const [, asset] of fs
+    .readFileSync(file, "utf8")
+    .matchAll(/url\(['"]?([^)'" ]+)/g))
+    assert(
+      fs.existsSync(path.resolve("css", asset)),
+      `Missing CSS asset ${asset}`,
+    );
+const code = [
+  "index.html",
+  ...fs.readdirSync("js").map((f) => "js/" + f),
+  ...fs.readdirSync("css").map((f) => "css/" + f),
+]
+  .map((f) => fs.readFileSync(f, "utf8"))
+  .join("\n");
+assert(!code.includes("data:image/"), "Assets must be files");
+assert(!code.includes("beforeinstallprompt"), "No app install button");
+const sw = fs.readFileSync("sw.js", "utf8");
+const manifest = JSON.parse(sw.match(/const FILES=(\[[\s\S]*?\]);/)[1]);
+manifest.forEach((p) =>
+  assert(fs.existsSync(p), `Offline asset missing: ${p}`),
+);
+console.log(
+  "PASS source syntax, HTML/CSS resources, offline manifest, external asset rules",
+);
+for (const test of ["audio", "regression", "elevator", "pwa", "migration"]) {
+  const r = spawnSync(process.execPath, [`tests/${test}.cjs`], {
+    stdio: "inherit",
+  });
+  if (r.status !== 0) process.exit(r.status || 1);
+}
