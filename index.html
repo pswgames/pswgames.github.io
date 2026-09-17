@@ -49,11 +49,6 @@
     <script src="js/elevator.js"></script>
     <script src="js/screen-lock.js"></script>
     <script src="js/app.js"></script>
-    <script>
-      if ("serviceWorker" in navigator)
-        navigator.serviceWorker
-          .register("sw.js", { updateViaCache: "none" })
-          .catch(() => {});
-    </script>
+    <script src="js/pwa.js"></script>
   </body>
 </html>
