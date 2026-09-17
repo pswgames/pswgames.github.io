@@ -1,37 +1,36 @@
 name: Web App QA
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
+permissions:
+  contents: read
 concurrency:
   group: web-qa-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 10
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install dependencies
-        run: npm install --no-audit --no-fund
-      - name: Install Chrome for Playwright
-        run: npx playwright install --with-deps chrome
-      - name: Run full QA
-        run: npm test
-      - name: Upload QA artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+      - uses: pnpm/action-setup@v4
         with:
-          name: web-qa-artifacts
-          path: qa-artifacts/
+          version: '11.19.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - name: Check offline manifest is current
+        run: |
+          pnpm build:offline
+          git diff --exit-code -- sw.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: web-qa-results
+          path: .test-results/functional-results.json
           if-no-files-found: ignore
           retention-days: 7
