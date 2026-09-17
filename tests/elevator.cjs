@@ -74,6 +74,8 @@ try {
     "background receives continuous positions",
   );
   e.closeDoor();
+  assert.equal(shell.querySelector("#elevatorArrow").textContent, "•");
+  assert.equal(shell.querySelectorAll("[data-floor].selected").length, 0);
   advance(700);
   assert.equal(e.phase, "closed");
   e.openDoor();
@@ -91,6 +93,20 @@ try {
   advance(30000);
   assert.equal(e.current, 20);
   assert.equal(e.phase, "idle");
+  // Use actual delegated button clicks for every floor, including all two-digit labels.
+  for (let floor = 1; floor <= 20; floor++) {
+    const distance = Math.abs(e.current - floor);
+    const key = shell.querySelector('[data-floor="' + floor + '"]');
+    key.click();
+    assert.equal(key.getAttribute("aria-pressed"), "true");
+    assert(key.classList.contains("selected"));
+    advance(distance * 1200 + 5000);
+    assert.equal(e.current, floor);
+    assert.equal(e.phase, "idle");
+    assert.equal(key.getAttribute("aria-current"), "true");
+    assert.equal(key.getAttribute("aria-pressed"), "false");
+    assert.equal(shell.querySelectorAll("[aria-current=true]").length, 1);
+  }
   e.select(1);
   advance(1500);
   e.unmount();

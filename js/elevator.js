@@ -173,12 +173,15 @@
     ].join(":");
     if (signature !== lastPaint) {
       lastPaint = signature;
+      const manualClosing =
+        state.phase === "closing" && state.closeMode === "manual";
       dom.shell.dataset.phase = state.phase;
       dom.shell.dataset.target = state.target;
       setText(dom.floor, state.current);
       setText(
         dom.arrow,
-        ["preclose", "closing", "travel"].includes(state.phase) &&
+        !manualClosing &&
+          ["preclose", "closing", "travel"].includes(state.phase) &&
           state.target !== state.start
           ? state.target > state.start
             ? "▲"
@@ -189,9 +192,11 @@
       dom.keys.forEach((key) => {
         const n = +key.dataset.floor,
           selected =
+            !manualClosing &&
             ["preclose", "closing", "travel", "arrival"].includes(
               state.phase,
-            ) && n === state.target;
+            ) &&
+            n === state.target;
         key.classList.toggle("here", n === state.current);
         key.classList.toggle("selected", selected);
         key.classList.toggle("queued", n === state.queued);

@@ -85,6 +85,23 @@ const doc = w.document,
   const report = [];
   assert.equal(doc.querySelectorAll(".activity-card").length, 6);
   report.push("홈: 여섯 활동 진입");
+  go("elevator");
+  const floorOrder = Array.from({ length: 10 }, (_, row) => [
+    19 - row * 2,
+    20 - row * 2,
+  ]).flat();
+  assert.deepEqual(
+    [...doc.querySelectorAll("[data-floor]")].map((b) => +b.dataset.floor),
+    floorOrder,
+  );
+  assert.equal(
+    doc.querySelectorAll(".glass-cabin .elevator-console .floor-main").length,
+    1,
+  );
+  assert.equal(doc.querySelectorAll("details.more-floors").length, 0);
+  assert(doc.querySelector(".glass-cabin .elevator-hud"));
+  assert(doc.querySelector("[data-city-random]"));
+  report.push("엘리베이터: 우측 패널 19·20 → 1·2 배열, 모든 층 표시, 별도 HUD");
   go("language");
   click('[data-mode="consonant"]');
   assert.equal(

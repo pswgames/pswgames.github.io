@@ -544,10 +544,40 @@
     renderPotty();
   }
   function renderElevator() {
-    const P = window.SeowooPanorama;
-    main.innerHTML = `<section class="play-screen theme-elevator">${header("투명 엘리베이터")}<div class="elevator-layout"><div class="elevator-shell"><div class="elevator-display"><span id="elevatorArrow">•</span><strong id="elevatorFloor">${window.SeowooElevator.current}</strong><span>층</span></div><div class="glass-cabin"><div class="outside-view"></div><div class="cabin-frame"><div class="door door-l"></div><div class="door door-r"></div><div class="cabin-rail"></div></div><span class="cabin-label">SEOWOO SKY LIFT</span></div><div class="elevator-console"><p id="elevatorMsg" role="status">어디로 갈까?</p><div class="floor-panel"><div class="floor-main">${Array.from({ length: 8 }, (_, i) => `<button class="floor-key" data-floor="${i + 1}" aria-label="${i + 1}층">${i + 1}</button>`).join("")}</div><details class="more-floors"><summary>9–20층</summary><div class="floor-extra">${Array.from({ length: 12 }, (_, i) => `<button class="floor-key" data-floor="${i + 9}" aria-label="${i + 9}층">${i + 9}</button>`).join("")}</div></details></div></div></div><aside class="city-selector"><div class="city-title"><h2>어디로 떠나볼까?</h2><button class="icon-btn" data-city-random aria-label="도시 랜덤 선택">${icon("shuffle")}</button></div><div class="city-cards">${P.scenes.map((s) => `<button class="city-card ${s.id === P.selected ? "active" : ""}" data-city="${s.id}" aria-pressed="${s.id === P.selected}"><img src="assets/cities/${s.file}" alt="${s.name} 풍경"><span>${s.name}</span></button>`).join("")}</div></aside></div></section>`;
+    const floors = Array.from({ length: 10 }, (_, row) => [
+      19 - row * 2,
+      20 - row * 2,
+    ]).flat();
+    const keys = floors
+      .map(
+        (n) =>
+          '<button type="button" class="floor-key" data-floor="' +
+          n +
+          '" aria-label="' +
+          n +
+          '층">' +
+          n +
+          "</button>",
+      )
+      .join("");
+    main.innerHTML =
+      '<section class="play-screen theme-elevator">' +
+      header("투명 엘리베이터") +
+      '<div class="elevator-layout"><div class="elevator-shell"><div class="glass-cabin">' +
+      '<div class="outside-view"></div><div class="cabin-frame"><div class="door door-l"></div><div class="door door-r"></div><div class="cabin-rail"></div></div>' +
+      '<div class="elevator-hud"><div class="elevator-display" aria-label="현재 층"><span id="elevatorArrow">•</span><strong id="elevatorFloor">' +
+      window.SeowooElevator.current +
+      '</strong><span>층</span></div><p id="elevatorMsg" role="status">어디로 갈까?</p></div>' +
+      '<div class="elevator-console" role="group" aria-label="엘리베이터 조작 패널"><div class="floor-panel"><div class="floor-main" role="group" aria-label="층 선택, 위에서 19·20층부터 아래 1·2층까지">' +
+      keys +
+      "</div></div></div>" +
+      '<button class="elevator-scene-button" data-city-random aria-label="도시 랜덤 선택">' +
+      icon("shuffle") +
+      "<span>다른 풍경</span></button>" +
+      "</div></div></div></section>";
     window.SeowooElevator.mount(main.querySelector(".elevator-shell"));
   }
+
   function selectCity(id) {
     window.SeowooPanorama.choose(id);
     main.querySelectorAll("[data-city]").forEach((b) => {
