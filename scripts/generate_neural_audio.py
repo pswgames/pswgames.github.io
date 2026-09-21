@@ -4,7 +4,7 @@ import asyncio, hashlib, json, math, random, re, struct, wave
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-CATALOG=ROOT/"audio"/"catalog.js"
+CATALOGS=[ROOT/"audio"/"catalog.js",ROOT/"audio"/"extra-catalog.js"]
 VOICE_ROOT=ROOT/"audio"/"voice"
 SFX_ROOT=ROOT/"audio"/"sfx"
 FILES_JS=ROOT/"audio"/"files.js"
@@ -17,11 +17,16 @@ ENTRY_RE=re.compile(
 )
 
 def parse_catalog():
-    src=CATALOG.read_text(encoding="utf-8")
     rows=[]
-    for m in ENTRY_RE.finditer(src):
-        rows.append({"id":json.loads(m.group("id")),"text":json.loads(m.group("text")),"lang":json.loads(m.group("lang"))})
-    if len(rows)<500: raise RuntimeError(f"catalog parse incomplete: {len(rows)}")
+    seen=set()
+    for catalog in CATALOGS:
+        src=catalog.read_text(encoding="utf-8")
+        for m in ENTRY_RE.finditer(src):
+            row={"id":json.loads(m.group("id")),"text":json.loads(m.group("text")),"lang":json.loads(m.group("lang"))}
+            if row["id"] in seen: raise RuntimeError(f"duplicate catalog id: {row['id']}")
+            seen.add(row["id"])
+            rows.append(row)
+    if len(rows)<650: raise RuntimeError(f"catalog parse incomplete: {len(rows)}")
     return rows
 
 def relpath(lang,text):
