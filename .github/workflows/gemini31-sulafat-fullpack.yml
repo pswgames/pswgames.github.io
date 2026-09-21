@@ -40,7 +40,7 @@ jobs:
       - name: Install Gemini SDK and MP3 encoder
         run: python -m pip install --disable-pip-version-check --upgrade google-genai lameenc
 
-      - name: Generate nine batched Korean voice groups
+      - name: Generate eight batched Korean voice groups
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
@@ -48,7 +48,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          for pass in $(seq 1 9); do
+          for pass in $(seq 1 8); do
             echo "===== Gemini grouped generation pass $pass ====="
             set +e
             python scripts/generate_gemini31_voice_pack.py --next-batch
