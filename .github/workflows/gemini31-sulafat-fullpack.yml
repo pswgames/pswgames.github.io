@@ -65,14 +65,7 @@ jobs:
               exit "$status"
             fi
 
-            remaining=$(python - <<'PY'
-import json
-from pathlib import Path
-p=Path("audio/gemini31-generation-state.json")
-d=json.loads(p.read_text())
-print(d.get("remaining_count", 999999))
-PY
-)
+            remaining=$(python -c 'import json; print(json.load(open("audio/gemini31-generation-state.json", encoding="utf-8")).get("remaining_count", 999999))')
             echo "Remaining clips: $remaining"
             if [ "$remaining" = "0" ]; then
               break
