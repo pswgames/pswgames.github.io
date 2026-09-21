@@ -34,11 +34,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Gemini SDK and check audio tools
-        run: |
-          python -m pip install --disable-pip-version-check --upgrade google-genai
-          ffmpeg -version | head -n 1
-          ffprobe -version | head -n 1
+      - name: Install Gemini SDK and MP3 encoder
+        run: python -m pip install --disable-pip-version-check --upgrade google-genai lameenc
 
       - name: Generate and checkpoint Korean voice pack
         env:
@@ -52,7 +49,7 @@ jobs:
             status=$?
             set -e
 
-            git add audio/voice/ko audio/gemini31-generation-state.json audio/voice-report.json
+            git add audio/voice/ko audio/voice-report.json\n            [ -f audio/gemini31-generation-state.json ] && git add audio/gemini31-generation-state.json || true
             if ! git diff --cached --quiet; then
               git config user.name "github-actions[bot]"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
