@@ -1,0 +1,25 @@
+{
+  "engine": "Google Cloud Text-to-Speech Chirp 3 HD",
+  "language": "ko-KR",
+  "script": "문이 닫힙니다.\n올라갑니다.\n8층입니다.\n문이 열립니다.\n잘했어.\n다시 찾아볼까?",
+  "samples": [
+    {
+      "label": "Kore",
+      "voice_name": "ko-KR-Chirp3-HD-Kore",
+      "file": "audio/chirp3-audition/kore.mp3",
+      "bytes": 36384
+    },
+    {
+      "label": "Aoede",
+      "voice_name": "ko-KR-Chirp3-HD-Aoede",
+      "file": "audio/chirp3-audition/aoede.mp3",
+      "bytes": 36096
+    },
+    {
+      "label": "Despina",
+      "voice_name": "ko-KR-Chirp3-HD-Despina",
+      "file": "audio/chirp3-audition/despina.mp3",
+      "bytes": 34272
+    }
+  ]
+}
