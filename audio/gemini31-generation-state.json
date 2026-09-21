@@ -9,11 +9,12 @@
     "education-2",
     "education-3",
     "education-4",
-    "navigation-1"
+    "navigation-1",
+    "warm-1"
   ],
-  "remaining_batches": 3,
+  "remaining_batches": 2,
   "total_clips": 523,
-  "completed_clips": 344,
+  "completed_clips": 404,
   "failures": [],
   "layout": [
     {
@@ -597,13 +598,13 @@
     }
   ],
   "last_success": {
-    "batch": "education-4",
-    "style": "education",
-    "clip_count": 74,
+    "batch": "warm-1",
+    "style": "warm",
+    "clip_count": 60,
     "prompt_kind": "detailed",
     "api_attempt": 1,
-    "source_duration_seconds": 163.08,
-    "min_clip_seconds": 0.33,
-    "max_clip_seconds": 7.88
+    "source_duration_seconds": 94.16,
+    "min_clip_seconds": 0.34,
+    "max_clip_seconds": 2.67
   }
 }
