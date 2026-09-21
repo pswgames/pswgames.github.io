@@ -66,6 +66,7 @@
       dom &&
       state.phase !== "idle" &&
       state.phase !== "closed" &&
+      state.phase !== "announcing" &&
       state.paused === null &&
       !document.hidden &&
       !state.raf
@@ -89,6 +90,7 @@
     if (
       state.phase === "travel" ||
       state.phase === "arrival" ||
+      state.phase === "announcing" ||
       state.phase === "closed"
     )
       return 1;
@@ -137,13 +139,14 @@
     if (state.phase === "preclose" || state.phase === "closing")
       return "문이 닫혀요";
     if (state.phase === "opening") return "문이 열려요";
+    if (state.phase === "announcing") return `${state.current}층에 도착했어요`;
     if (state.phase === "closed") return "문이 닫혀 있어요";
     if (state.openHeld) return "열림 버튼을 누르는 동안 문이 열려 있어요";
     return `${state.current}층`;
   }
   function updateControls() {
     if (!dom) return;
-    const moving = state.phase === "travel";
+    const moving = ["travel", "arrival", "announcing"].includes(state.phase);
     if (dom.open) {
       dom.open.disabled = moving;
       dom.open.setAttribute("aria-disabled", String(moving));
@@ -155,6 +158,7 @@
       state.phase === "closing" ||
       state.phase === "closed" ||
       state.phase === "arrival" ||
+      state.phase === "announcing" ||
       state.openHeld;
     if (dom.close) {
       dom.close.disabled = closeDisabled;
@@ -288,6 +292,7 @@
       return true;
     }
     if (state.phase === "closed") {
+      audio()?.playVoice("opening");
       audio()?.doorOpen();
       animateDoor(0, now, "manual");
       return true;
@@ -302,6 +307,7 @@
     if (
       state.phase === "travel" ||
       state.phase === "arrival" ||
+      state.phase === "announcing" ||
       state.phase === "closing" ||
       state.phase === "closed"
     )
@@ -334,6 +340,20 @@
       return true;
     }
     return false;
+  }
+  async function announceArrivalAndOpen(now) {
+    if (!dom || state.phase !== "arrival") return;
+    const floor = state.current;
+    phase("announcing", now);
+    const arrived = audio()?.playVoice("arrival-" + floor);
+    if (arrived && typeof arrived.then === "function") await arrived;
+    if (!dom || state.phase !== "announcing" || state.current !== floor) return;
+    const opening = audio()?.playVoice("opening");
+    if (opening && typeof opening.then === "function") await opening;
+    if (!dom || state.phase !== "announcing" || state.current !== floor) return;
+    audio()?.doorOpen();
+    state.door = 1;
+    animateDoor(0, performance.now(), "arrival");
   }
   function distance(ms) {
     const total = Math.abs(state.target - state.start);
@@ -380,10 +400,7 @@
         phase("arrival", now);
       }
     } else if (state.phase === "arrival" && elapsed >= ARRIVAL_MS) {
-      audio()?.playVoice("arrival-" + state.current);
-      audio()?.doorOpen();
-      state.door = 1;
-      animateDoor(0, now, "arrival");
+      announceArrivalAndOpen(now);
     } else if (state.phase === "opening" && elapsed >= state.doorDuration) {
       state.door = 0;
       phase("waiting", now);

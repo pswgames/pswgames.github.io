@@ -40,6 +40,7 @@ console.log(
 );
 for (const test of [
   "audio",
+  "voice-assets",
   "regression",
   "elevator",
   "panorama",

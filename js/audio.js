@@ -11,10 +11,17 @@
       this.music = null;
       this.serial = 0;
       this.voiceVolume = clamp(settings.voiceVolume ?? 1);
-      this.sfxVolume = clamp(settings.sfxVolume ?? 0.65);
+      this.sfxVolume = clamp(settings.sfxVolume ?? 0.9);
       this.buffers = new Map();
       this.effects = new Set();
-      this.manifest = window.SEOWOO_AUDIO || {};
+      const files = window.SEOWOO_AUDIO_FILES || {};
+      this.manifest = Object.fromEntries(
+        Object.entries(window.SEOWOO_AUDIO || {}).map(([id, entry]) => [
+          id,
+          files[id] ? { ...entry, src: files[id] } : { ...entry },
+        ]),
+      );
+      this.sfxManifest = window.SEOWOO_SFX || {};
       this.voices = [];
       this.refreshVoices = () => {
         this.voices = window.speechSynthesis?.getVoices() || [];
@@ -63,7 +70,10 @@
     stopSfx() {
       for (const s of this.effects) {
         try {
-          s.stop();
+          s.stop?.();
+        } catch {}
+        try {
+          s.pause?.();
         } catch {}
       }
       this.effects.clear();
@@ -271,35 +281,78 @@
       if (!loop) s.stop(t + duration + 0.02);
       return s;
     }
-    playSfx(id) {
+    stopMotor() {
+      if (!this.motor) return;
+      try {
+        this.motor.stop?.();
+      } catch {}
+      try {
+        this.motor.pause?.();
+      } catch {}
+      this.effects.delete(this.motor);
+      this.motor = null;
+    }
+    playLocalSfx(id, spec) {
+      if (!this.settings.sound || !spec?.src) return false;
+      if (id === "motorStart") this.stopMotor();
+      if (id === "motorStop") this.stopMotor();
+      const a = new Audio(spec.src);
+      a.preload = "auto";
+      a.loop = !!spec.loop;
+      a.volume = clamp(this.sfxVolume * (spec.gain ?? 1));
+      this.effects.add(a);
+      const cleanup = () => {
+        if (!a.loop) this.effects.delete(a);
+        if (this.motor === a && !a.loop) this.motor = null;
+      };
+      a.onended = cleanup;
+      a.onerror = () => {
+        cleanup();
+        this.playSyntheticSfx(id);
+      };
+      a.play().catch(() => {
+        cleanup();
+        this.playSyntheticSfx(id);
+      });
+      if (id === "motorStart" && a.loop) this.motor = a;
+      return true;
+    }
+    playSyntheticSfx(id) {
       switch (id) {
         case "button":
-          this.noise(0.08, 1800, 0.1);
+          this.noise(0.08, 1800, 0.12);
           break;
         case "doorClose":
         case "doorOpen":
-          this.noise(1.25, 650, 0.12);
+          this.noise(1.25, 650, 0.16);
           break;
         case "motorStart":
-          this.motor?.stop();
-          this.motor = this.noise(2, 180, 0.12, true);
+          this.stopMotor();
+          this.motor = this.noise(2, 180, 0.16, true);
           break;
         case "motorStop":
-          try {
-            this.motor?.stop();
-          } catch {}
-          this.motor = null;
-          this.noise(0.45, 120, 0.07);
+          this.stopMotor();
+          this.noise(0.45, 120, 0.1);
           break;
         case "arrival":
-          this.tone(659, 0.6, "sine", 0.05);
-          this.tone(523, 0.8, "sine", 0.04, 0.22);
+          this.tone(784, 0.5, "sine", 0.08);
+          this.tone(659, 0.72, "sine", 0.07, 0.24);
           break;
         case "success":
-          this.tone(660, 0.18, "sine", 0.04);
-          this.tone(880, 0.3, "sine", 0.035, 0.15);
+          this.tone(660, 0.18, "sine", 0.06);
+          this.tone(880, 0.3, "sine", 0.055, 0.15);
+          break;
+        case "flush":
+          this.noise(1.0, 520, 0.2);
           break;
       }
+    }
+    playSfx(id) {
+      if (!this.settings.sound) return;
+      if (id === "motorStop") this.stopMotor();
+      const spec = this.sfxManifest[id];
+      if (spec?.src && this.playLocalSfx(id, spec)) return;
+      this.playSyntheticSfx(id);
     }
     success() {
       this.playSfx("success");
@@ -321,6 +374,9 @@
     }
     ding() {
       this.playSfx("arrival");
+    }
+    flush() {
+      this.playSfx("flush");
     }
   }
   window.SeowooAudioManager = AudioManager;

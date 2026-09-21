@@ -526,7 +526,7 @@
     if (potty.step === 5) {
       potty.busy = true;
       renderPotty(false);
-      audio.noise?.(0.7, 450, 0.13);
+      audio.flush();
       later(() => {
         potty.busy = false;
         potty.step++;
@@ -854,7 +854,7 @@
     `<button class="switch ${value ? "on" : ""}" role="switch" aria-label="${label}" aria-checked="${!!value}" data-setting="${key}"><i></i></button>`;
   function renderParent() {
     if (!parentAuthenticated) return;
-    parent.innerHTML = `${dialogHeader("보호자 메뉴")}<div class="parent-content"><div class="parent-summary"><span>${icon("heart")}</span><div><h3>서우가 자라는 시간</h3><p>완료한 놀이 ${state.stats.rounds}회 · 스티커 ${state.stickers.length}개</p></div></div><div class="settings-group"><div class="setting-row"><span>${icon("lock")} 화면잠금</span>${switchControl("lock", "화면잠금", window.SeowooScreenLock.locked)}</div><button class="setting-row" data-change-pin><span>${icon("lock")} 비밀번호 변경</span>${icon("chevron")}</button><label class="setting-row"><span>${icon("clock")} 이용시간 설정</span><select data-pref="breakMinutes" aria-label="이용시간 설정">${[10, 15, 20, 30].map((n) => `<option value="${n}" ${state.settings.breakMinutes === n ? "selected" : ""}>${n}분</option>`).join("")}</select></label><div class="setting-row"><span>${icon("sound")} 음성 안내</span>${switchControl("voice", "음성 안내", state.settings.voice)}</div><div class="setting-row"><span>${icon("music")} 효과음</span>${switchControl("sound", "효과음", state.settings.sound)}</div><label class="setting-row"><span>목소리 크기</span><input type="range" min="0" max="1" step=".05" value="${audio.voiceVolume}" data-volume="voice" aria-label="목소리 크기"></label><label class="setting-row"><span>효과음 크기</span><input type="range" min="0" max="1" step=".05" value="${audio.sfxVolume}" data-volume="sfx" aria-label="효과음 크기"></label></div><div class="settings-group"><label class="setting-row"><span>놀이 난이도</span><select data-pref="difficulty" aria-label="놀이 난이도">${[
+    parent.innerHTML = `${dialogHeader("보호자 메뉴")}<div class="parent-content"><div class="parent-summary"><span>${icon("heart")}</span><div><h3>서우가 자라는 시간</h3><p>완료한 놀이 ${state.stats.rounds}회 · 스티커 ${state.stickers.length}개</p></div></div><div class="settings-group"><div class="setting-row"><span>${icon("lock")} 화면잠금</span>${switchControl("lock", "화면잠금", window.SeowooScreenLock.locked)}</div><button class="setting-row" data-change-pin><span>${icon("lock")} 비밀번호 변경</span>${icon("chevron")}</button><label class="setting-row"><span>${icon("clock")} 이용시간 설정</span><select data-pref="breakMinutes" aria-label="이용시간 설정">${[10, 15, 20, 30].map((n) => `<option value="${n}" ${state.settings.breakMinutes === n ? "selected" : ""}>${n}분</option>`).join("")}</select></label><div class="setting-row"><span>${icon("sound")} 음성 안내</span>${switchControl("voice", "음성 안내", state.settings.voice)}</div><div class="setting-row"><span>${icon("music")} 효과음</span>${switchControl("sound", "효과음", state.settings.sound)}</div><label class="setting-row"><span>목소리 크기</span><input type="range" min="0" max="1" step=".05" value="${audio.voiceVolume}" data-volume="voice" aria-label="목소리 크기"></label><label class="setting-row"><span>효과음 크기</span><input type="range" min="0" max="1" step=".05" value="${audio.sfxVolume}" data-volume="sfx" aria-label="효과음 크기"></label><button class="setting-row" data-audio-test><span>${icon("sound")} 음성·효과음 테스트</span>${icon("chevron")}</button></div><div class="settings-group"><label class="setting-row"><span>놀이 난이도</span><select data-pref="difficulty" aria-label="놀이 난이도">${[
       ["auto", "자동"],
       ["1", "1단계"],
       ["2", "2단계"],
@@ -920,7 +920,7 @@
     parent.innerHTML = `${dialogHeader("기록 초기화")}<div class="parent-content app-info"><h3>처음부터 시작할까요?</h3><p>이 기기의 놀이 기록, 스티커와 놀이 설정을 지워요. 이 작업은 되돌릴 수 없어요. 보호자 비밀번호는 유지됩니다.</p><button class="btn soft" data-records>취소</button><button class="btn primary" data-reset-confirm>기록과 설정 지우기</button></div>`;
   }
   function info() {
-    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 7.0.0</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>음성은 기기에 설치된 한국어 음성 중 자연스러운 목소리를 우선 사용합니다. 기기와 음성 설치 상태에 따라 다르게 들릴 수 있어요.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
+    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 7.0.0</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>주요 안내 음성은 앱에 저장된 고정 음원을 우선 사용합니다. 음원 재생이 실패한 경우에만 기기 음성으로 대체합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
   }
   function closeParent() {
     parent.close();
@@ -1078,6 +1078,20 @@
     if ("resetAsk" in d) resetPrompt();
     if ("resetConfirm" in d) {
       K.reset();
+      return;
+    }
+    if ("audioTest" in d) {
+      b.disabled = true;
+      audio
+        .playVoice("closing")
+        .then(() => {
+          audio.ding();
+          return new Promise((resolve) => setTimeout(resolve, 500));
+        })
+        .then(() => audio.playVoice("opening"))
+        .finally(() => {
+          b.disabled = false;
+        });
       return;
     }
     if (d.setting) {

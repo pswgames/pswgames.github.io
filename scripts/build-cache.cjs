@@ -15,13 +15,38 @@ for (const p of [
   "css",
   "js",
   "data",
-  "audio",
   "icons",
   "assets/art",
   "assets/cities",
   "assets/fonts",
 ])
   walk(path.join(root, p));
+
+// Voice clips are numerous, so only the elevator/core pack is installed eagerly.
+// Every other local voice file is cached on first use by the service worker.
+for (const p of ["audio/catalog.js", "audio/files.js", "audio/sfx.js"])
+  if (fs.existsSync(path.join(root, p))) files.push(p);
+if (fs.existsSync(path.join(root, "audio/sfx"))) walk(path.join(root, "audio/sfx"));
+const voiceManifestPath = path.join(root, "audio/files.js");
+if (fs.existsSync(voiceManifestPath)) {
+  const source = fs.readFileSync(voiceManifestPath, "utf8");
+  const match = source.match(/window\.SEOWOO_AUDIO_FILES\s*=\s*(\{[\s\S]*\})\s*;/);
+  if (match) {
+    const voices = JSON.parse(match[1]);
+    const critical = [
+      "closing",
+      "opening",
+      "up",
+      "down",
+      ...Array.from({ length: 20 }, (_, i) => `arrival-${i + 1}`),
+      ...Array.from({ length: 9 }, (_, i) => `common-${i}`),
+    ];
+    for (const id of critical) {
+      const p = voices[id];
+      if (p && fs.existsSync(path.join(root, p)) && !files.includes(p)) files.push(p);
+    }
+  }
+}
 files.push(
   "index.html",
   "manifest.webmanifest",
