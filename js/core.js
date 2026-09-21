@@ -12,6 +12,8 @@
       countMode: "both",
       breakMinutes: 15,
       englishVoice: true,
+      voiceVolume: 1,
+      sfxVolume: 0.9,
     },
     stats: {
       totalChoices: 0,
