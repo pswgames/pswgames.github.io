@@ -1,5 +1,5 @@
 name: Generate Seowoo Neural Audio
-# Regenerate after audio regression harness updates.
+# Regenerate after elevator announcement state-machine fix.
 on:
   push:
     branches:
