@@ -345,11 +345,11 @@
     if (!dom || state.phase !== "arrival") return;
     const floor = state.current;
     phase("announcing", now);
-    await audio()?.playVoice("arrival-" + floor);
+    const arrived = audio()?.playVoice("arrival-" + floor);
+    if (arrived && typeof arrived.then === "function") await arrived;
     if (!dom || state.phase !== "announcing" || state.current !== floor) return;
-    await new Promise((resolve) => setTimeout(resolve, 80));
-    if (!dom || state.phase !== "announcing" || state.current !== floor) return;
-    await audio()?.playVoice("opening");
+    const opening = audio()?.playVoice("opening");
+    if (opening && typeof opening.then === "function") await opening;
     if (!dom || state.phase !== "announcing" || state.current !== floor) return;
     audio()?.doorOpen();
     state.door = 1;
