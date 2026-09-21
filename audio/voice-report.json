@@ -12,14 +12,14 @@
     "en-US": "edge-tts"
   },
   "ko_generation": {
-    "status": "in_progress",
+    "status": "complete",
     "model": "gemini-3.1-flash-tts-preview",
     "voice": "Sulafat",
     "unique_clips": 523,
-    "completed_clips": 464,
-    "remaining_clips": 59,
+    "completed_clips": 523,
+    "remaining_clips": 0,
     "grouped_requests": 8,
-    "completed_groups": 7,
+    "completed_groups": 8,
     "style_profiles": [
       "warm",
       "navigation",
