@@ -12,7 +12,7 @@ SFX_JS=ROOT/"audio"/"sfx.js"
 REPORT=ROOT/"audio"/"voice-report.json"
 SR=44100
 ENTRY_RE=re.compile(
-    r'(?P<id>"(?:\\.|[^"\\])*")\\s*:\\s*\\{\\s*"text"\\s*:\\s*(?P<text>"(?:\\.|[^"\\])*")\\s*,\\s*"lang"\\s*:\\s*(?P<lang>"(?:\\.|[^"\\])*")',
+    r'(?P<id>"(?:\\.|[^"\\])*")\s*:\s*\{\s*"text"\s*:\s*(?P<text>"(?:\\.|[^"\\])*")\s*,\s*"lang"\s*:\s*(?P<lang>"(?:\\.|[^"\\])*")',
     re.S,
 )
 
