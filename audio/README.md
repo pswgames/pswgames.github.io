@@ -2,11 +2,12 @@
 
 현재 앱은 `audio/catalog.js`의 발화 항목을 `audio/files.js`의 로컬 MP3와 연결해 우선 재생합니다.
 
-- 음성 카탈로그: 554개 항목
-- 고유 음성 파일: 549개
+- 음성 카탈로그: 668개 항목
+- 고유 음성 파일: 661개
 - 한국어: `ko-KR-SunHiNeural`
 - 영어: `en-US-JennyNeural`
 - 효과음: 도착 딩동, 버튼, 문 열림/닫힘, 운행/정지, 성공, 물내림
+- 현재 앱의 유한 음성 경로 전체를 PWA 오프라인 캐시에 포함
 - 로컬 음원 실패 시에만 기기 TTS로 대체
 
 `scripts/generate_neural_audio.py`는 현재 음성 카탈로그 전체와 효과음을 재생성하는 유지보수 도구입니다. 생성 결과와 화자/속도/음량 설정은 `audio/voice-report.json`에 기록됩니다.

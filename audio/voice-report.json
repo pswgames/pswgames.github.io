@@ -1,8 +1,8 @@
 {
   "generator": "edge-tts",
   "purpose": "fixed local voice assets for Seowoo Playground",
-  "catalog_entries": 554,
-  "unique_clips": 549,
+  "catalog_entries": 668,
+  "unique_clips": 661,
   "selected_voices": {
     "ko-KR": "ko-KR-SunHiNeural",
     "en-US": "en-US-JennyNeural"
@@ -19,7 +19,7 @@
       "pitch": "+0Hz"
     }
   },
-  "mapping_entries": 554,
+  "mapping_entries": 668,
   "sfx_count": 8,
   "runtime_fallback": "device speechSynthesis only if local media playback fails",
   "licensing_note": "edge-tts uses Microsoft's online Edge speech service. Review provider terms before commercial redistribution; this workflow is for the current personal app."
