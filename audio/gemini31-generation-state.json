@@ -6,11 +6,12 @@
   "total_batches": 8,
   "completed_batches": [
     "education-1",
+    "education-2",
     "navigation-1"
   ],
-  "remaining_batches": 6,
+  "remaining_batches": 5,
   "total_clips": 523,
-  "completed_clips": 120,
+  "completed_clips": 195,
   "failures": [],
   "layout": [
     {
@@ -594,13 +595,13 @@
     }
   ],
   "last_success": {
-    "batch": "education-1",
+    "batch": "education-2",
     "style": "education",
     "clip_count": 75,
     "prompt_kind": "detailed",
     "api_attempt": 1,
-    "source_duration_seconds": 136.52,
-    "min_clip_seconds": 0.34,
-    "max_clip_seconds": 5.19
+    "source_duration_seconds": 167.04,
+    "min_clip_seconds": 0.31,
+    "max_clip_seconds": 7.18
   }
 }
