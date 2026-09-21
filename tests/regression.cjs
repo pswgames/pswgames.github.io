@@ -44,6 +44,7 @@ class Audio {
   success() {}
   tone() {}
   noise() {}
+  flush() {}
   preload() {}
   setVoiceVolume(v) {
     this.voiceVolume = +v;
