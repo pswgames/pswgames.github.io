@@ -1,10 +1,10 @@
 const fs=require("fs"),path=require("path"),vm=require("vm"),assert=require("assert/strict");
 const root=path.resolve(__dirname,".."),sandbox={window:{}};
-for(const file of ["audio/catalog.js","audio/files.js","audio/sfx.js"])
+for(const file of ["audio/catalog.js","audio/extra-catalog.js","audio/files.js","audio/sfx.js"])
   vm.runInNewContext(fs.readFileSync(path.join(root,file),"utf8"),sandbox,{filename:file});
 const catalog=sandbox.window.SEOWOO_AUDIO||{}, files=sandbox.window.SEOWOO_AUDIO_FILES||{}, sfx=sandbox.window.SEOWOO_SFX||{};
 const ids=Object.keys(catalog);
-assert(ids.length>=500,`Expected full voice catalog, got ${ids.length}`);
+assert(ids.length>=650,`Expected full voice catalog, got ${ids.length}`);
 assert.equal(Object.keys(files).length,ids.length,"Every catalog entry must have a fixed local audio asset");
 for(const id of ids){
   const rel=files[id];
