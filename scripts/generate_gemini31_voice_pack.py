@@ -302,11 +302,10 @@ def main():
         out = ROOT / item["path"]
         try:
             pcm, prompt_kind, attempts = synthesize(client, item)
-            convert_to_mp3(pcm, out)
-            dur = duration_seconds(out)
+            dur = pcm_duration_seconds(pcm)
             if dur < 0.12 or dur > 12.0:
-                out.unlink(missing_ok=True)
                 raise RuntimeError(f"unexpected duration: {dur:.2f}s")
+            encode_mp3(pcm, out)
 
             completed.add(item["path"])
             state["completed"] = sorted(completed)
