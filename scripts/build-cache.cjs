@@ -24,7 +24,7 @@ for (const p of [
 
 // Voice clips are numerous, so only the elevator/core pack is installed eagerly.
 // Every other local voice file is cached on first use by the service worker.
-for (const p of ["audio/catalog.js", "audio/files.js", "audio/sfx.js"])
+for (const p of ["audio/catalog.js", "audio/extra-catalog.js", "audio/files.js", "audio/sfx.js"])
   if (fs.existsSync(path.join(root, p))) files.push(p);
 if (fs.existsSync(path.join(root, "audio/sfx"))) walk(path.join(root, "audio/sfx"));
 const voiceManifestPath = path.join(root, "audio/files.js");
