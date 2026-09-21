@@ -5,11 +5,12 @@
   "strategy": "8 grouped TTS requests; split locally on long silence; preserves existing asset paths",
   "total_batches": 8,
   "completed_batches": [
+    "education-1",
     "navigation-1"
   ],
-  "remaining_batches": 7,
+  "remaining_batches": 6,
   "total_clips": 523,
-  "completed_clips": 45,
+  "completed_clips": 120,
   "failures": [],
   "layout": [
     {
@@ -593,13 +594,13 @@
     }
   ],
   "last_success": {
-    "batch": "navigation-1",
-    "style": "navigation",
-    "clip_count": 45,
+    "batch": "education-1",
+    "style": "education",
+    "clip_count": 75,
     "prompt_kind": "detailed",
     "api_attempt": 1,
-    "source_duration_seconds": 65.8,
-    "min_clip_seconds": 0.64,
-    "max_clip_seconds": 1.22
+    "source_duration_seconds": 136.52,
+    "min_clip_seconds": 0.34,
+    "max_clip_seconds": 5.19
   }
 }
