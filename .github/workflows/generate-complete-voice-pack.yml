@@ -1,4 +1,5 @@
 name: Generate Complete Seowoo Voice Pack
+# Rebuild after full offline voice-pack policy update.
 on:
   push:
     branches:
