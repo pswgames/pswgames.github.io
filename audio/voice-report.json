@@ -16,10 +16,10 @@
     "model": "gemini-3.1-flash-tts-preview",
     "voice": "Sulafat",
     "unique_clips": 523,
-    "completed_clips": 270,
-    "remaining_clips": 253,
+    "completed_clips": 344,
+    "remaining_clips": 179,
     "grouped_requests": 8,
-    "completed_groups": 4,
+    "completed_groups": 5,
     "style_profiles": [
       "warm",
       "navigation",
