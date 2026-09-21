@@ -1,0 +1,105 @@
+name: Generate Gemini 3.1 Sulafat Korean voice pack
+
+on:
+  push:
+    branches:
+      - feat/gemini31-sulafat-fullpack-20260921
+    paths:
+      - .github/triggers/gemini31-sulafat-fullpack.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gemini31-sulafat-fullpack
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Gemini API key
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::Repository secret GEMINI_API_KEY is not configured."
+            exit 1
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Gemini SDK and MP3 encoder
+        run: python -m pip install --disable-pip-version-check --upgrade google-genai lameenc
+
+      - name: Generate eight batched Korean voice groups
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for pass in $(seq 1 8); do
+            echo "===== Gemini grouped generation pass $pass ====="
+            set +e
+            python scripts/generate_gemini31_voice_pack.py --next-batch
+            status=$?
+            set -e
+
+            git add audio/voice/ko audio/voice-report.json
+            if [ -f audio/gemini31-generation-state.json ]; then
+              git add audio/gemini31-generation-state.json
+            fi
+            if ! git diff --cached --quiet; then
+              git commit -m "Generate Gemini Sulafat Korean voice group $pass"
+              git push origin HEAD:feat/gemini31-sulafat-fullpack-20260921
+            fi
+
+            if [ "$status" -ne 0 ]; then
+              echo "::error::Grouped generation stopped in pass $pass; successful groups were checkpointed."
+              exit "$status"
+            fi
+
+            remaining=$(python -c 'import json; print(json.load(open("audio/gemini31-generation-state.json", encoding="utf-8")).get("remaining_batches", 999999))')
+            echo "Remaining groups: $remaining"
+            if [ "$remaining" = "0" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.19.0'
+
+      - name: Install app dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Refresh offline cache
+        run: pnpm build:offline
+
+      - name: Run full app QA
+        run: pnpm test
+
+      - name: Commit final offline manifest
+        run: |
+          git add sw.js audio/voice-report.json audio/gemini31-generation-state.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Finalize Gemini Sulafat offline voice pack"
+            git push origin HEAD:feat/gemini31-sulafat-fullpack-20260921
+          fi
