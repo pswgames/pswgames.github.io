@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import base64, json, os, wave
+import base64, json, os, time, wave
 from pathlib import Path
 from google import genai
 
@@ -19,25 +19,22 @@ CANDIDATES = [
         "id": "navigation-smooth",
         "voice": "Algieba",
         "label": "Smooth Navigation",
-        "direction": """Audio Profile: A Korean woman in her early 30s with a polished, natural speaking voice for a premium car navigation system. Standard Seoul Korean accent. Calm, confident, refined and human.
-Scene: Quiet recording booth for a high-end in-car navigation product. The listener will hear short prompts repeatedly, so the voice must feel effortless and low-fatigue.
-Director's Notes: Speak naturally, not like a TTS engine. Avoid sing-song intonation, robotic rhythm, exaggerated articulation, ad-announcer energy, and overly bright AI-assistant tone. Use subtle human micro-pauses and restrained pitch movement. Keep the first four lines concise and neutral like real navigation guidance. Make the last two lines just a little warmer, as if speaking gently to a child. Do not add or omit words."""
+        "direction": """TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.
+Voice direction: Natural adult Korean female voice for a premium car navigation system. Standard Seoul Korean. Calm, smooth, confident and low-fatigue. Use restrained pitch movement, subtle human timing variation and small natural pauses. Avoid robotic cadence, sing-song TTS intonation, exaggerated articulation, advertisement narration, and an overly bright AI-assistant tone. Keep the first four lines concise and neutral; make the last two lines slightly warmer without becoming cute or childish.""",
     },
     {
         "id": "navigation-mature",
         "voice": "Gacrux",
         "label": "Mature Navigation",
-        "direction": """Audio Profile: A Korean female professional voice actor in her 30s, mature but not old, with a stable mid-low register and clear standard Seoul pronunciation.
-Scene: Recording short prompts for a luxury vehicle navigation system in a dry studio.
-Director's Notes: Make it sound like a real Korean voice actor recorded each line, not synthesized speech. Slight natural breath and tiny timing variations are welcome, but no audible sighs. Avoid mechanical cadence, identical sentence endings, excessive pitch rise, over-pronunciation, radio-DJ style, or commercial narration. Keep navigation lines calm and matter-of-fact. Make the final two child-facing lines warm and relaxed. Do not add or omit words."""
+        "direction": """TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.
+Voice direction: Natural Korean female professional narrator with a mature, stable mid-low register and clear standard Seoul pronunciation. Sound like a real studio voice actor recording short luxury vehicle navigation prompts. Use realistic micro-pauses and slight timing variation. Avoid mechanical rhythm, identical sentence endings, excessive pitch rise, radio-DJ delivery, commercial narration, or over-pronunciation. Keep the navigation lines calm and matter-of-fact; make the final two lines gently warm.""",
     },
     {
         "id": "assistant-warm",
         "voice": "Sulafat",
         "label": "Warm Human Assistant",
-        "direction": """Audio Profile: A warm Korean woman in her late 20s to early 30s, natural and trustworthy, like a premium smart assistant voiced by a real actor. Standard Seoul accent.
-Scene: A quiet home and car assistant that speaks to both adults and a young child.
-Director's Notes: Prioritize natural human prosody over perfect textbook diction. Use gentle conversational timing, soft phrase endings and small realistic pauses. Do not sound cute, childish, theatrical, synthetic, overly cheerful, or like a commercial. The navigation lines should remain concise and composed; the final two lines should become subtly more affectionate without changing the text. Do not add or omit words."""
+        "direction": """TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.
+Voice direction: Warm, natural Korean female smart-assistant voice with a standard Seoul accent. Prioritize believable human prosody over perfect textbook diction. Use gentle conversational timing, soft phrase endings and small realistic pauses. Avoid sounding theatrical, synthetic, overly cheerful, childish, or like a commercial. Keep the first four navigation lines composed and concise; make the final two lines subtly affectionate while preserving the exact wording.""",
     },
 ]
 
@@ -58,23 +55,33 @@ def save_wave(path: Path, pcm: bytes):
         wf.writeframes(pcm)
 
 for item in CANDIDATES:
-    prompt = f"""Synthesize speech for the exact TRANSCRIPT below. Do not read these instructions aloud.
+    prompt = f"""{item['direction']}
 
-{item['direction']}
-
-TRANSCRIPT:
+TRANSCRIPT BEGINS:
 {TRANSCRIPT}
+TRANSCRIPT ENDS.
 """
-    interaction = client.interactions.create(
-        model="gemini-3.1-flash-tts-preview",
-        input=prompt,
-        response_format={"type": "audio"},
-        generation_config={
-            "speech_config": [
-                {"voice": item["voice"]}
-            ]
-        },
-    )
+    interaction = None
+    last_error = None
+    for attempt in range(1, 6):
+        try:
+            interaction = client.interactions.create(
+                model="gemini-3.1-flash-tts-preview",
+                input=prompt,
+                response_format={"type": "audio"},
+                generation_config={
+                    "speech_config": [
+                        {"voice": item["voice"]}
+                    ]
+                },
+            )
+            break
+        except Exception as exc:
+            last_error = exc
+            print(f"Attempt {attempt}/5 failed for {item['id']}: {exc}")
+            time.sleep(attempt * 2)
+    if interaction is None:
+        raise RuntimeError(f"Gemini TTS failed after retries for {item['id']}: {last_error}")
     data = interaction.output_audio.data
     pcm = base64.b64decode(data) if isinstance(data, str) else bytes(data)
     if len(pcm) < 4000:
