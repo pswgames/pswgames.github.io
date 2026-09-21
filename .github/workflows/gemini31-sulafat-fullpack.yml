@@ -1,0 +1,108 @@
+name: Generate Gemini 3.1 Sulafat Korean voice pack
+
+on:
+  push:
+    branches:
+      - feat/gemini31-sulafat-fullpack-20260921
+    paths:
+      - .github/workflows/gemini31-sulafat-fullpack.yml
+      - scripts/generate_gemini31_voice_pack.py
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Gemini API key
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::error::Repository secret GEMINI_API_KEY is not configured."
+            exit 1
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Gemini SDK and check audio tools
+        run: |
+          python -m pip install --disable-pip-version-check --upgrade google-genai
+          ffmpeg -version | head -n 1
+          ffprobe -version | head -n 1
+
+      - name: Generate and checkpoint Korean voice pack
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          set -u
+          for batch in $(seq 1 40); do
+            echo "===== Gemini voice batch $batch ====="
+            set +e
+            python scripts/generate_gemini31_voice_pack.py --limit 15
+            status=$?
+            set -e
+
+            git add audio/voice/ko audio/gemini31-generation-state.json audio/voice-report.json
+            if ! git diff --cached --quiet; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Generate Gemini Sulafat Korean voice batch $batch"
+              git push origin HEAD:feat/gemini31-sulafat-fullpack-20260921
+            fi
+
+            if [ "$status" -ne 0 ]; then
+              echo "::error::Generation stopped in batch $batch; partial successful clips were checkpointed."
+              exit "$status"
+            fi
+
+            remaining=$(python - <<'PY'
+import json
+from pathlib import Path
+p=Path("audio/gemini31-generation-state.json")
+d=json.loads(p.read_text())
+print(d.get("remaining_count", 999999))
+PY
+)
+            echo "Remaining clips: $remaining"
+            if [ "$remaining" = "0" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.19.0'
+
+      - name: Install app dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Refresh offline cache
+        run: pnpm build:offline
+
+      - name: Run full app QA
+        run: pnpm test
+
+      - name: Commit final offline manifest
+        run: |
+          git add sw.js audio/voice-report.json audio/gemini31-generation-state.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Finalize Gemini Sulafat offline voice pack"
+            git push origin HEAD:feat/gemini31-sulafat-fullpack-20260921
+          fi
