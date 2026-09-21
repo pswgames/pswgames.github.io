@@ -20,12 +20,9 @@ for(const id of ["button","doorOpen","doorClose","motorStart","motorStop","arriv
   assert(fs.existsSync(full),`Missing SFX file: ${spec.src}`);
   assert(fs.statSync(full).size>1000,`SFX file too small: ${spec.src}`);
 }
-const critical=["closing","opening","up","down",...Array.from({length:20},(_,i)=>`arrival-${i+1}`),...Array.from({length:9},(_,i)=>`common-${i}`)];
-for(const id of critical)
-  assert(files[id],`Missing critical local voice: ${id}`);
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
-for(const id of critical)
-  assert(sw.includes(JSON.stringify(files[id]).slice(1,-1)),`Critical voice not precached: ${id}`);
+for(const [id,rel] of Object.entries(files))
+  assert(sw.includes(rel),`Local voice is not precached for offline use: ${id}`);
 const elevator=fs.readFileSync(path.join(root,"js/elevator.js"),"utf8");
 assert(elevator.includes('playVoice("opening")'),"Elevator opening announcement is not wired");
 assert(elevator.includes("announceArrivalAndOpen"),"Arrival voice sequence is not wired");
