@@ -1,0 +1,50 @@
+{
+  "engine": "Gemini 3.1 Flash TTS Preview",
+  "model": "gemini-3.1-flash-tts-preview",
+  "language": "ko-KR",
+  "script": "문이 닫힙니다.\n올라갑니다.\n8층입니다.\n문이 열립니다.\n잘했어.\n다시 찾아볼까?",
+  "samples": [
+    {
+      "id": "navigation-smooth",
+      "label": "Smooth Navigation",
+      "requested_voice": "Algieba",
+      "used": {
+        "model": "gemini-3.1-flash-tts-preview",
+        "voice": "Schedar",
+        "prompt": "simple"
+      },
+      "file": "audio/gemini31-audition/navigation-smooth.wav",
+      "pcm_bytes": 464640,
+      "wav_bytes": 464684,
+      "direction": "TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.\nVoice direction: Natural adult Korean female voice for a premium car navigation system. Standard Seoul Korean. Calm, smooth, confident and low-fatigue. Use restrained pitch movement, subtle human timing variation and small natural pauses. Avoid robotic cadence, sing-song TTS intonation, exaggerated articulation, advertisement narration, and an overly bright AI-assistant tone. Keep the first four lines concise and neutral; make the last two lines slightly warmer without becoming cute or childish."
+    },
+    {
+      "id": "navigation-mature",
+      "label": "Mature Navigation",
+      "requested_voice": "Gacrux",
+      "used": {
+        "model": "gemini-3.1-flash-tts-preview",
+        "voice": "Gacrux",
+        "prompt": "detailed"
+      },
+      "file": "audio/gemini31-audition/navigation-mature.wav",
+      "pcm_bytes": 802560,
+      "wav_bytes": 802604,
+      "direction": "TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.\nVoice direction: Natural Korean female professional narrator with a mature, stable mid-low register and clear standard Seoul pronunciation. Sound like a real studio voice actor recording short luxury vehicle navigation prompts. Use realistic micro-pauses and slight timing variation. Avoid mechanical rhythm, identical sentence endings, excessive pitch rise, radio-DJ delivery, commercial narration, or over-pronunciation. Keep the navigation lines calm and matter-of-fact; make the final two lines gently warm."
+    },
+    {
+      "id": "assistant-warm",
+      "label": "Warm Human Assistant",
+      "requested_voice": "Sulafat",
+      "used": {
+        "model": "gemini-3.1-flash-tts-preview",
+        "voice": "Sulafat",
+        "prompt": "detailed"
+      },
+      "file": "audio/gemini31-audition/assistant-warm.wav",
+      "pcm_bytes": 589440,
+      "wav_bytes": 589484,
+      "direction": "TTS synthesis task. Output audio only. Read only the transcript below, exactly as written.\nVoice direction: Warm, natural Korean female smart-assistant voice with a standard Seoul accent. Prioritize believable human prosody over perfect textbook diction. Use gentle conversational timing, soft phrase endings and small realistic pauses. Avoid sounding theatrical, synthetic, overly cheerful, childish, or like a commercial. Keep the first four navigation lines composed and concise; make the final two lines subtly affectionate while preserving the exact wording."
+    }
+  ]
+}
