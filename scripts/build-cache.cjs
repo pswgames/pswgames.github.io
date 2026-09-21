@@ -30,7 +30,7 @@ if (fs.existsSync(path.join(root, "audio/sfx"))) walk(path.join(root, "audio/sfx
 const voiceManifestPath = path.join(root, "audio/files.js");
 if (fs.existsSync(voiceManifestPath)) {
   const source = fs.readFileSync(voiceManifestPath, "utf8");
-  const match = source.match(/window\\.SEOWOO_AUDIO_FILES\\s*=\\s*(\\{[\\s\\S]*\\})\\s*;/);
+  const match = source.match(/window\.SEOWOO_AUDIO_FILES\s*=\s*(\{[\s\S]*\})\s*;/);
   if (match) {
     const voices = JSON.parse(match[1]);
     const critical = [
