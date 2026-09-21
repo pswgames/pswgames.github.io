@@ -1,26 +1,39 @@
 {
-  "generator": "edge-tts",
+  "generator": "hybrid fixed local voice pack",
   "purpose": "fixed local voice assets for Seowoo Playground",
   "catalog_entries": 668,
   "unique_clips": 661,
   "selected_voices": {
-    "ko-KR": "ko-KR-SunHiNeural",
+    "ko-KR": "gemini-3.1-flash-tts-preview / Sulafat",
     "en-US": "en-US-JennyNeural"
   },
-  "tuning": {
-    "ko-KR": {
-      "rate": "-6%",
-      "volume": "+12%",
-      "pitch": "+0Hz"
-    },
-    "en-US": {
-      "rate": "-7%",
-      "volume": "+10%",
-      "pitch": "+0Hz"
-    }
+  "providers": {
+    "ko-KR": "Google Gemini Developer API",
+    "en-US": "edge-tts"
+  },
+  "ko_generation": {
+    "status": "in_progress",
+    "model": "gemini-3.1-flash-tts-preview",
+    "voice": "Sulafat",
+    "unique_clips": 523,
+    "completed_clips": 45,
+    "remaining_clips": 478,
+    "grouped_requests": 8,
+    "completed_groups": 1,
+    "style_profiles": [
+      "warm",
+      "navigation",
+      "education"
+    ],
+    "asset_format": "MP3 24kHz mono 96kbps"
+  },
+  "en_generation": {
+    "status": "preserved",
+    "unique_clips": 138,
+    "voice": "en-US-JennyNeural"
   },
   "mapping_entries": 668,
   "sfx_count": 8,
   "runtime_fallback": "device speechSynthesis only if local media playback fails",
-  "licensing_note": "edge-tts uses Microsoft's online Edge speech service. Review provider terms before commercial redistribution; this workflow is for the current personal app."
+  "licensing_note": "Korean fixed local assets were generated with Google Gemini 3.1 Flash TTS Preview using the Sulafat preset voice. English assets remain Edge TTS JennyNeural. Provider terms and preview-model availability apply."
 }
