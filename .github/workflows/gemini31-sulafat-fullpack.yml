@@ -12,6 +12,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: gemini31-sulafat-fullpack
+  cancel-in-progress: true
+
 jobs:
   generate:
     runs-on: ubuntu-latest
