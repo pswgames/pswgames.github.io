@@ -27,7 +27,7 @@ VERSION = "gemini-3.1-flash-tts-preview-Sulafat-v1"
 SAMPLE_RATE = 24000
 
 ENTRY_RE = re.compile(
-    r'(?P<id>"(?:\\.|[^"\\])*")\\s*:\\s*\\{\\s*"text"\\s*:\\s*(?P<text>"(?:\\.|[^"\\])*")\\s*,\\s*"lang"\\s*:\\s*(?P<lang>"(?:\\.|[^"\\])*")',
+    r'(?P<id>"(?:\\.|[^"\\])*")\s*:\s*\{\s*"text"\s*:\s*(?P<text>"(?:\\.|[^"\\])*")\s*,\s*"lang"\s*:\s*(?P<lang>"(?:\\.|[^"\\])*")',
     re.S,
 )
 
