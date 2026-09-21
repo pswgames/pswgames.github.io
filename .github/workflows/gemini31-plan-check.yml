@@ -1,0 +1,24 @@
+name: Check Gemini grouped voice plan
+on:
+  push:
+    branches:
+      - feat/gemini31-sulafat-fullpack-20260921
+    paths:
+      - .github/triggers/gemini31-plan-check.txt
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install imports
+        run: python -m pip install --disable-pip-version-check google-genai lameenc
+      - name: Compile generator
+        run: python -m py_compile scripts/generate_gemini31_voice_pack.py
+      - name: Verify grouped plan
+        run: python scripts/generate_gemini31_voice_pack.py --plan
