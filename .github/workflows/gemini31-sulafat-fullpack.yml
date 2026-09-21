@@ -5,8 +5,7 @@ on:
     branches:
       - feat/gemini31-sulafat-fullpack-20260921
     paths:
-      - .github/workflows/gemini31-sulafat-fullpack.yml
-      - scripts/generate_gemini31_voice_pack.py
+      - .github/triggers/gemini31-sulafat-fullpack.txt
   workflow_dispatch:
 
 permissions:
@@ -14,7 +13,7 @@ permissions:
 
 concurrency:
   group: gemini31-sulafat-fullpack
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   generate:
@@ -41,33 +40,37 @@ jobs:
       - name: Install Gemini SDK and MP3 encoder
         run: python -m pip install --disable-pip-version-check --upgrade google-genai lameenc
 
-      - name: Generate and checkpoint Korean voice pack
+      - name: Generate nine batched Korean voice groups
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          set -u
-          for batch in $(seq 1 40); do
-            echo "===== Gemini voice batch $batch ====="
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for pass in $(seq 1 9); do
+            echo "===== Gemini grouped generation pass $pass ====="
             set +e
-            python scripts/generate_gemini31_voice_pack.py --limit 15
+            python scripts/generate_gemini31_voice_pack.py --next-batch
             status=$?
             set -e
 
-            git add audio/voice/ko audio/voice-report.json\n            [ -f audio/gemini31-generation-state.json ] && git add audio/gemini31-generation-state.json || true
+            git add audio/voice/ko audio/voice-report.json
+            if [ -f audio/gemini31-generation-state.json ]; then
+              git add audio/gemini31-generation-state.json
+            fi
             if ! git diff --cached --quiet; then
-              git config user.name "github-actions[bot]"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              git commit -m "Generate Gemini Sulafat Korean voice batch $batch"
+              git commit -m "Generate Gemini Sulafat Korean voice group $pass"
               git push origin HEAD:feat/gemini31-sulafat-fullpack-20260921
             fi
 
             if [ "$status" -ne 0 ]; then
-              echo "::error::Generation stopped in batch $batch; partial successful clips were checkpointed."
+              echo "::error::Grouped generation stopped in pass $pass; successful groups were checkpointed."
               exit "$status"
             fi
 
-            remaining=$(python -c 'import json; print(json.load(open("audio/gemini31-generation-state.json", encoding="utf-8")).get("remaining_count", 999999))')
-            echo "Remaining clips: $remaining"
+            remaining=$(python -c 'import json; print(json.load(open("audio/gemini31-generation-state.json", encoding="utf-8")).get("remaining_batches", 999999))')
+            echo "Remaining groups: $remaining"
             if [ "$remaining" = "0" ]; then
               break
             fi
