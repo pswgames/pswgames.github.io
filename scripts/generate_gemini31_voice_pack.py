@@ -162,44 +162,21 @@ def save_state(state):
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def save_pcm_wav(path: Path, pcm: bytes):
-    with wave.open(str(path), "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(SAMPLE_RATE)
-        wf.writeframes(pcm)
-
-
-def convert_to_mp3(pcm: bytes, out: Path):
+def encode_mp3(pcm: bytes, out: Path):
     out.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as td:
-        wav_path = Path(td) / "clip.wav"
-        mp3_path = Path(td) / "clip.mp3"
-        save_pcm_wav(wav_path, pcm)
-        cmd = [
-            "ffmpeg", "-y", "-loglevel", "error",
-            "-i", str(wav_path),
-            "-ac", "1", "-ar", "24000",
-            "-codec:a", "libmp3lame", "-b:a", "96k",
-            str(mp3_path),
-        ]
-        subprocess.run(cmd, check=True)
-        if not mp3_path.exists() or mp3_path.stat().st_size < 1500:
-            raise RuntimeError("encoded MP3 is missing or too small")
-        out.write_bytes(mp3_path.read_bytes())
+    encoder = lameenc.Encoder()
+    encoder.set_bit_rate(96)
+    encoder.set_in_sample_rate(SAMPLE_RATE)
+    encoder.set_channels(1)
+    encoder.set_quality(2)
+    data = encoder.encode(pcm) + encoder.flush()
+    if len(data) < 1500:
+        raise RuntimeError(f"encoded MP3 is too small: {len(data)} bytes")
+    out.write_bytes(data)
 
 
-def duration_seconds(path: Path) -> float:
-    r = subprocess.run(
-        [
-            "ffprobe", "-v", "error", "-show_entries", "format=duration",
-            "-of", "default=noprint_wrappers=1:nokey=1", str(path)
-        ],
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    return float(r.stdout.strip())
+def pcm_duration_seconds(pcm: bytes) -> float:
+    return len(pcm) / float(SAMPLE_RATE * 2)
 
 
 def synthesize(client, item):
