@@ -17,6 +17,7 @@
       toast,
       awardSticker,
     } = K;
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.1";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -887,7 +888,7 @@
       )
       .join(
         "",
-      )}</select></label><button class="setting-row" data-records><span>놀이 기록</span>${icon("chevron")}</button><button class="setting-row" data-app-info><span>앱 정보 <small>7.0.0</small></span>${icon("chevron")}</button><button class="setting-row" data-refresh><span>${icon("refresh")} 업데이트 확인</span>${icon("chevron")}</button></div><p class="parent-note">이용시간은 쉬기 알림으로 안내해요. 놀이 기록은 이 기기에 저장됩니다.</p></div>`;
+      )}</select></label><button class="setting-row" data-records><span>놀이 기록</span>${icon("chevron")}</button><button class="setting-row" data-app-info><span>앱 정보 <small>${APP_VERSION}</small></span>${icon("chevron")}</button><button class="setting-row" data-refresh><span>${icon("refresh")} 업데이트 확인</span>${icon("chevron")}</button></div><p class="parent-note">이용시간은 쉬기 알림으로 안내해요. 놀이 기록은 이 기기에 저장됩니다.</p></div>`;
   }
   function changePin() {
     if (!parentAuthenticated) return;
@@ -920,7 +921,7 @@
     parent.innerHTML = `${dialogHeader("기록 초기화")}<div class="parent-content app-info"><h3>처음부터 시작할까요?</h3><p>이 기기의 놀이 기록, 스티커와 놀이 설정을 지워요. 이 작업은 되돌릴 수 없어요. 보호자 비밀번호는 유지됩니다.</p><button class="btn soft" data-records>취소</button><button class="btn primary" data-reset-confirm>기록과 설정 지우기</button></div>`;
   }
   function info() {
-    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 7.0.0</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>주요 안내 음성은 앱에 저장된 고정 음원을 우선 사용합니다. 음원 재생이 실패한 경우에만 기기 음성으로 대체합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
+    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 ${APP_VERSION}</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>주요 안내 음성은 앱에 저장된 고정 음원을 우선 사용합니다. 음원 재생이 실패한 경우에만 기기 음성으로 대체합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
   }
   function closeParent() {
     parent.close();
@@ -1104,19 +1105,58 @@
       renderParent();
     }
     if ("refresh" in d) {
+      const timeout = (ms) =>
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("update-timeout")), ms),
+        );
+      const applyWaitingWorker = (worker) => {
+        if (!worker) return false;
+        const activate = () => {
+          if (worker.state === "installed") {
+            worker.postMessage({ type: "SKIP_WAITING" });
+            return true;
+          }
+          return false;
+        };
+        if (activate()) return true;
+        worker.addEventListener("statechange", activate);
+        return true;
+      };
       b.disabled = true;
-      b.textContent = "확인 중…";
-      navigator.serviceWorker
-        ?.getRegistration()
-        .then((r) => r?.update())
-        .then(() => {
-          toast("최신 파일을 다시 불러와요");
-          location.reload();
-        })
-        .catch(() => {
-          toast("연결을 확인해 주세요");
+      b.innerHTML = `<span>${icon("refresh")} 업데이트 확인 중…</span>`;
+      (async () => {
+        try {
+          if (!("serviceWorker" in navigator)) {
+            renderParent();
+            toast(`현재 최신 버전 ${APP_VERSION}이에요`);
+            return;
+          }
+          const registration = await Promise.race([
+            navigator.serviceWorker.getRegistration(),
+            timeout(4000),
+          ]);
+          if (!registration) {
+            renderParent();
+            toast("업데이트 기능을 다시 준비해 주세요");
+            return;
+          }
+
+          await Promise.race([registration.update(), timeout(8000)]);
+          const worker = registration.waiting || registration.installing;
+          if (applyWaitingWorker(worker)) {
+            toast("새 버전을 적용하고 있어요");
+            setTimeout(() => location.reload(), 2200);
+            return;
+          }
+
           renderParent();
-        });
+          toast(`현재 최신 버전 ${APP_VERSION}이에요`);
+        } catch {
+          renderParent();
+          toast("업데이트 확인이 지연됐어요. 앱을 다시 열면 자동으로 확인해요");
+        }
+      })();
+      return;
     }
   });
   parent.addEventListener("change", (e) => {
