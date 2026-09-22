@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.2";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.3";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
