@@ -13,6 +13,8 @@
       this.voiceVolume = clamp(settings.voiceVolume ?? 1);
       this.sfxVolume = clamp(settings.sfxVolume ?? 0.9);
       this.buffers = new Map();
+      this.decodedVoices = new Map();
+      this.voiceGain = null;
       this.effects = new Set();
       const files = window.SEOWOO_AUDIO_FILES || {};
       this.manifest = Object.fromEntries(
@@ -60,8 +62,14 @@
     }
     stopVoice() {
       this.serial++;
-      this.voice?.pause?.();
+      try {
+        this.voice?.stop?.();
+      } catch {}
+      try {
+        this.voice?.pause?.();
+      } catch {}
       this.voice = null;
+      this.voiceGain = null;
       window.speechSynthesis?.cancel();
       this.finishVoice?.(false);
       this.finishVoice = null;
@@ -91,7 +99,10 @@
     setVoiceVolume(n) {
       this.voiceVolume = clamp(n);
       this.settings.voiceVolume = this.voiceVolume;
-      if (this.voice) this.voice.volume = this.voiceVolume;
+      if (this.voice && "volume" in this.voice)
+        this.voice.volume = this.voiceVolume;
+      if (this.voiceGain)
+        this.voiceGain.gain.value = this.voiceVolume;
     }
     setSfxVolume(n) {
       this.sfxVolume = clamp(n);
@@ -137,14 +148,15 @@
           clearTimeout(this.voiceTimeout);
           this.finishVoice = null;
           this.voice = null;
+          this.voiceGain = null;
           resolve(ok);
         };
         this.finishVoice = resolve;
-        let fallbackStarted = false;
-        const fallback = () => {
-          if (token !== this.serial || fallbackStarted) return;
-          fallbackStarted = true;
-          this.voice?.pause();
+
+        let deviceFallbackStarted = false;
+        const deviceFallback = () => {
+          if (token !== this.serial || deviceFallbackStarted) return;
+          deviceFallbackStarted = true;
           if (!window.speechSynthesis) {
             finish(false);
             return;
@@ -160,22 +172,86 @@
           u.onerror = () => finish(false);
           window.speechSynthesis.speak(u);
         };
+
+        const playKoreanLocal = async () => {
+          try {
+            if (!entry?.src) throw new Error("missing Korean local voice asset");
+            this.unlock();
+            if (!this.ctx) throw new Error("AudioContext unavailable");
+            if (this.ctx.state === "suspended") await this.ctx.resume();
+
+            let buffer = this.decodedVoices.get(entry.src);
+            if (!buffer) {
+              const version = encodeURIComponent(
+                window.__SEOWOO_VERSION__ || "current",
+              );
+              const separator = entry.src.includes("?") ? "&" : "?";
+              const response = await fetch(
+                `${entry.src}${separator}v=${version}`,
+                { cache: "reload" },
+              );
+              if (!response.ok)
+                throw new Error(`voice asset HTTP ${response.status}`);
+              const bytes = await response.arrayBuffer();
+              buffer = await new Promise((res, rej) => {
+                const result = this.ctx.decodeAudioData(bytes.slice(0), res, rej);
+                result?.then?.(res, rej);
+              });
+              this.decodedVoices.set(entry.src, buffer);
+            }
+
+            if (token !== this.serial) return;
+            const source = this.ctx.createBufferSource();
+            const gain = this.ctx.createGain();
+            source.buffer = buffer;
+            gain.gain.value = this.voiceVolume;
+            source.connect(gain);
+            gain.connect(this.ctx.destination);
+            this.voice = source;
+            this.voiceGain = gain;
+            source.onended = () => {
+              try {
+                source.disconnect();
+                gain.disconnect();
+              } catch {}
+              finish(true);
+            };
+            source.start(0);
+          } catch (error) {
+            console.warn("Korean local voice playback failed", error);
+            // Never fall back to the device Korean TTS: it is the robotic voice
+            // this app is explicitly replacing.
+            finish(false);
+          }
+        };
+
         this.voiceTimeout = setTimeout(() => {
           if (token === this.serial) {
-            this.voice?.pause();
+            try {
+              this.voice?.stop?.();
+            } catch {}
+            try {
+              this.voice?.pause?.();
+            } catch {}
             window.speechSynthesis?.cancel();
             finish(false);
           }
         }, 20000);
+
+        if (lang.startsWith("ko")) {
+          playKoreanLocal();
+          return;
+        }
+
         if (entry?.src) {
           const a = this.buffers.get(entry.src) || new Audio(entry.src);
           this.voice = a;
           a.currentTime = 0;
           a.volume = this.voiceVolume;
           a.onended = () => finish(true);
-          a.onerror = fallback;
-          a.play().catch(fallback);
-        } else fallback();
+          a.onerror = deviceFallback;
+          a.play().catch(deviceFallback);
+        } else deviceFallback();
       });
     }
     async playFile(src) {

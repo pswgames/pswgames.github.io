@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.1";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.2";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -921,7 +921,7 @@
     parent.innerHTML = `${dialogHeader("기록 초기화")}<div class="parent-content app-info"><h3>처음부터 시작할까요?</h3><p>이 기기의 놀이 기록, 스티커와 놀이 설정을 지워요. 이 작업은 되돌릴 수 없어요. 보호자 비밀번호는 유지됩니다.</p><button class="btn soft" data-records>취소</button><button class="btn primary" data-reset-confirm>기록과 설정 지우기</button></div>`;
   }
   function info() {
-    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 ${APP_VERSION}</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>주요 안내 음성은 앱에 저장된 고정 음원을 우선 사용합니다. 음원 재생이 실패한 경우에만 기기 음성으로 대체합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
+    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 ${APP_VERSION}</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>한국어 안내 음성은 Gemini Sulafat 로컬 음원만 사용합니다. 기기의 한국어 TTS로 대체하지 않습니다. 영어는 저장된 로컬 음원을 우선 사용합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
   }
   function closeParent() {
     parent.close();
