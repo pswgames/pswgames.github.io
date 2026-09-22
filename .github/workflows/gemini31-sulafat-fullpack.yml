@@ -55,7 +55,7 @@ jobs:
             status=$?
             set -e
 
-            git add audio/voice/ko audio/voice-report.json
+            git add audio/voice/ko audio/voice-report.json audio/files.js
             if [ -f audio/gemini31-generation-state.json ]; then
               git add audio/gemini31-generation-state.json
             fi
