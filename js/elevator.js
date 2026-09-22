@@ -50,7 +50,50 @@
   };
   let dom = null,
     panorama = null,
-    lastPaint = "";
+    lastPaint = "",
+    voiceTail = null,
+    voiceEpoch = 0;
+
+  function resetVoiceQueue() {
+    voiceEpoch++;
+    voiceTail = null;
+  }
+
+  function queueVoice(id) {
+    const player = audio();
+    if (!player) return undefined;
+    const epoch = voiceEpoch;
+    const start = () => {
+      if (epoch !== voiceEpoch || !dom) return false;
+      return player.playVoice(id);
+    };
+    if (!voiceTail) {
+      const first = start();
+      if (!first || typeof first.then !== "function") return first;
+      const tracked = Promise.resolve(first).catch(() => false);
+      voiceTail = tracked;
+      tracked.then(
+        () => {
+          if (voiceTail === tracked) voiceTail = null;
+        },
+        () => {
+          if (voiceTail === tracked) voiceTail = null;
+        },
+      );
+      return tracked;
+    }
+    const chained = voiceTail.catch(() => false).then(start).catch(() => false);
+    voiceTail = chained;
+    chained.then(
+      () => {
+        if (voiceTail === chained) voiceTail = null;
+      },
+      () => {
+        if (voiceTail === chained) voiceTail = null;
+      },
+    );
+    return chained;
+  }
   const audio = () => window.SeowooCore?.audio;
   const save = () => {
     try {
@@ -120,7 +163,7 @@
   }
   function begin(target) {
     prepareTrip(target);
-    audio()?.playVoice("closing");
+    queueVoice("closing");
     if (doorFraction() > 0.985) {
       state.door = 1;
       state.doorFrom = 1;
@@ -257,7 +300,7 @@
       return;
     }
     if (target === state.current) {
-      audio()?.playVoice("arrival-" + target);
+      queueVoice("arrival-" + target);
       requestOpen(true);
       return;
     }
@@ -292,7 +335,7 @@
       return true;
     }
     if (state.phase === "closed") {
-      audio()?.playVoice("opening");
+      queueVoice("opening");
       audio()?.doorOpen();
       animateDoor(0, now, "manual");
       return true;
@@ -345,10 +388,10 @@
     if (!dom || state.phase !== "arrival") return;
     const floor = state.current;
     phase("announcing", now);
-    const arrived = audio()?.playVoice("arrival-" + floor);
+    const arrived = queueVoice("arrival-" + floor);
     if (arrived && typeof arrived.then === "function") await arrived;
     if (!dom || state.phase !== "announcing" || state.current !== floor) return;
-    const opening = audio()?.playVoice("opening");
+    const opening = queueVoice("opening");
     if (opening && typeof opening.then === "function") await opening;
     if (!dom || state.phase !== "announcing" || state.current !== floor) return;
     audio()?.doorOpen();
@@ -382,7 +425,7 @@
       state.door = 1;
       if (state.closeMode === "trip" && state.target !== state.current) {
         audio()?.motorStart();
-        audio()?.playVoice(state.target > state.start ? "up" : "down");
+        queueVoice(state.target > state.start ? "up" : "down");
         phase("travel", now);
       } else phase("closed", now);
     } else if (state.phase === "travel") {
@@ -474,6 +517,7 @@
       dom.open?.removeEventListener("lostpointercapture", openHoldEnd);
       audio()?.stopAll();
     }
+    resetVoiceQueue();
     panorama?.destroy();
     dom = null;
     panorama = null;
@@ -549,6 +593,7 @@
     cancelAnimationFrame(state.raf);
     state.raf = 0;
     audio()?.stopAll();
+    resetVoiceQueue();
   }
   function resume() {
     if (!dom || document.hidden) return;
