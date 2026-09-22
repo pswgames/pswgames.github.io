@@ -35,6 +35,6 @@ assert(audioSource.includes("Never fall back to the device Korean TTS"),"Korean 
 assert(audioSource.includes("decodeAudioData"),"Korean local MP3 must be decoded through Web Audio");
 
 const elevator=fs.readFileSync(path.join(root,"js/elevator.js"),"utf8");
-assert(elevator.includes('playVoice("opening")'),"Elevator opening announcement is not wired");
+assert(elevator.includes('queueVoice("opening")'),"Elevator opening announcement is not wired through the serialized queue");
 assert(elevator.includes("announceArrivalAndOpen"),"Arrival voice sequence is not wired");
 console.log(`Voice assets passed: ${ids.length} catalog mappings, ${new Set(Object.values(files)).size} unique clips, ${Object.keys(sfx).length} SFX`);

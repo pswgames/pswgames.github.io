@@ -1172,6 +1172,7 @@ h1:focus {
   left: 50%;
   top: 0;
   max-width: none;
+  filter: brightness(1.05);
   will-change: transform;
   user-select: none;
   pointer-events: none;

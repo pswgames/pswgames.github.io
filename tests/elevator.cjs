@@ -119,3 +119,12 @@ try {
 } finally {
   dom.window.close();
 }
+
+const elevatorSource = fs.readFileSync(path.join(root, "js/elevator.js"), "utf8");
+assert(elevatorSource.includes('queueVoice("closing")'), "Closing announcement must use the elevator voice queue");
+assert(elevatorSource.includes('queueVoice(state.target > state.start ? "up" : "down")'), "Direction announcement must use the elevator voice queue");
+assert(elevatorSource.includes('queueVoice("arrival-" + floor)'), "Floor arrival announcement must use the elevator voice queue");
+assert(elevatorSource.includes('queueVoice("opening")'), "Opening announcement must use the elevator voice queue");
+const cssSource = fs.readFileSync(path.join(root, "css/app.css"), "utf8");
+assert(/\.elevator-panorama-image\s*\{[\s\S]*?filter:\s*brightness\(1\.05\)/.test(cssSource), "Elevator panorama should be slightly brighter");
+console.log("PASS elevator regression: Elevator announcements must be serialized; panorama brightness +5%");
