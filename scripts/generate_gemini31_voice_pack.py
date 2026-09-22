@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOGS = [ROOT / "audio" / "catalog.js", ROOT / "audio" / "extra-catalog.js"]
 STATE_PATH = ROOT / "audio" / "gemini31-generation-state.json"
 REPORT_PATH = ROOT / "audio" / "voice-report.json"
+FILES_PATH = ROOT / "audio" / "files.js"
 
 MODEL = "gemini-3.1-flash-tts-preview"
 VOICE = "Sulafat"
@@ -87,6 +88,35 @@ def parse_catalog():
 def relpath(lang: str, text: str) -> str:
     h = hashlib.sha1(f"{lang}\0{text}".encode()).hexdigest()[:16]
     return f"audio/voice/ko/{h}.mp3"
+
+
+def legacy_relpath(lang: str, text: str) -> str:
+    # Existing English assets were generated with a literal backslash + zero separator.
+    h = hashlib.sha1(f"{lang}\\0{text}".encode()).hexdigest()[:16]
+    folder = "ko" if lang.lower().startswith("ko") else "en"
+    return f"audio/voice/{folder}/{h}.mp3"
+
+
+def write_mapping(rows):
+    mapping = {}
+    missing = []
+    for row in rows:
+        if row["lang"] == "ko-KR":
+            path = relpath(row["lang"], row["text"])
+        else:
+            path = legacy_relpath(row["lang"], row["text"])
+        mapping[row["id"]] = path
+        if not (ROOT / path).exists():
+            missing.append(path)
+    if missing:
+        raise RuntimeError(f"cannot publish voice mapping; missing assets: {missing[:5]}")
+    FILES_PATH.write_text(
+        "/* Generated mapping: Korean -> Gemini 3.1 Sulafat assets; English preserved. */\n"
+        + "window.SEOWOO_AUDIO_FILES="
+        + json.dumps(mapping, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+        + ";\n",
+        encoding="utf-8",
+    )
 
 
 def classify(ids: list[str]) -> str:
@@ -487,6 +517,7 @@ def run_next_batch(rows, items, batches):
     update_report(rows, items, state)
 
     if not pending:
+        write_mapping(rows)
         print("ALL_COMPLETE", flush=True)
         return 0
 
@@ -517,6 +548,8 @@ def run_next_batch(rows, items, batches):
         state.pop("last_failure", None)
         save_state(state, batches)
         update_report(rows, items, state)
+        if state["remaining_batches"] == 0:
+            write_mapping(rows)
         print(
             f"BATCH_COMPLETE {batch['id']} clips={len(batch['items'])} "
             f"remaining_groups={state['remaining_batches']}",
@@ -544,6 +577,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--next-batch", action="store_true")
     parser.add_argument("--plan", action="store_true")
+    parser.add_argument("--sync-mapping", action="store_true")
     args = parser.parse_args()
 
     rows = parse_catalog()
@@ -573,8 +607,12 @@ def main():
 
     if args.plan:
         return
+    if args.sync_mapping:
+        write_mapping(rows)
+        print("MAPPING_SYNCED", flush=True)
+        return
     if not args.next_batch:
-        raise SystemExit("Use --next-batch or --plan")
+        raise SystemExit("Use --next-batch, --sync-mapping, or --plan")
     if not os.environ.get("GEMINI_API_KEY"):
         raise RuntimeError("GEMINI_API_KEY is missing")
     raise SystemExit(run_next_batch(rows, items, batches))
