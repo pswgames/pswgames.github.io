@@ -153,8 +153,10 @@
         };
         this.finishVoice = resolve;
 
+        let deviceFallbackStarted = false;
         const deviceFallback = () => {
-          if (token !== this.serial) return;
+          if (token !== this.serial || deviceFallbackStarted) return;
+          deviceFallbackStarted = true;
           if (!window.speechSynthesis) {
             finish(false);
             return;
