@@ -1,4 +1,4 @@
-const fs=require("fs"),path=require("path"),vm=require("vm"),assert=require("assert/strict");
+const fs=require("fs"),path=require("path"),vm=require("vm"),assert=require("assert/strict"),crypto=require("crypto");
 const root=path.resolve(__dirname,".."),sandbox={window:{}};
 for(const file of ["audio/catalog.js","audio/extra-catalog.js","audio/files.js","audio/sfx.js"])
   vm.runInNewContext(fs.readFileSync(path.join(root,file),"utf8"),sandbox,{filename:file});
@@ -8,6 +8,11 @@ assert(ids.length>=650,`Expected full voice catalog, got ${ids.length}`);
 assert.equal(Object.keys(files).length,ids.length,"Every catalog entry must have a fixed local audio asset");
 for(const id of ids){
   const rel=files[id];
+  const entry=catalog[id];
+  if((entry.lang||"ko-KR")==="ko-KR"){
+    const expected="audio/voice/ko/"+crypto.createHash("sha1").update((entry.lang||"ko-KR")+"\0"+entry.text).digest("hex").slice(0,16)+".mp3";
+    assert.equal(rel,expected,`Korean voice mapping must point to Gemini Sulafat asset: ${id}`);
+  }
   assert(rel&&typeof rel==="string",`Missing voice mapping: ${id}`);
   const full=path.join(root,rel);
   assert(fs.existsSync(full),`Missing voice file: ${id} -> ${rel}`);
