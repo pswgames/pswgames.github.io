@@ -28,6 +28,12 @@ for(const id of ["button","doorOpen","doorClose","motorStart","motorStop","arriv
 const sw=fs.readFileSync(path.join(root,"sw.js"),"utf8");
 for(const [id,rel] of Object.entries(files))
   assert(sw.includes(rel),`Local voice is not precached for offline use: ${id}`);
+
+const audioSource=fs.readFileSync(path.join(root,"js/audio.js"),"utf8");
+assert(audioSource.includes('if (lang.startsWith("ko"))'),"Korean voice must use the dedicated local-only path");
+assert(audioSource.includes("Never fall back to the device Korean TTS"),"Korean device TTS fallback must remain disabled");
+assert(audioSource.includes("decodeAudioData"),"Korean local MP3 must be decoded through Web Audio");
+
 const elevator=fs.readFileSync(path.join(root,"js/elevator.js"),"utf8");
 assert(elevator.includes('playVoice("opening")'),"Elevator opening announcement is not wired");
 assert(elevator.includes("announceArrivalAndOpen"),"Arrival voice sequence is not wired");
