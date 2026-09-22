@@ -34,8 +34,41 @@ const fs = require("fs"),
     window: {
       speechSynthesis: synth,
       SEOWOO_AUDIO: {
-        hello: { text: "잘했어", src: "hello" },
-        bad: { text: "괜찮아", src: "bad" },
+        hello: { text: "hello", lang: "en-US", src: "hello" },
+        bad: { text: "missing", lang: "en-US", src: "bad" },
+        ko: { text: "문이 닫힙니다", lang: "ko-KR", src: "ko-local" },
+        koBad: { text: "문이 열립니다", lang: "ko-KR", src: "ko-bad" },
+      },
+      AudioContext: class {
+        constructor() {
+          this.state = "running";
+          this.destination = {};
+        }
+        resume() {
+          return Promise.resolve();
+        }
+        decodeAudioData(bytes, resolve) {
+          const buffer = { bytes };
+          resolve?.(buffer);
+          return Promise.resolve(buffer);
+        }
+        createBufferSource() {
+          return {
+            connect() {},
+            disconnect() {},
+            stop() {},
+            start() {
+              queueMicrotask(() => this.onended?.());
+            },
+          };
+        }
+        createGain() {
+          return {
+            gain: { value: 1 },
+            connect() {},
+            disconnect() {},
+          };
+        }
       },
     },
     document: { addEventListener() {} },
@@ -45,6 +78,11 @@ const fs = require("fs"),
         this.text = text;
       }
     },
+    fetch: async (src) => ({
+      ok: src !== "ko-bad?v=current",
+      status: src === "ko-bad?v=current" ? 404 : 200,
+      arrayBuffer: async () => new ArrayBuffer(8),
+    }),
     setTimeout,
     clearTimeout,
   };
@@ -68,6 +106,24 @@ const fs = require("fs"),
   );
   spoken[0].onend();
   assert(await second);
+
+  const beforeKorean = spoken.length;
+  assert(await a.playVoice("ko"), "Korean local Sulafat path should play through Web Audio");
+  assert.equal(
+    spoken.length,
+    beforeKorean,
+    "Korean local playback must never invoke device speechSynthesis",
+  );
+  assert.equal(
+    await a.playVoice("koBad"),
+    false,
+    "missing Korean local asset should fail closed instead of using device TTS",
+  );
+  assert.equal(
+    spoken.length,
+    beforeKorean,
+    "failed Korean local playback must still not invoke device speechSynthesis",
+  );
   const p = a.speak("one");
   const q = a.speak("two");
   assert.equal(await p, false);
@@ -80,7 +136,7 @@ const fs = require("fs"),
   a.setSfxVolume(-1);
   assert.equal(a.sfxVolume, 0);
   console.log(
-    "Audio tests passed: preload reuse, cancel settles promises, fallback once, stop, mute, volume clamp",
+    "Audio tests passed: English fallback, Korean local-only Web Audio, cancel, stop, mute, volume clamp",
   );
 })().catch((e) => {
   console.error(e);
