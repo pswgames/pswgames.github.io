@@ -70,7 +70,11 @@
       bandage:['<rect x="20" y="41" width="60" height="22" rx="11" fill="#f2c49c" transform="rotate(-12 50 52)"/><rect x="41" y="42" width="18" height="18" rx="5" fill="#e2aa79" transform="rotate(-12 50 51)"/>',"#fff3e8"],
       brush:['<rect x="27" y="30" width="46" height="34" rx="15" fill="#bca3dc"/><path d="M50 64v22" stroke="#806aa6" stroke-width="9" stroke-linecap="round"/><path d="M35 28v-9M43 27v-10M51 27V16M59 27v-10M67 28v-9" stroke="#806aa6" stroke-width="4"/>',"#f5f0ff"],
       water:['<path d="M50 16c15 21 25 33 25 47 0 15-11 25-25 25S25 78 25 63c0-14 10-26 25-47Z" fill="#79c9ec"/><path d="M40 66c3 8 9 11 17 9" fill="none" stroke="#dff6ff" stroke-width="5" stroke-linecap="round"/>',"#eefaff"],
-      treat:['<path d="M30 38c-12-9-21 8-10 17-11 9-2 26 10 17l40 0c12 9 21-8 10-17 11-9 2-26-10-17Z" fill="#d4a66b"/><circle cx="42" cy="55" r="3" fill="#a8794e"/><circle cx="58" cy="55" r="3" fill="#a8794e"/>',"#fff3e3"]
+      treat:['<path d="M30 38c-12-9-21 8-10 17-11 9-2 26 10 17l40 0c12 9 21-8 10-17 11-9 2-26-10-17Z" fill="#d4a66b"/><circle cx="42" cy="55" r="3" fill="#a8794e"/><circle cx="58" cy="55" r="3" fill="#a8794e"/>',"#fff3e3"],
+      ball:['<circle cx="50" cy="50" r="29" fill="#7fc6e4"/><path d="M25 35q25 17 50 0M25 65q25-17 50 0" fill="none" stroke="#effaff" stroke-width="5"/>',"#eefaff"],
+      bear:['<circle cx="50" cy="53" r="29" fill="#c79869"/><circle cx="28" cy="29" r="12" fill="#b6865c"/><circle cx="72" cy="29" r="12" fill="#b6865c"/><circle cx="40" cy="49" r="4" fill="#463f3a"/><circle cx="60" cy="49" r="4" fill="#463f3a"/><ellipse cx="50" cy="62" rx="12" ry="9" fill="#e5bd91"/><circle cx="50" cy="58" r="4" fill="#5c4940"/>',"#fbf0e4"],
+      butterfly:['<path d="M48 50c-10-20-31-20-30-3 0 13 13 17 27 13-13 9-13 27 1 27 12 0 15-16 7-31Z" fill="#ef8fb2"/><path d="M52 50c10-20 31-20 30-3 0 13-13 17-27 13 13 9 13 27-1 27-12 0-15-16-7-31Z" fill="#8fc6e7"/><rect x="47" y="34" width="6" height="38" rx="3" fill="#5d5f68"/><path d="M49 36c-4-8-9-10-13-9M51 36c4-8 9-10 13-9" fill="none" stroke="#5d5f68" stroke-width="3"/>',"#fff0f6"],
+      fish:['<path d="M24 52c12-22 43-25 58-3-15 23-45 25-58 3Z" fill="#76c0dd"/><path d="M24 52 10 36v32Z" fill="#5ba8c8"/><circle cx="68" cy="46" r="4" fill="#354f5a"/><path d="M47 45q7 7 0 14" fill="none" stroke="#dff6ff" stroke-width="4"/>',"#eefaff"]
     }; return m[kind];
   }
   function sized(base,scale=1){ const inner=(food(base)||simple(base)||simple(base.replace(/-big|-small/,""))||food(base.replace(/-big|-small/,""))); return inner?inner:null; }
