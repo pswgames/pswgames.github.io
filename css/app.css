@@ -738,11 +738,38 @@ h1:focus {
   width: 24px;
   height: 24px;
 }
+.more-intro {
+  max-width: 780px;
+  margin: 0 auto var(--s6);
+  padding: 22px 26px;
+  border: 2px solid white;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, #e9f8ff, #f1ffea);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+.more-intro h2 {
+  margin-top: var(--s2);
+  font-size: 28px;
+}
+.more-intro p {
+  margin-top: var(--s2);
+  color: var(--muted);
+  font-size: 16px;
+}
 .more-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--s6);
   padding-top: var(--s6);
+}
+.more-grid.premium-first .learning-card:nth-child(-n + 3) {
+  min-height: 230px;
+  border-width: 3px;
+  box-shadow: 0 9px 0 #24446612, 0 18px 34px #254d6b18;
+}
+.more-grid.premium-first .learning-card:nth-child(-n + 3) .learning-symbol {
+  font-size: 62px;
 }
 .more-grid .learning-card {
   min-height: 200px;
@@ -2228,10 +2255,27 @@ dialog::backdrop {
   .learning-symbol {
     font-size: 38px;
   }
+  .more-intro {
+    margin-bottom: var(--s4);
+    padding: 16px;
+  }
+  .more-intro h2 {
+    font-size: 22px;
+  }
+  .more-intro p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
   .more-grid {
     grid-template-columns: 1fr 1fr;
     gap: var(--s4);
     padding-top: var(--s2);
+  }
+  .more-grid.premium-first .learning-card:nth-child(-n + 3) {
+    min-height: 185px;
+  }
+  .more-grid.premium-first .learning-card:nth-child(-n + 3) .learning-symbol {
+    font-size: 46px;
   }
   .more-grid .learning-card {
     min-height: 170px;
