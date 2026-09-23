@@ -10,16 +10,38 @@ function worker(fail=false){
   return {trigger,removed,requests,get skipped(){return skipped},get claimed(){return claimed}};
 }
 function client(controlled){
-  const events={},docEvents={};let reloads=0,updates=0,options;
-  const sw={controller:controlled?{}:null,addEventListener:(k,f)=>events[k]=f,register:async(url,o)=>{assert.equal(url,'sw.js');options=o;return {update:async()=>updates++}}};
-  vm.runInNewContext(fs.readFileSync('js/pwa.js','utf8'),{navigator:{serviceWorker:sw},location:{reload:()=>reloads++},document:{hidden:false,addEventListener:(k,f)=>docEvents[k]=f},window:{addEventListener:(k,f)=>events[k]=f}});
-  return {events,docEvents,get reloads(){return reloads},get updates(){return updates},get options(){return options}};
+  const events={},docEvents={};let reloads=0,updates=0,options,registeredUrl;
+  const registration={
+    active:controlled?{scriptURL:'https://pswgames.github.io/sw.js?app=7.0.2'}:null,
+    waiting:null,
+    installing:null,
+    addEventListener(){},
+    update:async()=>updates++,
+  };
+  const sw={
+    controller:controlled?{}:null,
+    addEventListener:(k,f)=>events[k]=f,
+    register:async(url,o)=>{
+      registeredUrl=url;
+      assert.equal(url,'sw.js?app=7.1.1');
+      options=o;
+      return registration;
+    },
+  };
+  vm.runInNewContext(fs.readFileSync('js/pwa.js','utf8'),{
+    navigator:{serviceWorker:sw},
+    location:{reload:()=>reloads++},
+    document:{hidden:false,addEventListener:(k,f)=>docEvents[k]=f,querySelector:()=>null},
+    window:{__SEOWOO_VERSION__:'7.1.1',addEventListener:(k,f)=>events[k]=f},
+    encodeURIComponent,
+  });
+  return {events,docEvents,get reloads(){return reloads},get updates(){return updates},get options(){return options},get registeredUrl(){return registeredUrl}};
 }
 (async()=>{
  const w=worker();await w.trigger('install');assert(w.requests.length>=38);assert(w.requests.every(r=>r.cache==='reload'));assert.equal(w.skipped,1);
  await w.trigger('activate');assert.deepEqual(w.removed,['seowoo-static-6.8.1']);assert.equal(w.claimed,1);
  const fallback=await w.trigger('fetch',{request:{method:'GET',url:'https://pswgames.github.io/',mode:'navigate'}});assert.equal(await fallback.text(),'offline shell');
  const failed=worker(true);await assert.rejects(failed.trigger('install'));assert.deepEqual(failed.removed,[version]);assert.equal(failed.skipped,0);
- for(const controlled of [true,false]){const c=client(controlled);await new Promise(r=>setImmediate(r));assert.equal(c.options.updateViaCache,'none');c.events.controllerchange();c.events.controllerchange();assert.equal(c.reloads,controlled?1:0);c.events.online();c.docEvents.visibilitychange();await new Promise(r=>setImmediate(r));assert.equal(c.updates,3);}
- console.log('PASS PWA: fresh HTTP precache, failed-install rollback, scoped old-cache cleanup, offline shell, single upgrade reload, resume checks');
+ for(const controlled of [true,false]){const c=client(controlled);await new Promise(r=>setImmediate(r));assert.equal(c.registeredUrl,'sw.js?app=7.1.1');assert.equal(c.options.updateViaCache,'none');c.events.controllerchange();c.events.controllerchange();assert.equal(c.reloads,controlled?1:0);c.events.online();c.docEvents.visibilitychange();await new Promise(r=>setImmediate(r));assert.equal(c.updates,3);}
+ console.log('PASS PWA: versioned worker URL, fresh HTTP precache, failed-install rollback, scoped old-cache cleanup, offline shell, single upgrade reload, resume checks');
 })().catch(e=>{console.error(e);process.exitCode=1});
