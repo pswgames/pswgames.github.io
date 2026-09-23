@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.1.1";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.1.2";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -52,6 +52,22 @@
     );
   const art = (n) =>
     `<span class="toy-art art-${n}" aria-hidden="true"></span>`;
+  const featuredArt = (kind) => {
+    const svg = {
+      village:
+        '<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M8 66h104v15H8z" fill="#8fd19a"/><path d="M13 58 35 38l22 20v23H13z" fill="#fff3d7"/><path d="M8 59 35 34l27 25" fill="none" stroke="#ef8b78" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><rect x="25" y="60" width="13" height="21" rx="3" fill="#7fc4e7"/><path d="M59 54 82 31l28 23v27H59z" fill="#eef8ff"/><path d="M55 55 82 27l31 28" fill="none" stroke="#73baa9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><rect x="73" y="60" width="16" height="21" rx="3" fill="#f1b8cb"/><circle cx="99" cy="20" r="8" fill="#ffe277"/></svg>',
+      puzzle:
+        '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="17" y="15" width="39" height="34" rx="10" fill="#ffd167"/><circle cx="56" cy="32" r="9" fill="#eaf8ff"/><rect x="62" y="15" width="41" height="34" rx="10" fill="#ef90ae"/><circle cx="62" cy="32" r="9" fill="#f7fbff"/><rect x="17" y="52" width="39" height="29" rx="10" fill="#78c7e7"/><circle cx="56" cy="66" r="9" fill="#f7fbff"/><rect x="62" y="52" width="41" height="29" rx="10" fill="#9a86d8"/><circle cx="62" cy="66" r="9" fill="#f7fbff"/></svg>',
+      feelings:
+        '<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M60 80C13 54 22 15 46 21c7 2 12 7 14 13 2-6 7-11 14-13 24-6 33 33-14 59z" fill="#ffad9b"/><circle cx="47" cy="46" r="4" fill="#5c5b67"/><circle cx="73" cy="46" r="4" fill="#5c5b67"/><path d="M48 61c8 8 16 8 24 0" fill="none" stroke="#6d5351" stroke-width="4" stroke-linecap="round"/><circle cx="38" cy="57" r="6" fill="#f58d8c" opacity=".55"/><circle cx="82" cy="57" r="6" fill="#f58d8c" opacity=".55"/></svg>',
+    };
+    return `<span class="featured-art featured-${kind}">${svg[kind]}</span>`;
+  };
+  const featuredActivities = [
+    ["village", "역할놀이 마을", "마트·주방·동물병원", "village"],
+    ["puzzle", "퍼즐 탐험대", "끌어서 맞추는 퍼즐", "puzzle"],
+    ["feelings", "마음친구", "기분을 고르고 표현해요", "feelings"],
+  ];
   let route = "home",
     epoch = 0,
     sequenceEpoch = 0,
@@ -157,7 +173,7 @@
     ["english", "영어<br>찾기", "sky", 5],
   ];
   function renderHome() {
-    main.innerHTML = `<section class="home-world"><img class="home-landscape" src="assets/art/hero.webp" alt="손을 흔드는 서우와 귀여운 강아지가 있는 화사한 놀이터" fetchpriority="high"><div class="home-top"><span class="home-greeting">함께 놀며 자라는 작은 세상</span><div class="home-tools"><button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button><button class="parent-entry" data-parent>${icon("lock")} 보호자 메뉴</button></div></div><div class="brand-block"><h1 class="brand-logo" tabindex="-1" aria-label="서우놀이터">${[..."서우놀이터"].map((x, i) => `<span class="logo-${i}">${x}</span>`).join("")}</h1><p>오늘도 놀면서 쑥쑥 자라요!</p><div class="welcome-note">서우야,<br>${state.settings.greeting === "encourage" ? "오늘도 너를 응원해! <span>♡</span>" : "오늘은 뭐 하고 놀까? <span>☺</span>"}</div></div><div class="home-bottom"><nav class="activity-grid" aria-label="놀이 선택">${activities.map(([r, t, c, n]) => `<button class="activity-card ${c}" data-go="${r}"><span>${t}</span>${art(n)}</button>`).join("")}</nav><footer class="home-footer">${pill("treasure", `나의 보물 ${state.stickers.length}`, "star")}<span class="footer-message">오늘도 서우의 세상이 한 뼘 더!</span><div>${pill("music", "음악", "music")}${pill("more", "더 놀기", "heart")}</div></footer></div></section>`;
+    main.innerHTML = `<section class="home-world"><img class="home-landscape" src="assets/art/hero.webp" alt="손을 흔드는 서우와 귀여운 강아지가 있는 화사한 놀이터" fetchpriority="high"><div class="home-top"><span class="home-greeting">함께 놀며 자라는 작은 세상</span><div class="home-tools"><button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button><button class="parent-entry" data-parent>${icon("lock")} 보호자 메뉴</button></div></div><div class="brand-block"><h1 class="brand-logo" tabindex="-1" aria-label="서우놀이터">${[..."서우놀이터"].map((x, i) => `<span class="logo-${i}">${x}</span>`).join("")}</h1><p>오늘도 놀면서 쑥쑥 자라요!</p><div class="welcome-note">서우야,<br>${state.settings.greeting === "encourage" ? "오늘도 너를 응원해! <span>♡</span>" : "오늘은 뭐 하고 놀까? <span>☺</span>"}</div></div><div class="home-bottom"><section class="home-featured" aria-label="새 놀이"><div class="home-featured-head"><span>NEW</span><b>새로 생긴 놀이</b></div><div class="home-featured-grid">${featuredActivities.map(([r,t,s,k]) => `<button class="home-featured-card ${k}" data-go="${r}">${featuredArt(k)}<span><b>${t}</b><small>${s}</small></span><i>›</i></button>`).join("")}</div></section><nav class="activity-grid" aria-label="놀이 선택">${activities.map(([r, t, c, n]) => `<button class="activity-card ${c}" data-go="${r}"><span>${t}</span>${art(n)}</button>`).join("")}</nav><footer class="home-footer">${pill("treasure", `나의 보물 ${state.stickers.length}`, "star")}<span class="footer-message">오늘도 서우의 세상이 한 뼘 더!</span><div>${pill("music", "음악", "music")}${pill("more", "더 놀기", "heart")}</div></footer></div></section>`;
   }
   function gameShell(theme, title, content, tabs = "", back = "home") {
     main.innerHTML = `<section class="play-screen theme-${theme}">${header(title, back)}${tabs}<div class="game-body">${content}</div></section>`;
