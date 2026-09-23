@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.0.3";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.1.0";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -83,6 +83,7 @@
     musicTimer = null;
     audio.stopAll();
     window.SeowooElevator.unmount();
+    window.SeowooExperiences?.unmount?.();
     quiz = null;
     memory = null;
   }
@@ -109,6 +110,9 @@
     color: "색깔 찾기",
     memory: "기억하고 톡톡",
     together: "엄마아빠랑 같이",
+    village: "역할놀이 마을",
+    puzzle: "퍼즐 탐험대",
+    feelings: "마음친구",
   };
   function go(name, opts = {}) {
     if (name === "parent") {
@@ -221,6 +225,16 @@
         break;
       case "together":
         renderTogether();
+        break;
+      case "village":
+      case "puzzle":
+      case "feelings":
+        window.SeowooExperiences?.mount?.(route, {
+          main,
+          header,
+          icon,
+          go,
+        });
         break;
       default:
         renderMore();
@@ -591,7 +605,10 @@
     gameShell(
       "plain",
       route === "think" ? "생각 놀이터" : "더 많은 놀이",
-      `<div class="more-grid">${[
+      `<div class="more-intro"><span class="eyebrow">새로 생긴 놀이</span><h2>서우가 직접 만지고 움직이는 놀이</h2><p>정답보다 탐색과 표현을 먼저 생각했어.</p></div><div class="more-grid premium-first">${[
+        ["village", "역할놀이 마을", "🏘️"],
+        ["puzzle", "퍼즐 탐험대", "🧩"],
+        ["feelings", "마음친구", "💛"],
         ["memory", "기억하고 톡톡", "🧠"],
         ["color", "색깔 찾기", "🌈"],
         ["alphabet", "ABC 카드", "ABC"],
