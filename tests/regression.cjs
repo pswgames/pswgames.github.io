@@ -86,7 +86,11 @@ const doc = w.document,
   await wait(20);
   const report = [];
   assert.equal(doc.querySelectorAll(".activity-card").length, 6);
-  report.push("홈: 여섯 활동 진입");
+  assert.equal(doc.querySelectorAll(".home-featured-card").length, 3);
+  assert(doc.querySelector('[data-go="village"].home-featured-card'));
+  assert(doc.querySelector('[data-go="puzzle"].home-featured-card'));
+  assert(doc.querySelector('[data-go="feelings"].home-featured-card'));
+  report.push("홈: 기존 여섯 활동 + 신규 3개 놀이 직접 진입");
   go("elevator");
   const floorOrder = Array.from({ length: 10 }, (_, row) => [
     19 - row * 2,
