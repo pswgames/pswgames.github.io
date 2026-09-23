@@ -68,6 +68,7 @@ for (const p of [
   "data/content.js",
   "js/core.js",
   "js/screen-lock.js",
+  "js/experiences.js",
   "js/app.js",
 ])
   w.eval(fs.readFileSync(path.join(root, p), "utf8"));
@@ -180,12 +181,34 @@ const doc = w.document,
     "treasure",
     "more",
     "together",
+    "village",
+    "puzzle",
+    "feelings",
   ]) {
     go(r);
     assert($("#main h1"));
     assert.equal($("#main").textContent.includes("undefined"), false, r);
   }
-  report.push("17개 기존/새 놀이 경로 렌더링");
+  report.push("20개 기존/새 놀이 경로 렌더링");
+  go("more");
+  assert($('[data-go="village"]'));
+  assert($('[data-go="puzzle"]'));
+  assert($('[data-go="feelings"]'));
+  go("village");
+  assert($(".village-map"));
+  click('[data-village-place="market"]');
+  assert($(".market-room"));
+  go("puzzle");
+  assert($(".puzzle-hub"));
+  click('[data-puzzle-mode="shadows"]');
+  assert.equal(doc.querySelectorAll(".shape-piece").length, 4);
+  go("feelings");
+  assert($(".feelings-world"));
+  click('[data-mood="sad"]');
+  assert($(".mood-bg-sad"));
+  click("[data-feeling-story]");
+  assert($(".feeling-story"));
+  report.push("프리미엄 3개 메뉴 진입·장면 전환·기본 상호작용 렌더링");
   go("potty");
   click('[data-potty="next"]');
   for (let i = 0; i < 3; i++) click('[data-potty="wash"]');
