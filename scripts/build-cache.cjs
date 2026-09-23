@@ -19,6 +19,7 @@ for (const p of [
   "assets/art",
   "assets/cities",
   "assets/fonts",
+  "assets/worlds",
 ])
   walk(path.join(root, p));
 

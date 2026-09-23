@@ -66,9 +66,12 @@ w.setTimeout = (fn, ms, ...args) =>
   realTimeout(fn, ms >= 500 ? 15 : ms, ...args);
 for (const p of [
   "data/content.js",
+  "data/experience-v2.js",
   "js/core.js",
   "js/screen-lock.js",
   "js/experiences.js",
+  "js/experience-icons.js",
+  "js/experiences-v2.js",
   "js/app.js",
 ])
   w.eval(fs.readFileSync(path.join(root, p), "utf8"));
@@ -199,20 +202,32 @@ const doc = w.document,
   assert($('[data-go="puzzle"]'));
   assert($('[data-go="feelings"]'));
   go("village");
-  assert($(".village-map"));
-  click('[data-village-place="market"]');
-  assert($(".market-room"));
+  assert($(".v2-world-hub"));
+  click('[data-place="market"]');
+  assert($(".market-world"));
+  assert.equal(doc.querySelectorAll(".product-card").length, 12);
   go("puzzle");
-  assert($(".puzzle-hub"));
-  click('[data-puzzle-mode="shadows"]');
-  assert.equal(doc.querySelectorAll(".shape-piece").length, 4);
+  assert($(".v2-puzzle-world"));
+  assert.equal(w.SEOWOO_EXPERIENCE_V2.puzzles.length, 12);
+  const puzzleSeen = new Set();
+  for (let i = 0; i < 12; i++) {
+    puzzleSeen.add(w.SeowooExperiencesV2.state.puzzle.case.id);
+    click("[data-puzzle-next]");
+  }
+  assert.equal(puzzleSeen.size, 12, "12개 퍼즐은 한 순환 안에서 중복되면 안 됩니다");
   go("feelings");
-  assert($(".feelings-world"));
+  assert($(".v2-feelings-home"));
+  assert.equal(w.SEOWOO_EXPERIENCE_V2.feelings.length, 12);
   click('[data-mood="sad"]');
-  assert($(".mood-bg-sad"));
-  click("[data-feeling-story]");
-  assert($(".feeling-story"));
-  report.push("프리미엄 3개 메뉴 진입·장면 전환·기본 상호작용 렌더링");
+  click("[data-feeling-start]");
+  assert($(".v2-feeling-case"));
+  const feelingSeen = new Set();
+  for (let i = 0; i < 12; i++) {
+    feelingSeen.add(w.SeowooExperiencesV2.state.feelings.case.id);
+    click("[data-feeling-next]");
+  }
+  assert.equal(feelingSeen.size, 12, "12개 감정상황은 한 순환 안에서 중복되면 안 됩니다");
+  report.push("V2 역할놀이·12개 퍼즐·12개 감정상황 진입 및 무중복 랜덤 순환");
   go("potty");
   click('[data-potty="next"]');
   for (let i = 0; i < 3; i++) click('[data-potty="wash"]');

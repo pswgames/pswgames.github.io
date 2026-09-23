@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0ea"/><stop offset="1" stop-color="#f7e2d8"/></linearGradient>
+  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#efd8b8"/><stop offset="1" stop-color="#d9b98f"/></linearGradient>
+  <filter id="ds"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#5b463a" flood-opacity=".15"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#wall)"/>
+<rect y="705" width="1600" height="195" fill="url(#floor)"/>
+<g filter="url(#ds)">
+  <g transform="translate(70 90)">
+    <rect width="355" height="265" rx="34" fill="#bfeaff" stroke="#fff" stroke-width="14"/>
+    <path d="M177 0v265M0 132h355" stroke="#fff" stroke-width="11"/>
+    <path d="M0 205q100-75 180-35t175-22v117H0z" fill="#9cd38d"/>
+    <circle cx="292" cy="60" r="35" fill="#ffe277"/>
+  </g>
+  <rect x="1010" y="80" width="470" height="190" rx="35" fill="#a9d0b7" stroke="#fff" stroke-width="12"/>
+  <path d="M1245 80v190" stroke="#e8f3e9" stroke-width="8"/>
+  <circle cx="1215" cy="180" r="8" fill="#6f9f7f"/><circle cx="1275" cy="180" r="8" fill="#6f9f7f"/>
+</g>
+<rect x="40" y="380" width="1520" height="60" rx="24" fill="#f3d9b2"/>
+<rect x="55" y="440" width="1490" height="260" rx="0 0 34 34" fill="#aed0b8"/>
+<path d="M350 440v260M690 440v260M1040 440v260M1320 440v260" stroke="#7da98d" stroke-width="8"/>
+<g filter="url(#ds)">
+  <rect x="75" y="455" width="250" height="220" rx="30" fill="#b9d9ec" stroke="#fff" stroke-width="10"/>
+  <path d="M75 550h250" stroke="#fff" stroke-width="8"/>
+  <rect x="285" y="490" width="12" height="55" rx="6" fill="#6e94a8"/>
+  <rect x="285" y="580" width="12" height="55" rx="6" fill="#6e94a8"/>
+</g>
+<g transform="translate(1015 455)">
+  <ellipse cx="200" cy="160" rx="170" ry="70" fill="#d7dcd9"/>
+  <ellipse cx="200" cy="160" rx="128" ry="48" fill="#48575d"/>
+  <circle cx="200" cy="160" r="76" fill="#34454b"/>
+  <path d="M345 160h105" stroke="#6f7f84" stroke-width="26" stroke-linecap="round"/>
+</g>
+<g transform="translate(705 420)" filter="url(#ds)">
+  <ellipse cx="130" cy="195" rx="118" ry="35" fill="#fff"/>
+  <ellipse cx="130" cy="188" rx="88" ry="22" fill="#edf4f3"/>
+  <rect x="45" y="20" width="170" height="165" rx="38" fill="#9fb4bc" stroke="#fff" stroke-width="8"/>
+  <rect x="65" y="0" width="130" height="35" rx="18" fill="#6c858f"/>
+  <path d="M22 70h45M215 70h45" stroke="#6b8790" stroke-width="20" stroke-linecap="round"/>
+</g>
+<g fill="#f8f4e6"><circle cx="590" cy="500" r="28"/><circle cx="620" cy="525" r="18"/><circle cx="1450" cy="340" r="10"/></g>
+</svg>
