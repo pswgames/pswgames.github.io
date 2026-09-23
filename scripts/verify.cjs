@@ -11,8 +11,10 @@ for (const dir of ["js", "data", "audio"])
       filename: file,
     });
 const html = fs.readFileSync("index.html", "utf8");
-for (const [, file] of html.matchAll(/(?:src|href)="([^"#]+)"/g))
-  assert(fs.existsSync(file), `Missing ${file}`);
+for (const [, file] of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
+  const localFile = file.split(/[?#]/)[0];
+  assert(fs.existsSync(localFile), `Missing ${file}`);
+}
 for (const file of ["css/app.css", "css/tokens.css"])
   for (const [, asset] of fs
     .readFileSync(file, "utf8")
