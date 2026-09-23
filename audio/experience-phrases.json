@@ -1,0 +1,258 @@
+{
+  "v3-village": {
+    "text": "서우야, 어디에서 놀까?",
+    "lang": "ko-KR"
+  },
+  "v3-market": {
+    "text": "그림을 보고 장바구니에 담아 줘.",
+    "lang": "ko-KR"
+  },
+  "v3-kitchen": {
+    "text": "재료를 씻고, 썰고, 냄비에 넣어 보자.",
+    "lang": "ko-KR"
+  },
+  "v3-clinic": {
+    "text": "아픈 친구를 돌봐 줄까?",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle": {
+    "text": "조각을 고르고, 맞는 자리를 눌러 봐.",
+    "lang": "ko-KR"
+  },
+  "v3-feelings": {
+    "text": "서우야, 지금 기분이 어때?",
+    "lang": "ko-KR"
+  },
+  "v3-retry": {
+    "text": "괜찮아. 다시 해 볼까?",
+    "lang": "ko-KR"
+  },
+  "v3-place": {
+    "text": "어디에 놓을까?",
+    "lang": "ko-KR"
+  },
+  "v3-correct": {
+    "text": "잘 찾았어.",
+    "lang": "ko-KR"
+  },
+  "v3-done": {
+    "text": "우와, 다 했어!",
+    "lang": "ko-KR"
+  },
+  "v3-checkout": {
+    "text": "계산 끝! 또 장보러 갈까?",
+    "lang": "ko-KR"
+  },
+  "v3-wash": {
+    "text": "깨끗이 씻었어. 이제 썰어 보자.",
+    "lang": "ko-KR"
+  },
+  "v3-chop": {
+    "text": "잘했어. 냄비에 넣어 줘.",
+    "lang": "ko-KR"
+  },
+  "v3-pot": {
+    "text": "냄비에 쏙!",
+    "lang": "ko-KR"
+  },
+  "v3-cook": {
+    "text": "보글보글, 요리가 됐어. 접시에 담아 줘.",
+    "lang": "ko-KR"
+  },
+  "v3-serve": {
+    "text": "맛있는 요리 완성!",
+    "lang": "ko-KR"
+  },
+  "v3-care": {
+    "text": "친구가 기분이 좋아졌어.",
+    "lang": "ko-KR"
+  },
+  "v3-care-done": {
+    "text": "친구를 잘 돌봐 줬어.",
+    "lang": "ko-KR"
+  },
+  "v3-breathe": {
+    "text": "꽃향기를 맡듯이 숨을 들이마시고, 천천히 후.",
+    "lang": "ko-KR"
+  },
+  "v3-count": {
+    "text": "별을 누르며 하나, 둘, 셋.",
+    "lang": "ko-KR"
+  },
+  "v3-stretch": {
+    "text": "어깨를 으쓱, 힘을 툭 풀어 봐.",
+    "lang": "ko-KR"
+  },
+  "v3-calm-done": {
+    "text": "잘했어. 마음이 편안해졌니?",
+    "lang": "ko-KR"
+  },
+  "v3-different": {
+    "text": "그렇게 느낄 수도 있어. 친구 얼굴도 살펴볼까?",
+    "lang": "ko-KR"
+  },
+  "v3-mood-happy": {
+    "text": "기뻐요",
+    "lang": "ko-KR"
+  },
+  "v3-mood-sad": {
+    "text": "속상해요",
+    "lang": "ko-KR"
+  },
+  "v3-mood-angry": {
+    "text": "화나요",
+    "lang": "ko-KR"
+  },
+  "v3-mood-scared": {
+    "text": "무서워요",
+    "lang": "ko-KR"
+  },
+  "v3-mood-surprised": {
+    "text": "놀랐어요",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-shape-garden": {
+    "text": "같은 모양의 화분을 찾아줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-animal-home": {
+    "text": "동물 친구를 알맞은 집으로 데려가줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-vehicle-place": {
+    "text": "탈것을 알맞은 곳으로 보내줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-fruit-color": {
+    "text": "과일을 같은 색 바구니에 담아줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-big-small": {
+    "text": "큰 것은 큰 집, 작은 것은 작은 집",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-food-place": {
+    "text": "음식을 알맞은 곳에 정리해줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-weather-wear": {
+    "text": "날씨에 맞는 물건을 골라줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-bathroom-order": {
+    "text": "손 씻는 순서대로 놓아보자",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-half-match": {
+    "text": "반쪽을 맞춰 하나로 만들어줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-bedtime": {
+    "text": "잠자기 전에 필요한 것을 찾아줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-picnic": {
+    "text": "소풍에 필요한 것만 가방에 넣어줘",
+    "lang": "ko-KR"
+  },
+  "v3-puzzle-music-family": {
+    "text": "같은 악기 가족끼리 모아줘",
+    "lang": "ko-KR"
+  },
+  "v3-story-tower": {
+    "text": "열심히 쌓은 블록 탑이 갑자기 무너졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-tower": {
+    "text": "속상할 수 있어. 다시 천천히 쌓아보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-thunder": {
+    "text": "창밖에서 아주 큰 천둥소리가 났어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-thunder": {
+    "text": "무서울 수 있어. 어른 손을 잡고 천천히 숨 쉬어보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-bubble": {
+    "text": "커다란 비눗방울이 반짝이며 날아가. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-bubble": {
+    "text": "신나고 기쁜 마음이네. 같이 웃어보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-toy": {
+    "text": "친구가 묻지 않고 내가 놀던 자동차를 가져갔어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-toy": {
+    "text": "화가 날 수 있어. '나도 놀고 있었어'라고 말해보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-mom": {
+    "text": "집에 오니 엄마가 반갑게 꼭 안아줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-mom": {
+    "text": "마음이 따뜻하고 기쁘구나.",
+    "lang": "ko-KR"
+  },
+  "v3-story-dark": {
+    "text": "불이 꺼져서 방이 아주 어두워졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-dark": {
+    "text": "깜깜하면 무서울 수 있어. 불을 켜고 천천히 둘러보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-cookie": {
+    "text": "먹으려고 들고 있던 쿠키가 바닥에 떨어졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-cookie": {
+    "text": "아쉽고 속상한 마음이 들 수 있어.",
+    "lang": "ko-KR"
+  },
+  "v3-story-birthday": {
+    "text": "문을 열었더니 친구들이 갑자기 생일 노래를 불러줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-birthday": {
+    "text": "깜짝 놀랐구나. 그리고 곧 기쁜 마음도 들 수 있어.",
+    "lang": "ko-KR"
+  },
+  "v3-story-splash": {
+    "text": "친구가 뛰다가 내 옷에 물을 많이 튀겼어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-splash": {
+    "text": "화가 날 수 있어. 먼저 몸을 닦고 천천히 말해보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-puppy": {
+    "text": "강아지가 달려와서 꼬리를 흔들며 반겨줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-puppy": {
+    "text": "반갑고 기쁜 마음이 들었겠네.",
+    "lang": "ko-KR"
+  },
+  "v3-story-balloon": {
+    "text": "옆에 있던 풍선이 갑자기 큰 소리를 내며 터졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-balloon": {
+    "text": "깜짝 놀랄 수 있어. 놀란 몸을 천천히 진정시켜보자.",
+    "lang": "ko-KR"
+  },
+  "v3-story-turn": {
+    "text": "미끄럼틀에서 친구가 새치기를 했어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "v3-response-turn": {
+    "text": "화가 날 수 있어. '내 차례야'라고 또박또박 말해보자.",
+    "lang": "ko-KR"
+  }
+}
