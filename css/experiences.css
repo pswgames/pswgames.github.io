@@ -1,0 +1,120 @@
+/* High-touch original toddler play worlds. No external artwork: scenes are CSS/SVG so they stay sharp offline. */
+.xp-screen {
+  --xp-ink: #244864;
+  --xp-soft-ink: #5c7588;
+  --xp-card: #fffffff2;
+  overflow-x: hidden;
+}
+.xp-body {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.xp-kicker {
+  display: inline-block;
+  color: #2d8ba7;
+  font-size: 16px;
+  letter-spacing: .04em;
+  margin-bottom: 8px;
+}
+.xp-spark { animation: xp-pop .62s cubic-bezier(.2,.85,.25,1); }
+@keyframes xp-pop { 45% { transform: scale(1.07); filter: brightness(1.08); } }
+@keyframes xp-float { 50% { transform: translateY(-8px); } }
+@keyframes xp-bob { 50% { transform: translateY(-4px) rotate(1deg); } }
+@keyframes xp-wiggle { 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+@keyframes xp-steam { 0% { transform: translateY(10px) scale(.8); opacity:0; } 25% { opacity:.7; } 100% { transform: translateY(-45px) scale(1.25); opacity:0; } }
+@keyframes xp-tail { 50% { transform: rotate(30deg); } }
+@keyframes xp-pulse { 50% { transform: scale(1.08); } }
+@keyframes xp-breathe { 0%,100% { transform:scale(.82); } 50% { transform:scale(1.12); } }
+
+/* Shared hand-friendly draggable objects */
+.xp-drag { touch-action: none; user-select: none; -webkit-user-select:none; }
+.xp-drag.is-dragging { opacity: .28; }
+.xp-drag-ghost {
+  position: fixed !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  opacity: .96;
+  filter: drop-shadow(0 18px 14px #31546a35);
+  transition: transform 90ms ease;
+}
+.xp-drop-zone { transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease; }
+.xp-drop-zone.is-over { transform: scale(1.04); filter: brightness(1.05); box-shadow: 0 0 0 6px #ffffffcc, 0 0 0 12px #60d6c2aa !important; }
+.xp-bounce-home { animation: xp-wiggle .3s ease; }
+
+/* ---------- ROLE PLAY VILLAGE ---------- */
+.xp-village.play-screen {
+  background: linear-gradient(#d8f5ff 0 38%, #dff4db 38% 100%);
+}
+.xp-village .xp-body { max-width: 1360px; }
+.village-map {
+  position: relative;
+  min-height: clamp(610px, 77svh, 850px);
+  overflow: hidden;
+  border: 5px solid #fff;
+  border-radius: 38px;
+  background: #c9f0ff;
+  box-shadow: 0 18px 50px #214c6821;
+}
+.village-sky-layer,
+.village-map-art { position:absolute; inset:0; width:100%; height:100%; }
+.village-map-art { object-fit:cover; }
+.village-title-card {
+  position:absolute;
+  left: 50%;
+  top: 26px;
+  transform: translateX(-50%);
+  z-index:2;
+  min-width:min(550px,calc(100% - 36px));
+  padding:17px 28px 18px;
+  text-align:center;
+  border:2px solid #fff;
+  border-radius:28px;
+  background:#ffffffde;
+  box-shadow:0 10px 30px #40687d1c;
+  backdrop-filter: blur(8px);
+}
+.village-title-card h2 { font-size:clamp(26px,3vw,38px); color:#285b75; }
+.village-title-card p { margin-top:5px; font-size:17px; color:#6b8796; }
+.village-hotspots { position:absolute; inset:0; z-index:3; pointer-events:none; }
+.village-pin {
+  position:absolute;
+  pointer-events:auto;
+  width:clamp(190px,20vw,260px);
+  min-height:112px;
+  display:grid;
+  grid-template-columns:72px 1fr;
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:14px;
+  padding:14px 18px;
+  border:3px solid #fff;
+  border-radius:28px;
+  background:#fffffff0;
+  box-shadow:0 10px 0 #335b6d14,0 16px 28px #244d6b22;
+  text-align:left;
+  color:#315b71;
+}
+.village-pin:before {
+  content:"";
+  position:absolute;
+  left:50%; bottom:-16px;
+  width:28px; height:28px;
+  background:inherit;
+  border-right:3px solid white;
+  border-bottom:3px solid white;
+  transform:translateX(-50%) rotate(45deg);
+}
+.village-pin .pin-icon {
+  grid-row:1/3;
+  display:grid;
+  place-items:center;
+  width:70px; height:70px;
+  border-radius:22px;
+  font-size:42px;
+  background:#f2fbff;
+  box-shadow:inset 0 -5px 0 #2f6e8b0b;
+}
+.village-pin b { align-self:end; font-size:23px; font-weight:400; }
+.village-pin small { align-self:start; color:#6e8998; font-size:15px; }
+.village-pin.market { left:7%; top:45%; }
