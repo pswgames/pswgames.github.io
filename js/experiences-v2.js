@@ -17,8 +17,8 @@
     market: { mission: [], cart: [], checked: false },
     kitchen: { recipe: null, washed: new Set(), chopped: new Set(), pot: new Set(), cooked: false, served: false },
     clinic: { patient: null, required: [], done: new Set() },
-    puzzle: { case: null, placed: new Set(), deck: [], tries: 0, completed: 0 },
-    feelings: { mood: "happy", case: null, deck: [], tries: 0, completed: 0, calm: 0, calmType: "breathe" }
+    puzzle: { case: null, placed: new Set(), deck: [], recent: [], tries: 0, completed: 0 },
+    feelings: { mood: "happy", case: null, deck: [], recent: [], tries: 0, completed: 0, calm: 0, calmType: "breathe" }
   };
 
   const later=(fn,ms)=>{
@@ -39,9 +39,18 @@
     return d;
   };
   const nextFromDeck=(key,list,current)=>{
-    if(!S[key].deck.length) S[key].deck=newDeck(list,current?.id);
-    const id=S[key].deck.shift();
-    return list.find(x=>x.id===id) || list[0];
+    const state=S[key];
+    const maxRecent=Math.max(1,list.length-1);
+    const blocked=new Set(state.recent||[]);
+    let candidates=list.filter(x=>!blocked.has(x.id)&&x.id!==current?.id);
+    if(!candidates.length){
+      state.recent=(state.recent||[]).slice(-Math.max(0,maxRecent-1));
+      const retry=new Set(state.recent);
+      candidates=list.filter(x=>!retry.has(x.id)&&x.id!==current?.id);
+    }
+    const next=pick(candidates.length?candidates:list.filter(x=>x.id!==current?.id));
+    state.recent=[...(state.recent||[]),next.id].slice(-maxRecent);
+    return next || list[0];
   };
   const itemMeta=(id,items)=>items.find(x=>x[0]===id);
   const character=(mood="happy")=>`
