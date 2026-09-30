@@ -30,9 +30,11 @@ for(const [id,rel] of Object.entries(files))
   assert(sw.includes(rel),`Local voice is not precached for offline use: ${id}`);
 
 const audioSource=fs.readFileSync(path.join(root,"js/audio.js"),"utf8");
-assert(audioSource.includes('if (lang.startsWith("ko"))'),"Korean voice must use the dedicated local-only path");
-assert(audioSource.includes("Never fall back to the device Korean TTS"),"Korean device TTS fallback must remain disabled");
-assert(audioSource.includes("decodeAudioData"),"Korean local MP3 must be decoded through Web Audio");
+assert(audioSource.includes('if (lang.startsWith("ko"))'),"Korean voice must keep the dedicated premium local path");
+assert(audioSource.includes("decodeAudioData"),"Korean local MP3 must first use Web Audio");
+assert(audioSource.includes("playLocalMediaFallback"),"Korean Web Audio failure must retry the same local MP3 through HTMLAudio");
+assert(audioSource.includes("deviceFallback"),"Korean voice must have a last-resort device TTS path");
+assert(!audioSource.includes("Never fall back to the device Korean TTS"),"Korean playback must not fail closed into silence");
 
 const elevator=fs.readFileSync(path.join(root,"js/elevator.js"),"utf8");
 assert(elevator.includes('queueVoice("opening")'),"Elevator opening announcement is not wired through the serialized queue");
