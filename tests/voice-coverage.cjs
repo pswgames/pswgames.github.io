@@ -38,6 +38,21 @@ for(const say of ["아","야","어","여","오","요","우","유","으","이"]) 
 for(const [say] of C.shapes) need(`${say}, 찾아볼까?`,"ko-KR","shape quiz");
 for(const [say] of C.colors) need(`${say}, 찾아볼까?`,"ko-KR","color quiz");
 for(const m of C.missions) need(m.say,"ko-KR","family mission");
+
+// Every literal speech call in every current play module must resolve to a local
+// asset first. Dynamic/template speech is covered by the content loops above.
+for(const file of ["js/app.js","js/experiences.js","js/experiences-v2.js","js/elevator.js"]){
+  const source=fs.readFileSync(path.join(root,file),"utf8");
+  for(const match of source.matchAll(/audio\.speak\(\s*(["'])(.*?)\1(?:\s*,\s*(["'])(.*?)\3)?/g)){
+    need(match[2],match[4]||"ko-KR",`literal speech in ${file}`);
+  }
+  for(const match of source.matchAll(/playVoice\(\s*(["'])(.*?)\1/g)){
+    const id=match[2];
+    assert(catalog[id],`Missing playVoice catalog entry in ${file}: ${id}`);
+    assert(files[id],`Missing playVoice asset mapping in ${file}: ${id}`);
+    assert(fs.existsSync(path.join(root,files[id])),`Missing playVoice file in ${file}: ${id}`);
+  }
+}
 for(let n=1;n<=100;n++){
   for(const prefix of ["native","sino","both"]){
     const id=`${prefix}-${n}`;
@@ -47,4 +62,4 @@ for(let n=1;n<=100;n++){
   }
 }
 assert.deepEqual(missing,[],`Finite app speech paths without local audio:\n${JSON.stringify(missing,null,2)}`);
-console.log(`Voice coverage passed: all finite app speech paths resolve to local audio (${Object.keys(catalog).length} catalog entries)`);
+console.log(`Voice coverage passed: all finite and literal app speech paths resolve to local audio (${Object.keys(catalog).length} catalog entries)`);
