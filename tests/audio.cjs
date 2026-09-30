@@ -15,7 +15,7 @@ const fs = require("fs"),
     }
     load() {}
     play() {
-      if (this.src === "bad") {
+      if (this.src === "bad" || String(this.src).startsWith("ko-dead")) {
         queueMicrotask(() => this.onerror?.());
         return Promise.reject(Error("missing"));
       }
@@ -26,6 +26,7 @@ const fs = require("fs"),
     getVoices: () => [],
     addEventListener() {},
     cancel() {},
+    resume() {},
     speak(u) {
       spoken.push(u);
     },
@@ -37,7 +38,8 @@ const fs = require("fs"),
         hello: { text: "hello", lang: "en-US", src: "hello" },
         bad: { text: "missing", lang: "en-US", src: "bad" },
         ko: { text: "문이 닫힙니다", lang: "ko-KR", src: "ko-local" },
-        koBad: { text: "문이 열립니다", lang: "ko-KR", src: "ko-bad" },
+        koMedia: { text: "문이 열립니다", lang: "ko-KR", src: "ko-media" },
+        koDead: { text: "음성 복구 테스트", lang: "ko-KR", src: "ko-dead" },
       },
       AudioContext: class {
         constructor() {
@@ -78,11 +80,15 @@ const fs = require("fs"),
         this.text = text;
       }
     },
-    fetch: async (src) => ({
-      ok: src !== "ko-bad?v=current",
-      status: src === "ko-bad?v=current" ? 404 : 200,
-      arrayBuffer: async () => new ArrayBuffer(8),
-    }),
+    fetch: async (src) => {
+      const fail =
+        src === "ko-media?v=current" || src === "ko-dead?v=current";
+      return {
+        ok: !fail,
+        status: fail ? 404 : 200,
+        arrayBuffer: async () => new ArrayBuffer(8),
+      };
+    },
     setTimeout,
     clearTimeout,
   };
@@ -108,22 +114,52 @@ const fs = require("fs"),
   assert(await second);
 
   const beforeKorean = spoken.length;
-  assert(await a.playVoice("ko"), "Korean local Sulafat path should play through Web Audio");
-  assert.equal(
-    spoken.length,
-    beforeKorean,
-    "Korean local playback must never invoke device speechSynthesis",
-  );
-  assert.equal(
-    await a.playVoice("koBad"),
-    false,
-    "missing Korean local asset should fail closed instead of using device TTS",
+  assert(
+    await a.playVoice("ko"),
+    "Korean Sulafat should play through Web Audio when available",
   );
   assert.equal(
     spoken.length,
     beforeKorean,
-    "failed Korean local playback must still not invoke device speechSynthesis",
+    "healthy Korean local playback should not invoke device TTS",
   );
+
+  const mediaFallback = a.playVoice("koMedia");
+  await new Promise((r) => setTimeout(r, 5));
+  const mediaInstance = instances.find((x) =>
+    String(x.src).startsWith("ko-media?v=current"),
+  );
+  assert(mediaInstance, "Korean Web Audio failure must retry the same local MP3");
+  mediaInstance.onended();
+  assert(
+    await mediaFallback,
+    "Korean local media fallback should preserve premium local voice playback",
+  );
+  assert.equal(
+    spoken.length,
+    beforeKorean,
+    "successful local MP3 fallback should not invoke device TTS",
+  );
+
+  const deviceFallback = a.playVoice("koDead");
+  await new Promise((r) => setTimeout(r, 10));
+  assert.equal(
+    spoken.length,
+    beforeKorean + 1,
+    "Korean playback must fall back to device TTS instead of becoming silent",
+  );
+  spoken.at(-1).onend();
+  assert(await deviceFallback, "device TTS fallback should settle successfully");
+
+  const dynamicFallback = a.speak("카탈로그에 없는 안내");
+  await new Promise((r) => setTimeout(r, 5));
+  assert.equal(
+    spoken.length,
+    beforeKorean + 2,
+    "uncatalogued Korean speech must still have a last-resort voice path",
+  );
+  spoken.at(-1).onend();
+  assert(await dynamicFallback);
   const p = a.speak("one");
   const q = a.speak("two");
   assert.equal(await p, false);
@@ -136,7 +172,7 @@ const fs = require("fs"),
   a.setSfxVolume(-1);
   assert.equal(a.sfxVolume, 0);
   console.log(
-    "Audio tests passed: English fallback, Korean local-only Web Audio, cancel, stop, mute, volume clamp",
+    "Audio tests passed: premium Korean Web Audio, local MP3 retry, device TTS last resort, cancel, stop, mute, volume clamp",
   );
 })().catch((e) => {
   console.error(e);
