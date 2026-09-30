@@ -161,6 +161,9 @@
             finish(false);
             return;
           }
+          try {
+            window.speechSynthesis.resume?.();
+          } catch {}
           const u = new SpeechSynthesisUtterance(text);
           u.lang = lang;
           u.rate = rate;
@@ -173,23 +176,50 @@
           window.speechSynthesis.speak(u);
         };
 
+        const versionedSrc = (src) => {
+          const version = encodeURIComponent(
+            window.__SEOWOO_VERSION__ || "current",
+          );
+          const separator = src.includes("?") ? "&" : "?";
+          return `${src}${separator}v=${version}`;
+        };
+
+        const playLocalMediaFallback = () => {
+          if (token !== this.serial) return;
+          if (!entry?.src) {
+            deviceFallback();
+            return;
+          }
+          try {
+            const a = new Audio(versionedSrc(entry.src));
+            a.preload = "auto";
+            a.currentTime = 0;
+            a.volume = this.voiceVolume;
+            this.voice = a;
+            a.onended = () => finish(true);
+            a.onerror = deviceFallback;
+            a.play().catch(deviceFallback);
+          } catch (error) {
+            console.warn("Local voice media fallback failed", error);
+            deviceFallback();
+          }
+        };
+
         const playKoreanLocal = async () => {
           try {
-            if (!entry?.src) throw new Error("missing Korean local voice asset");
+            if (!entry?.src) {
+              deviceFallback();
+              return;
+            }
             this.unlock();
             if (!this.ctx) throw new Error("AudioContext unavailable");
             if (this.ctx.state === "suspended") await this.ctx.resume();
 
             let buffer = this.decodedVoices.get(entry.src);
             if (!buffer) {
-              const version = encodeURIComponent(
-                window.__SEOWOO_VERSION__ || "current",
-              );
-              const separator = entry.src.includes("?") ? "&" : "?";
-              const response = await fetch(
-                `${entry.src}${separator}v=${version}`,
-                { cache: "reload" },
-              );
+              const response = await fetch(versionedSrc(entry.src), {
+                cache: "reload",
+              });
               if (!response.ok)
                 throw new Error(`voice asset HTTP ${response.status}`);
               const bytes = await response.arrayBuffer();
@@ -218,10 +248,11 @@
             };
             source.start(0);
           } catch (error) {
-            console.warn("Korean local voice playback failed", error);
-            // Never fall back to the device Korean TTS: it is the robotic voice
-            // this app is explicitly replacing.
-            finish(false);
+            console.warn(
+              "Korean Web Audio playback failed; retrying local media",
+              error,
+            );
+            playLocalMediaFallback();
           }
         };
 
