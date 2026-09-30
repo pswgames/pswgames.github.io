@@ -34,6 +34,6 @@
   },
   "mapping_entries": 668,
   "sfx_count": 8,
-  "runtime_fallback": "device speechSynthesis only if local media playback fails",
+  "runtime_fallback": "Korean: Web Audio local MP3 -> HTMLAudio same local MP3 -> device speechSynthesis; English: local media -> device speechSynthesis",
   "licensing_note": "Korean fixed local assets were generated with Google Gemini 3.1 Flash TTS Preview using the Sulafat preset voice. English assets remain Edge TTS JennyNeural. Provider terms and preview-model availability apply."
 }
