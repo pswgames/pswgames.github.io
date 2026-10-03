@@ -22,8 +22,9 @@ for (const p of [
 ])
   walk(path.join(root, p));
 
-// The complete fixed voice pack is installed with the PWA so every current
-// speech path stays deterministic even without a network connection.
+// Keep the complete fixed voice pack in the manifest for deterministic runtime
+// caching, but precache only the app shell plus critical elevator voices so one
+// large media failure cannot block a PWA update.
 for (const p of ["audio/catalog.js", "audio/extra-catalog.js", "audio/files.js", "audio/sfx.js"])
   if (fs.existsSync(path.join(root, p))) files.push(p);
 if (fs.existsSync(path.join(root, "audio/sfx"))) walk(path.join(root, "audio/sfx"));
