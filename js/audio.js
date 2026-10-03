@@ -40,7 +40,26 @@
     unlock() {
       try {
         this.ctx ??= new (window.AudioContext || window.webkitAudioContext)();
-        if (this.ctx.state === "suspended") this.ctx.resume().catch(() => {});
+        const prime = () => {
+          if (!this.ctx || this.ctx.state !== "running") return;
+          try {
+            // Starting a zero-buffer source during a real user gesture keeps
+            // iOS/Safari/PWA Web Audio unlocked without producing sound.
+            const source = this.ctx.createBufferSource();
+            source.connect(this.ctx.destination);
+            source.onended = () => {
+              try {
+                source.disconnect();
+              } catch {}
+            };
+            source.start(0);
+          } catch {}
+        };
+        if (this.ctx.state === "suspended") {
+          const resumed = this.ctx.resume();
+          if (resumed?.then) resumed.then(prime).catch(() => {});
+          else prime();
+        } else prime();
       } catch {}
     }
     pickVoice(lang) {
@@ -191,7 +210,8 @@
             return;
           }
           try {
-            const a = new Audio(versionedSrc(entry.src));
+            const a =
+              this.buffers.get(entry.src) || new Audio(versionedSrc(entry.src));
             a.preload = "auto";
             a.currentTime = 0;
             a.volume = this.voiceVolume;
