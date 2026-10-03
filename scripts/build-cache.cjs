@@ -22,8 +22,9 @@ for (const p of [
 ])
   walk(path.join(root, p));
 
-// The complete fixed voice pack is installed with the PWA so every current
-// speech path stays deterministic even without a network connection.
+// Keep the complete fixed voice pack in the manifest for deterministic runtime
+// caching, but precache only the app shell plus critical elevator voices so one
+// large media failure cannot block a PWA update.
 for (const p of ["audio/catalog.js", "audio/extra-catalog.js", "audio/files.js", "audio/sfx.js"])
   if (fs.existsSync(path.join(root, p))) files.push(p);
 if (fs.existsSync(path.join(root, "audio/sfx"))) walk(path.join(root, "audio/sfx"));
@@ -37,8 +38,34 @@ const appVersion = JSON.parse(
   fs.readFileSync(path.join(root, "package.json"), "utf8"),
 ).version;
 const version = "seowoo-v" + String(appVersion || "current");
+
+const audioFilesSource = fs.readFileSync(
+  path.join(root, "audio/files.js"),
+  "utf8",
+);
+const audioFilesMatch = audioFilesSource.match(
+  /window\.SEOWOO_AUDIO_FILES=(\{.*\});\s*$/s,
+);
+const audioFiles = audioFilesMatch ? JSON.parse(audioFilesMatch[1]) : {};
+const elevatorVoiceIds = [
+  "closing",
+  "opening",
+  "up",
+  "down",
+  ...Array.from({ length: 20 }, (_, i) => `arrival-${i + 1}`),
+];
+const elevatorVoiceFiles = elevatorVoiceIds
+  .map((id) => audioFiles[id])
+  .filter(Boolean);
+const bootFiles = [
+  ...new Set([
+    ...files.filter((file) => !file.startsWith("audio/voice/")),
+    ...elevatorVoiceFiles,
+  ]),
+];
+
 fs.writeFileSync(
   path.join(root, "sw.js"),
-  `/* Generated offline manifest; run node scripts/build-cache.cjs after changes. */\nconst CACHE=${JSON.stringify(version)};\nconst FILES=${JSON.stringify(files)};\nself.addEventListener('install',e=>e.waitUntil((async()=>{try{const c=await caches.open(CACHE);await c.addAll(FILES.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()}catch(error){await caches.delete(CACHE);throw error}})()));\nself.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('seowoo-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));\nself.addEventListener('message',e=>{if(e.data==='SKIP_WAITING'||e.data?.type==='SKIP_WAITING')e.waitUntil(self.skipWaiting());if(e.data?.type==='CHECK_UPDATE')e.waitUntil(self.registration.update().catch(()=>{}))});\nself.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin||new URL(e.request.url).pathname==='/sw.js')return;const url=new URL(e.request.url);const key=e.request.mode==='navigate'?'index.html':e.request;if(e.request.mode==='navigate'||/\\.(js|css)$/.test(url.pathname)){e.respondWith(fetch(e.request,{cache:'no-cache'}).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(key,r.clone())}return r}).catch(()=>caches.match(key,{ignoreSearch:true})));return}e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(hit=>hit||fetch(e.request).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(e.request,r.clone())}return r}))) });\n`,
+  `/* Generated offline manifest; run node scripts/build-cache.cjs after changes. */\nconst CACHE=${JSON.stringify(version)};\nconst FILES=${JSON.stringify(files)};\nconst BOOT_FILES=${JSON.stringify(bootFiles)};\nself.addEventListener('install',e=>e.waitUntil((async()=>{try{const c=await caches.open(CACHE);await c.addAll(BOOT_FILES.map(url=>new Request(url,{cache:'reload'})));await self.skipWaiting()}catch(error){await caches.delete(CACHE);throw error}})()));\nself.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('seowoo-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));\nself.addEventListener('message',e=>{if(e.data==='SKIP_WAITING'||e.data?.type==='SKIP_WAITING')e.waitUntil(self.skipWaiting());if(e.data?.type==='CHECK_UPDATE')e.waitUntil(self.registration.update().catch(()=>{}))});\nself.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin||new URL(e.request.url).pathname==='/sw.js')return;const url=new URL(e.request.url);const key=e.request.mode==='navigate'?'index.html':e.request;if(e.request.mode==='navigate'||/\\.(js|css)$/.test(url.pathname)){e.respondWith(fetch(e.request,{cache:'no-cache'}).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(key,r.clone())}return r}).catch(()=>caches.match(key,{ignoreSearch:true})));return}e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(hit=>hit||fetch(e.request).then(async r=>{if(r.ok){const c=await caches.open(CACHE);await c.put(e.request,r.clone())}return r}))) });\n`,
 );
 console.log(`Offline manifest: ${files.length} assets, ${version}`);
