@@ -163,6 +163,13 @@
   }
   function begin(target) {
     prepareTrip(target);
+    audio()?.preload([
+      "closing",
+      "opening",
+      "up",
+      "down",
+      "arrival-" + target,
+    ]);
     queueVoice("closing");
     if (doorFraction() > 0.985) {
       state.door = 1;
@@ -576,7 +583,13 @@
     );
     const panoImage = shell.querySelector(".elevator-panorama-image");
     if (panoImage) panoImage.draggable = false;
-    audio()?.preload(["closing", "up", "down", "arrival-" + state.current]);
+    audio()?.preload([
+      "closing",
+      "opening",
+      "up",
+      "down",
+      "arrival-" + state.current,
+    ]);
     state.door = 0;
     state.openHeld = false;
     paint();
