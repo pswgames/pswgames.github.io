@@ -938,10 +938,164 @@
       "model": "gemini-3.8-flash-tts",
       "voice": "Sulafat",
       "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-clinic-use-water"
+      ],
+      "text": "목마른 친구에게 물을 줬어.",
+      "path": "audio/voice/ko/9921ef61f963b92b.mp3",
+      "seconds": 3.06,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-use-treat"
+      ],
+      "text": "친구에게 간식을 줬어.",
+      "path": "audio/voice/ko/28a758bf1bcb6325.mp3",
+      "seconds": 2.09,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-stethoscope"
+      ],
+      "text": "이번에는 청진기, 골라볼까?",
+      "path": "audio/voice/ko/ff5197080f832883.mp3",
+      "seconds": 2.91,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-thermometer"
+      ],
+      "text": "이번에는 체온계, 골라볼까?",
+      "path": "audio/voice/ko/4dfe0d57290989e9.mp3",
+      "seconds": 2.8,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-bandage"
+      ],
+      "text": "이번에는 반창고, 골라볼까?",
+      "path": "audio/voice/ko/f8785b588612e0a4.mp3",
+      "seconds": 2.95,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-brush"
+      ],
+      "text": "이번에는 빗, 골라볼까?",
+      "path": "audio/voice/ko/d755bf710020f397.mp3",
+      "seconds": 2.47,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-water"
+      ],
+      "text": "이번에는 물, 골라볼까?",
+      "path": "audio/voice/ko/a004a923f9ab8f54.mp3",
+      "seconds": 2.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-next-treat"
+      ],
+      "text": "이번에는 간식, 골라볼까?",
+      "path": "audio/voice/ko/d634781d0f788491.mp3",
+      "seconds": 2.57,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-start-dog"
+      ],
+      "text": "멍멍이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/1f5a9dc6641d684e.mp3",
+      "seconds": 4.44,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-start-cat"
+      ],
+      "text": "야옹이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/9b0d4d84b3f8605d.mp3",
+      "seconds": 4.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-clinic-start-rabbit"
+      ],
+      "text": "토끼를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/9ae20be84d35064a.mp3",
+      "seconds": 4.13,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-puzzle-shape-garden"
+      ],
+      "text": "같은 모양의 화분을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/4d490b1328763e3a.mp3",
+      "seconds": 5.42,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-puzzle-animal-home"
+      ],
+      "text": "동물 친구를 알맞은 집으로 데려가줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/6517e363f764eaaf.mp3",
+      "seconds": 5.99,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-puzzle-vehicle-place"
+      ],
+      "text": "탈것을 알맞은 곳으로 보내줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/07d31e47cc5154b0.mp3",
+      "seconds": 5.44,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
     }
   ],
   "status": "in_progress",
-  "remaining": 56,
+  "remaining": 42,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
