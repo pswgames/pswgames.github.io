@@ -1850,13 +1850,387 @@
       "group": "gemini38-5",
       "file_seconds": 2.928,
       "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-drag-help"
+      ],
+      "text": "그림을 잡고, 반짝이는 자리로 끌어다 놓아봐.",
+      "path": "audio/voice/ko/82fd43ae43d5dc48.mp3",
+      "seconds": 4.25,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-0"
+      ],
+      "text": "서우를 문 앞으로 끌어다 놓아볼까?",
+      "path": "audio/voice/ko/a42e24e68f7c05ed.mp3",
+      "seconds": 2.5,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-1"
+      ],
+      "text": "옷 그림으로 서우를 옮겨서 바지를 내려보자.",
+      "path": "audio/voice/ko/8fd68ada6c0a8fe6.mp3",
+      "seconds": 3.51,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-2"
+      ],
+      "text": "서우를 변기로 옮겨서 편안하게 앉아보자.",
+      "path": "audio/voice/ko/2a86a32161b0c88a.mp3",
+      "seconds": 3.67,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-4"
+      ],
+      "text": "휴지 쪽으로 서우를 옮겨서 깨끗이 닦아보자.",
+      "path": "audio/voice/ko/8c2908e1ae478127.mp3",
+      "seconds": 3.75,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-5"
+      ],
+      "text": "물 내리는 버튼으로 서우를 옮겨볼까?",
+      "path": "audio/voice/ko/9f4064363ffe4297.mp3",
+      "seconds": 2.73,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-6"
+      ],
+      "text": "옷 그림으로 서우를 옮겨서 바지를 올려보자.",
+      "path": "audio/voice/ko/9594f2d45a3757be.mp3",
+      "seconds": 3.63,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-potty-drag-7"
+      ],
+      "text": "세면대로 서우를 옮겨서 손을 씻어보자. 세 번 뽀득뽀득!",
+      "path": "audio/voice/ko/18616be789619ee0.mp3",
+      "seconds": 5.19,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-start"
+      ],
+      "text": "블록을 끌어서 빈칸에 놓아봐. 한 줄을 채우면 반짝하고 사라져!",
+      "path": "audio/voice/ko/2ad381a598b5dcf8.mp3",
+      "seconds": 5.86,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-place"
+      ],
+      "text": "블록이 쏙! 다른 블록도 놓아볼까?",
+      "path": "audio/voice/ko/8decf7028ef8c9b1.mp3",
+      "seconds": 3.57,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-clear"
+      ],
+      "text": "한 줄을 가득 채웠네! 반짝반짝!",
+      "path": "audio/voice/ko/85b893eedc2e2036.mp3",
+      "seconds": 2.86,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-multi"
+      ],
+      "text": "여러 줄을 한꺼번에 채웠어! 멋지다!",
+      "path": "audio/voice/ko/effb3b8dd63aca6e.mp3",
+      "seconds": 2.92,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-combo"
+      ],
+      "text": "또 한 줄! 연달아 잘했어!",
+      "path": "audio/voice/ko/0392b051e2a8e595.mp3",
+      "seconds": 2.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-over"
+      ],
+      "text": "놓을 자리가 없네. 다시 시작해볼까?",
+      "path": "audio/voice/ko/e6e391876094ea15.mp3",
+      "seconds": 3.1,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-block-pause"
+      ],
+      "text": "잠깐 쉬자. 계속하기를 누르면 다시 놀 수 있어.",
+      "path": "audio/voice/ko/cd4a815d01fcf466.mp3",
+      "seconds": 4.18,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-block-retry"
+      ],
+      "text": "괜찮아. 빈칸이 있는 다른 자리에 놓아볼까?",
+      "path": "audio/voice/ko/253d51a7675d3a43.mp3",
+      "seconds": 5.23,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-village-start"
+      ],
+      "text": "서우를 끌어서 가고 싶은 집에 놓아볼까?",
+      "path": "audio/voice/ko/e0087a684642ba47.mp3",
+      "seconds": 4.09,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-kitchen-wash"
+      ],
+      "text": "깨끗하게 씻었어! 씻은 재료를 끌어서 도마로 옮겨보자.",
+      "path": "audio/voice/ko/d6bed1555923d354.mp3",
+      "seconds": 5.71,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-apple"
+      ],
+      "text": "사과를 장바구니에 담았네!",
+      "path": "audio/voice/ko/aea64ad8e815d02f.mp3",
+      "seconds": 2.09,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-banana"
+      ],
+      "text": "바나나를 장바구니에 담았네!",
+      "path": "audio/voice/ko/d9c814ba8de52cb8.mp3",
+      "seconds": 2.07,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-milk"
+      ],
+      "text": "우유를 장바구니에 담았네!",
+      "path": "audio/voice/ko/1236f0116bed24a0.mp3",
+      "seconds": 1.97,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-bread"
+      ],
+      "text": "식빵을 장바구니에 담았네!",
+      "path": "audio/voice/ko/065281fdc5be7c3e.mp3",
+      "seconds": 2.06,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-carrot"
+      ],
+      "text": "당근을 장바구니에 담았네!",
+      "path": "audio/voice/ko/09be79a8704e513e.mp3",
+      "seconds": 1.99,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-egg"
+      ],
+      "text": "달걀을 장바구니에 담았네!",
+      "path": "audio/voice/ko/fd56be239901990b.mp3",
+      "seconds": 2.02,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-cheese"
+      ],
+      "text": "치즈를 장바구니에 담았네!",
+      "path": "audio/voice/ko/76fbad8075cf19a3.mp3",
+      "seconds": 1.95,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-grape"
+      ],
+      "text": "포도를 장바구니에 담았네!",
+      "path": "audio/voice/ko/d98cfcd7cceb57ee.mp3",
+      "seconds": 1.89,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-pear"
+      ],
+      "text": "배를 장바구니에 담았네!",
+      "path": "audio/voice/ko/2a701bba2435f757.mp3",
+      "seconds": 1.8,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-cereal"
+      ],
+      "text": "시리얼을 장바구니에 담았네!",
+      "path": "audio/voice/ko/0af39d115f61ee17.mp3",
+      "seconds": 2.08,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-market-pick-yogurt"
+      ],
+      "text": "요거트를 장바구니에 담았네!",
+      "path": "audio/voice/ko/db191a8a41b49e32.mp3",
+      "seconds": 2.45,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-market-pick-juice"
+      ],
+      "text": "주스를 장바구니에 담았네!",
+      "path": "audio/voice/ko/e7aa1856fe26ad1e.mp3",
+      "seconds": 2.56,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-soup"
+      ],
+      "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
+      "path": "audio/voice/ko/036ca2481ae1b6ed.mp3",
+      "seconds": 6.74,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-omelet"
+      ],
+      "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
+      "path": "audio/voice/ko/3bd5c86aaae28ba4.mp3",
+      "seconds": 6.96,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-stew"
+      ],
+      "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
+      "path": "audio/voice/ko/add423e1f6f36ee5.mp3",
+      "seconds": 6.47,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-shape-garden"
+      ],
+      "text": "같은 모양끼리 맞춰보자. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/8062e51c907558e4.mp3",
+      "seconds": 5.83,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
     }
   ],
   "status": "complete",
   "remaining": 0,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved",
-  "catalog_entries": 148,
+  "catalog_entries": 164,
   "validation": {
     "mp3_decode": "148/148 passed",
     "duration_seconds": [
