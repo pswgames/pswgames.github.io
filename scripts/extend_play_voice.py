@@ -2,6 +2,7 @@
 Each sentence is generated independently; existing recordings are never rewritten.
 """
 import base64, json, os, subprocess, sys, time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 import generate_gemini31_voice_pack as voice
 
@@ -52,23 +53,24 @@ def main():
     pending=[id for id in ROWS if not (ROOT/MAPPING['play-'+id]).exists()]
     report['status']='in_progress';report['remaining']=len(pending);checkpoint(report)
     try:
-        failures=[]
-        for n,id in enumerate(pending):
-            print(f'Generating sentence {n+1}/{len(pending)}: {id}',flush=True)
+        def generate(id):
             for attempt in range(2):
                 try:
+                    print(f'Generating bounded sentence: {id}, attempt {attempt+1}',flush=True)
                     subprocess.run([sys.executable,__file__,'--one',id,str(attempt)],cwd=ROOT,timeout=65,check=True)
-                    break
+                    return json.loads((RESULTS/(id+'.json')).read_text())
                 except (subprocess.TimeoutExpired,subprocess.CalledProcessError):
-                    if attempt:
-                        failures.append(id);break
-                    print(f'Retrying one bounded request: {id}',flush=True);time.sleep(3)
-            if id in failures: continue
-            report['clips'].append(json.loads((RESULTS/(id+'.json')).read_text()))
-            report['remaining']=len(pending)-n-1+len(failures)
-            # Keep successful clips safe even when a later provider request stalls.
-            checkpoint(report)
-            time.sleep(2)
+                    time.sleep(2)
+            return None
+        report['failed']=[]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            futures={pool.submit(generate,id):id for id in pending}
+            for future in as_completed(futures):
+                clip=future.result()
+                if clip:report['clips'].append(clip)
+                else:report['failed'].append(futures[future])
+                report['remaining']=sum(not (ROOT/p).exists() for p in MAPPING.values())
+                checkpoint(report)
         missing=[p for p in MAPPING.values() if not (ROOT/p).exists()]
         if missing:raise RuntimeError(f'Missing {len(missing)} clips')
         (ROOT/'audio/play-files.js').write_text('/* New Sulafat clips; existing files.js is unchanged. */\nObject.assign(window.SEOWOO_AUDIO_FILES,'+json.dumps(MAPPING,ensure_ascii=False,separators=(',',':'))+');\n')
