@@ -5,7 +5,8 @@
     running = false,
     pending = null,
     last = [],
-    shown = "";
+    shown = "",
+    eventTimer = 0;
   const audio = () => window.SeowooCore.audio;
   const paint = () => {
     const n = document.querySelector("[data-narration]");
@@ -47,11 +48,35 @@
     drain(keys, generation);
   }
   function reset() {
+    clearTimeout(eventTimer);
     generation++;
     running = false;
     pending = null;
     last = [];
     shown = "";
+  }
+  // Dragging invalidates queued next-step guidance. A committed new state owns
+  // narration immediately; fade the previous clip before replacing it.
+  function invalidate() {
+    pending = null;
+    generation++;
+    running = false;
+    clearTimeout(eventTimer);
+  }
+  function event(...keys) {
+    invalidate();
+    const a = audio(), token = generation;
+    if (a.voiceGain && a.ctx) {
+      const gain=a.voiceGain.gain, now=a.ctx.currentTime;
+      gain.cancelScheduledValues(now);
+      gain.setValueAtTime(gain.value,now);
+      gain.linearRampToValueAtTime(0,now+.04);
+    }
+    eventTimer=setTimeout(() => {
+      if (token !== generation) return;
+      a.stopVoice();
+      say(...keys);
+    }, 45);
   }
   function repeat() {
     if (last.length) {
@@ -64,6 +89,8 @@
   }
   window.SeowooNarrator = {
     say,
+    event,
+    invalidate,
     repeat,
     reset,
     paint,

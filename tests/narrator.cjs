@@ -19,6 +19,7 @@ const events = {},
 for (const id of ["a", "b", "c", "d"])
   audio.manifest["play-" + id] = { text: id };
 const box = {
+  setTimeout, clearTimeout,
   window: {
     SeowooCore: { audio },
     addEventListener: (k, f) => (events[k] = f),

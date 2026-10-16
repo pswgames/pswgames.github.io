@@ -21,6 +21,7 @@ const ready = new Promise((resolve, reject) => {
 });
 const routes = [
   "home",
+  "blockpang",
   "village",
   "puzzle",
   "feelings",
@@ -55,6 +56,8 @@ const routes = [
       height: 1000,
       touch: false,
     },
+    { id: "android-chromium", type: chromium, width:412, height:915, touch:true },
+    { id: "tablet-landscape-webkit", type: webkit, width:1180, height:820, touch:true },
     { id: "iphone-webkit", type: webkit, width: 390, height: 844, touch: true },
     {
       id: "tablet-webkit",
@@ -95,6 +98,7 @@ const routes = [
     });
     await page.goto("http://127.0.0.1:4173/");
     await page.locator(".home-featured-card").first().waitFor();
+    const {dragTo,block}=require("./browser-drag.cjs")(page,spec,context);
     const tap = async (sel) => {
       const el = page.locator(sel).first();
       await el.scrollIntoViewIfNeeded();
@@ -153,7 +157,7 @@ const routes = [
         });
     }
     await go("village");
-    await tap('[data-place="market"]');
+    await dragTo('[data-kind="town-child"]', '[data-zone="visit-market"]');
     await layout("market");
     await page.screenshot({
       path: out + "/" + spec.id + "-market.png",
@@ -169,14 +173,18 @@ const routes = [
             !window.SeowooExperiencesV2.state.market.mission.includes(p[0]),
         )[0],
     );
-    await tap(`[data-drag="${wrong}"]`);
+    await dragTo(`[data-drag="${wrong}"]`, '[data-zone="market-cart"]');
     assert.equal(
       await page.evaluate(
         () => window.SeowooExperiencesV2.state.market.cart.length,
       ),
       0,
     );
-    for (const id of mission) await tap(`[data-drag="${id}"]`);
+    await tap(`[data-drag="${mission[0]}"]`);
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.market.cart.length),0,"tap cannot move product");
+    await dragTo(`[data-drag="${mission[0]}"]`, '[data-zone="market-cart"]', {cancel:true});
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.market.cart.length),0,"cancel cannot commit");
+    for (const id of mission) await dragTo(`[data-drag="${id}"]`, '[data-zone="market-cart"]');
     assert.equal(
       await page.evaluate(
         () => window.SeowooExperiencesV2.state.market.cart.length,
@@ -207,7 +215,7 @@ const routes = [
     );
     for (const id of need)
       for (const kind of ["raw", "washed", "chopped"])
-        await tap(`[data-drag="${id}"][data-kind="${kind}"]`);
+        await dragTo(`[data-drag="${id}"][data-kind="${kind}"]`, `[data-zone="${{raw:"sink",washed:"board",chopped:"pot"}[kind]}"]`);
     await tap("[data-cook]");
     await tap("[data-serve]");
     assert(
@@ -226,7 +234,7 @@ const routes = [
     const tools = await page.evaluate(
       () => window.SeowooExperiencesV2.state.clinic.required,
     );
-    for (const id of tools) await tap(`[data-drag="${id}"]`);
+    for (const id of tools) await dragTo(`[data-drag="${id}"]`, '[data-zone="patient"]');
     assert.equal(
       await page.evaluate(
         () => window.SeowooExperiencesV2.state.clinic.done.size,
@@ -234,6 +242,7 @@ const routes = [
       4,
     );
     await tap("[data-clinic-next]");
+    await require("./block-browser-flow.cjs")({page,spec,context,go,tap,layout,out,results});
     await go("puzzle");
     const puzzle = await page.evaluate(
       () => window.SeowooExperiencesV2.state.puzzle.case,
