@@ -323,12 +323,18 @@ const routes = [
     const browser = await chromium.launch();
     browsers.push(browser);
     const context = await browser.newContext();
-    const page = await context.newPage();
-    await page.goto("http://127.0.0.1:4173/");
-    await page.waitForFunction(() => navigator.serviceWorker.controller, null, {
+    // Initial activation may deliberately reload the installing tab. Start the
+    // offline journey in a fresh tab only after that worker controls the origin.
+    const installingPage = await context.newPage();
+    await installingPage.goto("http://127.0.0.1:4173/");
+    await installingPage.waitForFunction(() => navigator.serviceWorker.controller, null, {
       timeout: 45000,
     });
-    await page.evaluate(() => window.SeowooApp.go("village"));
+    await installingPage.close();
+    const page = await context.newPage();
+    currentPage = page;
+    await page.goto("http://127.0.0.1:4173/");
+    await page.locator('[data-go="village"]').click();
     await page.locator('[data-place="market"]').click();
     await page.waitForTimeout(9000);
     await context.setOffline(true);

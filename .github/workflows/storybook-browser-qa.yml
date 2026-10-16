@@ -23,7 +23,6 @@ jobs:
       - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
       - run: npm install --no-save --ignore-scripts --no-audit --no-fund --no-package-lock playwright@1.58.2
       - run: npx playwright install --with-deps chromium webkit
-      - run: node tests/storybook-browser.cjs --visual-only
       - run: npm test
       - run: node tests/storybook-browser.cjs
       - uses: actions/upload-artifact@v4
