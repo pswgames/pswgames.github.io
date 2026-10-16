@@ -52,9 +52,10 @@
     );
   const art = (n) =>
     `<span class="toy-art art-${n}" aria-hidden="true"></span>`;
-  const picture=(pic)=>window.SeowooArt?.picture(pic)||pic;
-  const gameArt=(name)=>window.SeowooArt?.icon(name)||'';
-  const featuredArt=kind=>`<span class="featured-art featured-${kind}">${gameArt({village:'village-icon',puzzle:'puzzle',feelings:'heart'}[kind])}</span>`;
+  const picture = (pic) => window.SeowooArt?.picture(pic) || pic;
+  const gameArt = (name) => window.SeowooArt?.icon(name) || "";
+  const featuredArt = (kind) =>
+    `<span class="featured-art featured-${kind}">${gameArt({ village: "village-icon", puzzle: "puzzle", feelings: "heart" }[kind])}</span>`;
   const featuredActivities = [
     ["village", "역할놀이 마을", "마트·주방·동물병원", "village"],
     ["puzzle", "퍼즐 탐험대", "끌어서 맞추는 퍼즐", "puzzle"],
@@ -148,7 +149,23 @@
       new CustomEvent("seowoo:route", { detail: { route: name } }),
     );
     render();
-    if(['numbers','more','think','numberBoard','alphabet','englishWords','koreanWords','hangul','music','treasure'].includes(route))window.SeowooNarrator?.say('menu-'+(route==='think'?'more':route));
+    if (
+      [
+        "numbers",
+        "more",
+        "think",
+        "numberBoard",
+        "alphabet",
+        "englishWords",
+        "koreanWords",
+        "hangul",
+        "music",
+        "treasure",
+      ].includes(route)
+    )
+      window.SeowooNarrator?.say(
+        "menu-" + (route === "think" ? "more" : route),
+      );
     window.scrollTo(0, 0);
     main.querySelector("h1")?.focus({ preventScroll: true });
   }
@@ -167,7 +184,7 @@
     ["english", "영어<br>찾기", "sky", 5],
   ];
   function renderHome() {
-    main.innerHTML = `<section class="home-world"><img class="home-landscape" src="assets/art/hero.webp" alt="손을 흔드는 서우와 귀여운 강아지가 있는 화사한 놀이터" fetchpriority="high"><div class="home-top"><span class="home-greeting">함께 놀며 자라는 작은 세상</span><div class="home-tools"><button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button><button class="parent-entry" data-parent>${icon("lock")} 보호자 메뉴</button></div></div><div class="brand-block"><h1 class="brand-logo" tabindex="-1" aria-label="서우놀이터">${[..."서우놀이터"].map((x, i) => `<span class="logo-${i}">${x}</span>`).join("")}</h1><p>오늘도 놀면서 쑥쑥 자라요!</p><div class="welcome-note">서우야,<br>${state.settings.greeting === "encourage" ? "오늘도 너를 응원해! <span>♡</span>" : "오늘은 뭐 하고 놀까? <span>☺</span>"}</div></div><div class="home-bottom"><section class="home-featured" aria-label="새 놀이"><div class="home-featured-head"><span>NEW</span><b>새로 생긴 놀이</b></div><div class="home-featured-grid">${featuredActivities.map(([r,t,s,k]) => `<button class="home-featured-card ${k}" data-go="${r}">${featuredArt(k)}<span><b>${t}</b><small>${s}</small></span><i>›</i></button>`).join("")}</div></section><nav class="activity-grid" aria-label="놀이 선택">${activities.map(([r, t, c, n]) => `<button class="activity-card ${c}" data-go="${r}"><span>${t}</span>${art(n)}</button>`).join("")}</nav><footer class="home-footer">${pill("treasure", `나의 보물 ${state.stickers.length}`, "star")}<span class="footer-message">오늘도 서우의 세상이 한 뼘 더!</span><div>${pill("music", "음악", "music")}${pill("more", "더 놀기", "heart")}</div></footer></div></section>`;
+    main.innerHTML = `<section class="home-world"><img class="home-landscape" src="assets/art/hero.webp" alt="손을 흔드는 서우와 귀여운 강아지가 있는 화사한 놀이터" fetchpriority="high"><div class="home-top"><span class="home-greeting">함께 놀며 자라는 작은 세상</span><div class="home-tools"><button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button><button class="parent-entry" data-parent>${icon("lock")} 보호자 메뉴</button></div></div><div class="brand-block"><h1 class="brand-logo" tabindex="-1" aria-label="서우놀이터">${[..."서우놀이터"].map((x, i) => `<span class="logo-${i}">${x}</span>`).join("")}</h1><p>오늘도 놀면서 쑥쑥 자라요!</p><div class="welcome-note">서우야,<br>${state.settings.greeting === "encourage" ? "오늘도 너를 응원해! <span>♡</span>" : "오늘은 뭐 하고 놀까? <span>☺</span>"}</div></div><div class="home-bottom"><section class="home-featured" aria-label="새 놀이"><div class="home-featured-head"><span>NEW</span><b>새로 생긴 놀이</b></div><div class="home-featured-grid">${featuredActivities.map(([r, t, s, k]) => `<button class="home-featured-card ${k}" data-go="${r}">${featuredArt(k)}<span><b>${t}</b><small>${s}</small></span><i>›</i></button>`).join("")}</div></section><nav class="activity-grid" aria-label="놀이 선택">${activities.map(([r, t, c, n]) => `<button class="activity-card ${c}" data-go="${r}"><span>${t}</span>${art(n)}</button>`).join("")}</nav><footer class="home-footer">${pill("treasure", `나의 보물 ${state.stickers.length}`, "star")}<span class="footer-message">오늘도 서우의 세상이 한 뼘 더!</span><div>${pill("music", "음악", "music")}${pill("more", "더 놀기", "heart")}</div></footer></div></section>`;
   }
   function gameShell(theme, title, content, tabs = "", back = "home") {
     main.innerHTML = `<section class="play-screen theme-${theme}">${header(title, back)}${tabs}<div class="game-body">${content}</div></section>`;
@@ -361,7 +378,8 @@
       return `<div class="number-train"><span>${+t.key - 2}</span><span>${+t.key - 1}</span><span>?</span></div>`;
     if (q.kind === "finger")
       return `<div class="finger-display" aria-label="손가락 ${t.key}개">${hand(Math.min(5, +t.key))}${+t.key > 5 ? hand(+t.key - 5) : ""}</div>`;
-    if (q.kind === "word") return `<div class="word-picture">${picture(t.pic)}</div>`;
+    if (q.kind === "word")
+      return `<div class="word-picture">${picture(t.pic)}</div>`;
     if (q.kind === "color")
       return `<span class="color-sample" style="--sample:${t.color}"></span>`;
     return `<div class="question-symbol ${q.kind === "shape" ? "shape-symbol" : ""}">${t.symbol || t.key}</div>`;
@@ -455,12 +473,18 @@
       f.textContent = "잘했어!";
       f.classList.add("success");
       audio.success();
-      const praise=audio.speak("잘했어!");
+      const praise = audio.speak("잘했어!");
       main
         .querySelectorAll("[data-answer]")
         .forEach((b) => (b.disabled = true));
-      const answerEpoch=epoch;
-      Promise.resolve(praise).then(()=>{if(answerEpoch!==epoch||quiz!==q)return;later(()=>{q.index++;drawQuiz();},180);});
+      const answerEpoch = epoch;
+      Promise.resolve(praise).then(() => {
+        if (answerEpoch !== epoch || quiz !== q) return;
+        later(() => {
+          q.index++;
+          drawQuiz();
+        }, 180);
+      });
     } else {
       button.classList.add("try-again");
       f.textContent = "다시 찾아볼까?";
@@ -534,8 +558,11 @@
       complete("realPotty");
       awardSticker();
       audio.success();
-      audio.speak("잘했어!");
-      go("treasure");
+      potty.busy = true;
+      const doneEpoch = epoch;
+      Promise.resolve(audio.speak("잘했어!")).then(() => {
+        if (doneEpoch === epoch) go("treasure");
+      });
       return;
     }
     if (action === "wash") {
@@ -700,6 +727,7 @@
         "기억하고 톡톡",
         `<div class="result-card"><div class="result-star">${gameArt("star")}</div><h2>잘 기억했어!</h2><button class="btn primary" data-go="memory">한 번 더</button></div>`,
       );
+      window.SeowooNarrator?.say("all-done");
       return;
     }
     m.sequence = Array.from({ length: difficultyLevel("memory") }, () =>
@@ -711,7 +739,7 @@
     gameShell(
       "shapes",
       "기억하고 톡톡",
-      `<div class="memory-prompt"><h2>잘 보고 기억해봐!</h2><div id="memoryStage" class="memory-stage">${gameArt("blocks")}</div></div><div class="answer-choices">${["🍎", "🚗", "🐶", "⭐"].map((s, i) => `<button class="answer toy-choice choice-${i}" data-memory="${i}" aria-label="${["사과","자동차","강아지","별"][i]}" disabled>${picture(s)}</button>`).join("")}</div><div id="feedback" class="feedback" role="status">어떤 순서일까?</div>`,
+      `<div class="memory-prompt"><h2>잘 보고 기억해봐!</h2><div id="memoryStage" class="memory-stage">${gameArt("blocks")}</div></div><div class="answer-choices">${["🍎", "🚗", "🐶", "⭐"].map((s, i) => `<button class="answer toy-choice choice-${i}" data-memory="${i}" aria-label="${["사과", "자동차", "강아지", "별"][i]}" disabled>${picture(s)}</button>`).join("")}</div><div id="feedback" class="feedback" role="status">어떤 순서일까?</div>`,
       "",
       "more",
     );
@@ -734,7 +762,14 @@
         audio.speak("같은 순서로 눌러봐");
       }
     };
-    later(display, 300);
+    const memoryEpoch = epoch;
+    if (m.index === 0)
+      Promise.resolve(audio.speak("그림을 잘 봐. 같은 순서로 눌러보자.")).then(
+        () => {
+          if (memoryEpoch === epoch && memory === m) later(display, 300);
+        },
+      );
+    else later(display, 300);
   }
   function answerMemory(i) {
     const m = memory;
@@ -750,8 +785,10 @@
         m.score++;
         m.index++;
         document.getElementById("feedback").textContent = "잘했어!";
-        audio.speak("잘했어!");
-        later(drawMemory, 1000);
+        const memoryEpoch = epoch;
+        Promise.resolve(audio.speak("잘했어!")).then(() => {
+          if (memoryEpoch === epoch && memory === m) later(drawMemory, 180);
+        });
       }
     } else {
       m.pos = 0;
@@ -820,7 +857,7 @@
           .forEach((b) => b.setAttribute("aria-pressed", "false"));
       }
     };
-    window.SeowooNarrator?.say("music-"+i);
+    window.SeowooNarrator?.say("music-" + i);
     tick();
     musicTimer = setInterval(tick, i === 2 ? 650 : 420);
   }
@@ -831,7 +868,8 @@
       .querySelectorAll("[data-music]")
       .forEach((b) => b.setAttribute("aria-pressed", "false"));
     document.getElementById("musicStatus").textContent = "잠깐 쉬어가요";
-    window.SeowooNarrator?.reset();window.SeowooNarrator?.say("music-stop");
+    window.SeowooNarrator?.reset();
+    window.SeowooNarrator?.say("music-stop");
   }
   function dialogHeader(title) {
     return `<div class="dialog-head"><h2>${title}</h2><button class="icon-btn" data-parent-close aria-label="보호자 메뉴 닫기">${icon("close")}</button></div>`;
@@ -961,7 +999,10 @@
     const b = e.target.closest("button");
     if (!b) return;
     const d = b.dataset;
-    if("narrationRepeat" in d){window.SeowooNarrator?.repeat();return;}
+    if ("narrationRepeat" in d) {
+      window.SeowooNarrator?.repeat();
+      return;
+    }
     if (d.go) {
       go(d.go);
       return;
@@ -1088,9 +1129,12 @@
     }
     if ("missionDone" in d) {
       complete("together");
-      audio.speak("잘했어!");
+      b.disabled = true;
       toast("함께한 시간을 기억할게!");
-      go("treasure");
+      const doneEpoch = epoch;
+      Promise.resolve(audio.speak("잘했어!")).then(() => {
+        if (doneEpoch === epoch) go("treasure");
+      });
     }
   });
   parent.addEventListener("click", (e) => {

@@ -1,3 +1,168 @@
 /* Shared illustration treatments. Existing home landscape and elevator stay intact. */
-.featured-art>.v2-icon{width:100%;height:100%}.featured-art{overflow:hidden}.featured-art img{border-radius:18px}.learning-symbol>.v2-icon{width:112px;height:112px}.more-grid .learning-card{background:linear-gradient(145deg,#fffdf9,#f0f7f6);border:3px solid white;border-radius:28px;box-shadow:0 8px 0 #9fb6a219,0 13px 28px #48656110}.more-grid.premium-first .learning-card:nth-child(-n+3){background:linear-gradient(145deg,#fff9e7,#edf8ef)}.number-activities .learning-card{border:3px solid #fff}.learning-card .learning-symbol{line-height:1;display:block;margin-bottom:8px}.word-card .v2-icon,.alphabet-card .v2-icon{width:100%;height:105px}.word-card>span{display:flex;align-items:center;justify-content:center}.word-card .color-sample{width:78px;height:78px}.word-card,.alphabet-card{border:3px solid white!important;background:#fffdf7!important;box-shadow:0 6px 0 #a8bca21a,0 12px 24px #5677580e;border-radius:24px!important}.word-picture .v2-icon{width:160px;height:160px}.memory-stage>.v2-icon{width:150px;height:150px}.answer>.v2-icon{width:100px;height:100px}.music-card>span>.v2-icon{width:140px;height:140px}.music-intro .v2-icon{width:140px;height:140px}.sticker .v2-icon{width:95px;height:95px}.big-emoji .v2-icon{width:160px;height:160px}.result-star{background:none!important;box-shadow:none!important}.result-star .v2-icon{width:130px;height:130px}.result-star.small .v2-icon{width:70px;height:70px}.count-objects button>.v2-icon{width:42px;height:42px}.exact-shape{display:block;width:65px;height:65px;background:linear-gradient(145deg,#ffdb89,#edaf47);box-shadow:inset 0 2px 5px #fff8,0 4px 10px #9b784c26}.shape-circle{border-radius:50%}.shape-square{border-radius:12px}.shape-triangle{clip-path:polygon(50% 4%,98% 96%,2% 96%)}.art-label{font-size:16px;color:#68838c}.shape-symbol{text-shadow:0 5px 0 #9cb7a32b,0 8px 16px #73998e16}.hand-picture{filter:drop-shadow(0 8px 9px #c48f5f24)}
-@media(max-width:600px){.learning-symbol>.v2-icon{width:88px;height:88px}.word-card .v2-icon,.alphabet-card .v2-icon{height:82px}.word-card,.alphabet-card{border-radius:20px!important}.music-card>span>.v2-icon{width:100px;height:100px}.answer>.v2-icon{width:75px;height:75px}.sticker .v2-icon{width:68px;height:68px}.count-objects button>.v2-icon{width:34px;height:34px}.more-grid .learning-card{min-height:175px}.memory-stage>.v2-icon{width:115px;height:115px}}
+.featured-art > .v2-icon {
+  width: 100%;
+  height: 100%;
+}
+.featured-art {
+  overflow: hidden;
+}
+.featured-art img {
+  border-radius: 18px;
+}
+.learning-symbol > .v2-icon {
+  width: 112px;
+  height: 112px;
+}
+.more-grid .learning-card {
+  background: linear-gradient(145deg, #fffdf9, #f0f7f6);
+  border: 3px solid white;
+  border-radius: 28px;
+  box-shadow:
+    0 8px 0 #9fb6a219,
+    0 13px 28px #48656110;
+}
+.more-grid.premium-first .learning-card:nth-child(-n + 3) {
+  background: linear-gradient(145deg, #fff9e7, #edf8ef);
+}
+.number-activities .learning-card {
+  border: 3px solid #fff;
+}
+.learning-card .learning-symbol {
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.word-card .v2-icon,
+.alphabet-card .v2-icon {
+  width: 100%;
+  height: 105px;
+}
+.word-card > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.word-card .color-sample {
+  width: 78px;
+  height: 78px;
+}
+.word-card,
+.alphabet-card {
+  border: 3px solid white !important;
+  background: #fffdf7 !important;
+  box-shadow:
+    0 6px 0 #a8bca21a,
+    0 12px 24px #5677580e;
+  border-radius: 24px !important;
+}
+.word-picture .v2-icon {
+  width: 160px;
+  height: 160px;
+}
+.memory-stage > .v2-icon {
+  width: 150px;
+  height: 150px;
+}
+.answer > .v2-icon {
+  width: 100px;
+  height: 100px;
+}
+.music-card > span > .v2-icon {
+  width: 140px;
+  height: 140px;
+}
+.music-intro .v2-icon {
+  width: 140px;
+  height: 140px;
+}
+.sticker .v2-icon {
+  width: 95px;
+  height: 95px;
+}
+.big-emoji .v2-icon {
+  width: 160px;
+  height: 160px;
+}
+.result-star {
+  background: none !important;
+  box-shadow: none !important;
+}
+.result-star .v2-icon {
+  width: 130px;
+  height: 130px;
+}
+.result-star.small .v2-icon {
+  width: 70px;
+  height: 70px;
+}
+.count-objects button > .v2-icon {
+  width: 42px;
+  height: 42px;
+}
+.exact-shape {
+  display: block;
+  width: 65px;
+  height: 65px;
+  background: linear-gradient(145deg, #ffdb89, #edaf47);
+  box-shadow:
+    inset 0 2px 5px #fff8,
+    0 4px 10px #9b784c26;
+}
+.shape-circle {
+  border-radius: 50%;
+}
+.shape-square {
+  border-radius: 12px;
+}
+.shape-triangle {
+  clip-path: polygon(50% 4%, 98% 96%, 2% 96%);
+}
+.art-label {
+  font-size: 16px;
+  color: #68838c;
+}
+.shape-symbol {
+  text-shadow:
+    0 5px 0 #9cb7a32b,
+    0 8px 16px #73998e16;
+}
+.hand-picture {
+  filter: drop-shadow(0 8px 9px #c48f5f24);
+}
+@media (max-width: 600px) {
+  .learning-symbol > .v2-icon {
+    width: 88px;
+    height: 88px;
+  }
+  .word-card .v2-icon,
+  .alphabet-card .v2-icon {
+    height: 82px;
+  }
+  .word-card,
+  .alphabet-card {
+    border-radius: 20px !important;
+  }
+  .music-card > span > .v2-icon {
+    width: 100px;
+    height: 100px;
+  }
+  .answer > .v2-icon {
+    width: 75px;
+    height: 75px;
+  }
+  .sticker .v2-icon {
+    width: 68px;
+    height: 68px;
+  }
+  .count-objects button > .v2-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .more-grid .learning-card {
+    min-height: 175px;
+  }
+  .memory-stage > .v2-icon {
+    width: 115px;
+    height: 115px;
+  }
+}
