@@ -4,7 +4,6 @@ module.exports=function(page,spec,context){
   async function path(from,to,cancel=false,probe=null){
     if(spec.touch && spec.type.name()==='chromium'){
       client ||= await context.newCDPSession(page);
-      await page.evaluate(from=>{window.__pointerTrace=[];window.__pointerHit=document.elementFromPoint(from.x,from.y)?.outerHTML.slice(0,200);if(!window.__traceBound){for(const type of ["pointerdown","pointermove","pointerup","pointercancel","lostpointercapture"])document.addEventListener(type,e=>{window.__pointerTrace.push([type,e.pointerId,e.pointerType,e.clientX,e.clientY,e.target.className]);},{capture:true});window.__traceBound=true;}},from);
       const send=(type,p)=>client.send('Input.dispatchTouchEvent',{type,touchPoints:p?[{x:p.x,y:p.y,id:1}]:[]});
       await send('touchStart',from);
       for(let i=1;i<=12;i++)await send('touchMove',{x:from.x+(to.x-from.x)*i/12,y:from.y+(to.y-from.y)*i/12});
@@ -28,10 +27,10 @@ module.exports=function(page,spec,context){
       await page.mouse.up();
     }
     await page.waitForTimeout(210);
-    if(spec.touch && spec.type.name()==="chromium")console.log("NATIVE POINTER",JSON.stringify(await page.evaluate(()=>({hit:__pointerHit,events:__pointerTrace,place:SeowooExperiencesV2.state.village.place}))));
   }
   async function dragTo(sel,zoneSel,options={}){
     const item=page.locator(sel).first(),zone=page.locator(zoneSel).first();
+    assert.equal(await item.evaluate(el=>getComputedStyle(el).touchAction),"none","draggable must own touch gestures");
     await item.scrollIntoViewIfNeeded();
     await page.evaluate(([a,b])=>{const ar=document.querySelector(a).getBoundingClientRect(),br=document.querySelector(b).getBoundingClientRect();const top=Math.min(ar.top,br.top),bottom=Math.max(ar.bottom,br.bottom);if(bottom-top<innerHeight-20)scrollBy(0,top-12);},[sel,zoneSel]);
     const r=await item.boundingBox(),z=await zone.boundingBox();
