@@ -610,8 +610,19 @@
       "text": "이번에는 주스, 찾아볼까?",
       "path": "audio/voice/ko/d5dc0fb9c5ac0068.mp3",
       "seconds": 2.68
+    },
+    {
+      "ids": [
+        "play-market-other-juice"
+      ],
+      "text": "주스도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/eb9b99cc8cb4ec65.mp3",
+      "seconds": 4.73,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "single_utterance": true
     }
   ],
   "status": "in_progress",
-  "remaining": 72
+  "remaining": 71
 }
