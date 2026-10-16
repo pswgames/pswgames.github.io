@@ -1,6 +1,6 @@
 {
   "voice": "Sulafat",
-  "model": "gemini-3.1-flash-tts-preview",
+  "model": "mixed: original 3.1 and successor 3.8 / Sulafat",
   "scope": "new play dialogue only",
   "clips": [
     {
@@ -9,7 +9,9 @@
       ],
       "text": "서우야, 오늘은 어디에서 놀까? 가고 싶은 집을 눌러봐.",
       "path": "audio/voice/ko/cc339fd4671fc539.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -17,7 +19,9 @@
       ],
       "text": "필요한 물건을 다 담았어! 이제 계산하기를 눌러볼까?",
       "path": "audio/voice/ko/ddd2c0c8bcc943cd.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -25,7 +29,9 @@
       ],
       "text": "장보기 성공! 필요한 물건을 모두 샀어. 한 번 더 해볼까?",
       "path": "audio/voice/ko/df9019536f8de4ec.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -33,7 +39,9 @@
       ],
       "text": "이미 장바구니에 담았네. 다른 물건도 찾아볼까?",
       "path": "audio/voice/ko/abfa94cb8a90a0ed.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -41,7 +49,9 @@
       ],
       "text": "깨끗하게 씻었어! 씻은 재료를 눌러서 도마로 옮겨보자.",
       "path": "audio/voice/ko/01ec4d690606ffc5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -49,7 +59,9 @@
       ],
       "text": "톡톡! 잘랐어. 이제 재료를 냄비에 넣어볼까?",
       "path": "audio/voice/ko/c10dc4fe32aaeae1.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -57,7 +69,9 @@
       ],
       "text": "냄비에 쏙! 남은 재료도 준비해보자.",
       "path": "audio/voice/ko/1e266ecda67de0b0.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -65,7 +79,9 @@
       ],
       "text": "재료를 모두 넣었어! 요리하기를 눌러보자.",
       "path": "audio/voice/ko/bc873c1cb64df497.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -73,7 +89,9 @@
       ],
       "text": "보글보글! 요리가 다 됐어. 접시에 담아볼까?",
       "path": "audio/voice/ko/6ef1aa96988f260c.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -81,7 +99,9 @@
       ],
       "text": "맛있는 요리 완성! 정말 멋진 요리사네.",
       "path": "audio/voice/ko/12c9d8bf1496deff.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -89,7 +109,9 @@
       ],
       "text": "먼저 재료를 깨끗이 씻어보자. 싱크대로 옮겨볼까?",
       "path": "audio/voice/ko/d2185c29da0e348e.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -97,7 +119,9 @@
       ],
       "text": "씻은 재료는 도마로 옮겨서 잘라보자.",
       "path": "audio/voice/ko/3a09bd87336289b6.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -105,7 +129,9 @@
       ],
       "text": "잘라 놓은 재료는 냄비에 넣어보자.",
       "path": "audio/voice/ko/e6e3017344c4bf94.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -113,7 +139,9 @@
       ],
       "text": "그 도구도 좋지만, 그림에 나온 도구부터 골라볼까?",
       "path": "audio/voice/ko/93e417c57f3ce235.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -121,7 +149,9 @@
       ],
       "text": "동물 친구를 잘 돌봐줬어. 정말 고마워! 다른 친구도 만나볼까?",
       "path": "audio/voice/ko/99072bc07d0c12b4.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -129,7 +159,9 @@
       ],
       "text": "그림을 누르고, 알맞은 자리를 눌러봐. 끌어서 놓아도 좋아.",
       "path": "audio/voice/ko/e65c1551dea4f626.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -137,7 +169,9 @@
       ],
       "text": "어디에 놓으면 좋을까? 알맞은 자리를 눌러봐.",
       "path": "audio/voice/ko/869d96b7af390f9d.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -145,7 +179,9 @@
       ],
       "text": "잘 찾았어! 다른 그림도 제자리에 놓아볼까?",
       "path": "audio/voice/ko/004ff049281656d2.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -153,7 +189,9 @@
       ],
       "text": "괜찮아. 그림을 보고 다른 자리에 놓아볼까?",
       "path": "audio/voice/ko/9702b538fe18641d.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -161,7 +199,9 @@
       ],
       "text": "그림을 모두 맞췄네! 다음 퍼즐도 해볼까?",
       "path": "audio/voice/ko/49a69c083f500c32.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -169,7 +209,9 @@
       ],
       "text": "서우야, 지금 기분이 어때? 네 마음과 닮은 얼굴을 골라봐.",
       "path": "audio/voice/ko/fdb5d22ba29a0b2a.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -177,7 +219,9 @@
       ],
       "text": "그렇게 느낄 수도 있어. 그림 속 친구의 표정도 살펴볼까?",
       "path": "audio/voice/ko/7aa36f09967c7c05.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -185,7 +229,9 @@
       ],
       "text": "동그라미를 누르고, 풍선처럼 천천히 숨을 쉬어보자.",
       "path": "audio/voice/ko/48d5ea198360833f.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -193,7 +239,9 @@
       ],
       "text": "반짝이는 별을 천천히 세 번 눌러보자.",
       "path": "audio/voice/ko/71012bbab6f1d3ce.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -201,7 +249,9 @@
       ],
       "text": "동그라미를 누르고, 어깨를 으쓱 올렸다가 툭 내려보자.",
       "path": "audio/voice/ko/d46c9a7b1b6387cd.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -209,7 +259,9 @@
       ],
       "text": "천천히 잘했어. 마음이 조금 편안해졌니?",
       "path": "audio/voice/ko/3f227199b6988dd7.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -217,7 +269,9 @@
       ],
       "text": "숫자랑 놀아볼까? 하고 싶은 그림을 눌러봐.",
       "path": "audio/voice/ko/e03fc030c29d7e81.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -225,7 +279,9 @@
       ],
       "text": "재미있는 놀이가 모였네! 마음에 드는 그림을 눌러봐.",
       "path": "audio/voice/ko/97c5b985d2c9e967.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -233,7 +289,9 @@
       ],
       "text": "좋아하는 숫자를 눌러봐. 하나부터 백까지 같이 읽어보자.",
       "path": "audio/voice/ko/cea086fa20842eb3.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -241,7 +299,9 @@
       ],
       "text": "알파벳 카드를 눌러봐. 영어 이름을 들려줄게.",
       "path": "audio/voice/ko/3450bb03fa050c2c.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -249,7 +309,9 @@
       ],
       "text": "궁금한 그림을 눌러봐. 영어로 이름을 들어보자.",
       "path": "audio/voice/ko/bd84a0f058ac26f3.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -257,7 +319,9 @@
       ],
       "text": "그림을 누르면 이름을 들려줄게. 어떤 그림이 궁금하니?",
       "path": "audio/voice/ko/d4c6248838fed44d.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -265,7 +329,9 @@
       ],
       "text": "글자를 눌러서 소리를 들어보자. 가, 나, 다!",
       "path": "audio/voice/ko/33a1fb07b2db03da.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -273,7 +339,9 @@
       ],
       "text": "어떤 멜로디를 들어볼까? 좋아하는 그림을 눌러봐.",
       "path": "audio/voice/ko/3a2053ecbe889e6f.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -281,7 +349,9 @@
       ],
       "text": "서우가 모은 스티커야! 놀이를 마치면 하나씩 모을 수 있어.",
       "path": "audio/voice/ko/4f0cf4d62428f2ca.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -289,7 +359,9 @@
       ],
       "text": "그림을 잘 봐. 같은 순서로 눌러보자.",
       "path": "audio/voice/ko/0ea09f676768ec71.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -297,7 +369,9 @@
       ],
       "text": "멜로디가 끝났어. 또 들어볼까?",
       "path": "audio/voice/ko/9b47b8e0755a56ea.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -305,7 +379,9 @@
       ],
       "text": "음악을 잠깐 멈췄어. 듣고 싶으면 다시 골라봐.",
       "path": "audio/voice/ko/28485e7377dd7f27.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -313,7 +389,9 @@
       ],
       "text": "끝까지 잘했어! 한 번 더 해볼까?",
       "path": "audio/voice/ko/0213f05a5832a43c.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -321,7 +399,9 @@
       ],
       "text": "영어 소리를 듣고 같은 글자를 찾아보자.",
       "path": "audio/voice/ko/9455fa440888a9a4.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -329,7 +409,9 @@
       ],
       "text": "다시 듣기를 누르면 안내를 들려줄게.",
       "path": "audio/voice/ko/89ce5ef6307f90d5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -337,7 +419,9 @@
       ],
       "text": "사과, 잘 찾았어!",
       "path": "audio/voice/ko/661ab9f0d96630f2.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -345,7 +429,9 @@
       ],
       "text": "이번에는 사과, 찾아볼까?",
       "path": "audio/voice/ko/09fcb9e1c14bbd27.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -353,7 +439,9 @@
       ],
       "text": "사과도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/4b22f9412ad0591d.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -361,7 +449,9 @@
       ],
       "text": "바나나, 잘 찾았어!",
       "path": "audio/voice/ko/74aee00f7bf028ce.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -369,7 +459,9 @@
       ],
       "text": "이번에는 바나나, 찾아볼까?",
       "path": "audio/voice/ko/52fb7a8052cb66a0.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -377,7 +469,9 @@
       ],
       "text": "바나나도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/cbb00645751a6a51.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -385,7 +479,9 @@
       ],
       "text": "우유, 잘 찾았어!",
       "path": "audio/voice/ko/9f607938a748ef6a.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -393,7 +489,9 @@
       ],
       "text": "이번에는 우유, 찾아볼까?",
       "path": "audio/voice/ko/0d644decdc2e4f83.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -401,7 +499,9 @@
       ],
       "text": "우유도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/4082489c13d8c311.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -409,7 +509,9 @@
       ],
       "text": "식빵, 잘 찾았어!",
       "path": "audio/voice/ko/3c631ee31dfd85cc.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -417,7 +519,9 @@
       ],
       "text": "이번에는 식빵, 찾아볼까?",
       "path": "audio/voice/ko/2b78b1ebc622e7c5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -425,7 +529,9 @@
       ],
       "text": "식빵도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/38e3e403c1c12862.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -433,7 +539,9 @@
       ],
       "text": "당근, 잘 찾았어!",
       "path": "audio/voice/ko/ae110c4a5f5f05e4.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -441,7 +549,9 @@
       ],
       "text": "이번에는 당근, 찾아볼까?",
       "path": "audio/voice/ko/6690e74bfe1ce765.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -449,7 +559,9 @@
       ],
       "text": "당근도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/ae2ea8da1ea9ebc0.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -457,7 +569,9 @@
       ],
       "text": "달걀, 잘 찾았어!",
       "path": "audio/voice/ko/0a8adea8038dab3d.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -465,7 +579,9 @@
       ],
       "text": "이번에는 달걀, 찾아볼까?",
       "path": "audio/voice/ko/ecf51f57f84782db.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -473,7 +589,9 @@
       ],
       "text": "달걀도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/501576fcd422c8a4.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -481,7 +599,9 @@
       ],
       "text": "치즈, 잘 찾았어!",
       "path": "audio/voice/ko/1cfb5c2a213f1939.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -489,7 +609,9 @@
       ],
       "text": "이번에는 치즈, 찾아볼까?",
       "path": "audio/voice/ko/1f0a29166b7168c5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -497,7 +619,9 @@
       ],
       "text": "치즈도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/99472bcb5d1addf5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -505,7 +629,9 @@
       ],
       "text": "포도, 잘 찾았어!",
       "path": "audio/voice/ko/7f2d960d1fd20c9b.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -513,7 +639,9 @@
       ],
       "text": "이번에는 포도, 찾아볼까?",
       "path": "audio/voice/ko/dbd5f16374c4b46a.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -521,7 +649,9 @@
       ],
       "text": "포도도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/525de39f95acd478.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -529,7 +659,9 @@
       ],
       "text": "배, 잘 찾았어!",
       "path": "audio/voice/ko/746c6ee9b56f7c06.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -537,7 +669,9 @@
       ],
       "text": "이번에는 배, 찾아볼까?",
       "path": "audio/voice/ko/66c52cba2188ea5c.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -545,7 +679,9 @@
       ],
       "text": "배도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/7b00df20c4726fa5.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -553,7 +689,9 @@
       ],
       "text": "시리얼, 잘 찾았어!",
       "path": "audio/voice/ko/5838c42cbb147437.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -561,7 +699,9 @@
       ],
       "text": "이번에는 시리얼, 찾아볼까?",
       "path": "audio/voice/ko/7cfe663b59c85d68.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -569,7 +709,9 @@
       ],
       "text": "시리얼도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/660d4d2a5ba311a6.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -577,7 +719,9 @@
       ],
       "text": "요거트, 잘 찾았어!",
       "path": "audio/voice/ko/faf14a342f7aebca.mp3",
-      "recovered_checkpoint": true
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -585,7 +729,9 @@
       ],
       "text": "이번에는 요거트, 찾아볼까?",
       "path": "audio/voice/ko/7a10f265caf127de.mp3",
-      "seconds": 3.09
+      "seconds": 3.09,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -593,7 +739,9 @@
       ],
       "text": "요거트도 맛있지! 오늘 살 물건을 다시 찾아보자.",
       "path": "audio/voice/ko/c2bbc7fa393e12ed.mp3",
-      "seconds": 4.63
+      "seconds": 4.63,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -601,7 +749,9 @@
       ],
       "text": "주스, 잘 찾았어!",
       "path": "audio/voice/ko/7decf87b8ce2e156.mp3",
-      "seconds": 2.13
+      "seconds": 2.13,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -609,7 +759,9 @@
       ],
       "text": "이번에는 주스, 찾아볼까?",
       "path": "audio/voice/ko/d5dc0fb9c5ac0068.mp3",
-      "seconds": 2.68
+      "seconds": 2.68,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat"
     },
     {
       "ids": [
@@ -636,9 +788,6 @@
   ],
   "status": "in_progress",
   "remaining": 70,
-  "failed": [
-    "market-start-0",
-    "market-start-3",
-    "market-start-2"
-  ]
+  "failed": [],
+  "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
