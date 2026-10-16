@@ -1,5 +1,9 @@
 /* Project-owned generated illustrations; fixed semantic map. */
 window.SEOWOO_ART = {
+  "meal-soup": "assets/art/v3/meal-soup.webp",
+  "meal-omelet": "assets/art/v3/meal-omelet.webp",
+  "meal-stew": "assets/art/v3/meal-stew.webp",
+  rinse: "assets/art/v3/rinse.webp",
   village: "assets/art/v3/village.webp",
   market: "assets/art/v3/market.webp",
   kitchen: "assets/art/v3/kitchen.webp",

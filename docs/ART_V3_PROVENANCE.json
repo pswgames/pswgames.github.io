@@ -1,5 +1,5 @@
 {
-  "method": "built-in image generation; exact atlas crops and WebP encoding",
+  "method": "Built-in image generation; scene grid crops and content-bounded sprite extraction with neighbour-aware margins; optimized WebP assets.",
   "assets": {
     "worlds": [
       2,
@@ -203,6 +203,15 @@
         "elevator-icon",
         "potty-icon"
       ]
+    ],
+    "finishing": [
+      2,
+      [
+        "meal-soup",
+        "meal-omelet",
+        "meal-stew",
+        "rinse"
+      ]
     ]
   },
   "prompts": [
@@ -237,6 +246,1235 @@
     {
       "key": "extras2",
       "prompt": "Use case: stylized-concept. Production sprite atlas for premium toddler learning games. Single square 2048x2048 image divided into EXACT 6 columns and 6 rows of equal cells. Each separate object centered within its cell with at least 12% empty margins, completely isolated on pure white, no visible grid. Beautiful soft 3D animated movie quality, rounded shapes, detailed tactile wood fabric and natural textures, warm studio lighting, subtle contact shadow, gentle harmonious pastel colors, no flat vector or emoji. No letters, numbers, labels or text. Strict row-major reading order left to right, top to bottom: 1: pink dress; 2: backpack; 3: crescent moon; 4: fluffy cloud; 5: rainy cloud; 6: snowflake; 7: green mountain; 8: ocean wave; 9: child foot; 10: human eye; 11: human nose; 12: smiling human mouth; 13: human ear; 14: child head; 15: lock of brown hair; 16: tooth; 17: child belly with shirt lifted only slightly; 18: colorful building blocks; 19: friendly toy robot; 20: balloon; 21: ice cream cone; 22: key; 23: golden crown; 24: toy van; 25: xylophone; 26: friendly zebra; 27: jigsaw puzzle pieces; 28: friendly dinosaur; 29: toy rocket; 30: rainbow; 31: pink heart; 32: hands clapping; 33: small toy village; 34: colorful counting beads; 35: tiny toy glass elevator; 36: rubber duck beside tiny potty. Keep all 36 subjects distinct and fully inside their own cell. Anatomical subjects must be friendly stylized educational forms."
+    },
+    {
+      "key": "finishing",
+      "prompt": "Four isolated sprites: vegetable soup, cheese omelet with broccoli, potato-carrot-corn stew, child hands rinsing under running water. Same warm dimensional 3D style; generated 2026-10-16."
     }
-  ]
+  ],
+  "sprite_bounds": {
+    "food": [
+      {
+        "name": "apple",
+        "left": 38,
+        "top": 20,
+        "width": 254,
+        "height": 275,
+        "components": 1
+      },
+      {
+        "name": "banana",
+        "left": 318,
+        "top": 6,
+        "width": 302,
+        "height": 299,
+        "components": 1
+      },
+      {
+        "name": "milk",
+        "left": 676,
+        "top": 15,
+        "width": 199,
+        "height": 292,
+        "components": 1
+      },
+      {
+        "name": "bread",
+        "left": 942,
+        "top": 37,
+        "width": 311,
+        "height": 259,
+        "components": 1
+      },
+      {
+        "name": "carrot",
+        "left": 17,
+        "top": 295,
+        "width": 307,
+        "height": 313,
+        "components": 1
+      },
+      {
+        "name": "egg",
+        "left": 342,
+        "top": 354,
+        "width": 277,
+        "height": 245,
+        "components": 1
+      },
+      {
+        "name": "cheese",
+        "left": 645,
+        "top": 333,
+        "width": 283,
+        "height": 270,
+        "components": 1
+      },
+      {
+        "name": "grape",
+        "left": 965,
+        "top": 310,
+        "width": 282,
+        "height": 292,
+        "components": 1,
+        "note": "Tightened lower boundary after visual QA to exclude the neighbouring straw tip."
+      },
+      {
+        "name": "pear",
+        "left": 42,
+        "top": 609,
+        "width": 240,
+        "height": 310,
+        "components": 1
+      },
+      {
+        "name": "cereal",
+        "left": 349,
+        "top": 606,
+        "width": 262,
+        "height": 310,
+        "components": 1
+      },
+      {
+        "name": "yogurt",
+        "left": 660,
+        "top": 656,
+        "width": 248,
+        "height": 241,
+        "components": 2
+      },
+      {
+        "name": "juice",
+        "left": 1003,
+        "top": 598,
+        "width": 203,
+        "height": 307,
+        "components": 1
+      },
+      {
+        "name": "tomato",
+        "left": 19,
+        "top": 921,
+        "width": 286,
+        "height": 303,
+        "components": 1
+      },
+      {
+        "name": "mushroom",
+        "left": 333,
+        "top": 924,
+        "width": 277,
+        "height": 298,
+        "components": 1
+      },
+      {
+        "name": "broccoli",
+        "left": 625,
+        "top": 904,
+        "width": 314,
+        "height": 321,
+        "components": 1
+      },
+      {
+        "name": "corn",
+        "left": 953,
+        "top": 906,
+        "width": 291,
+        "height": 323,
+        "components": 1
+      }
+    ],
+    "objects": [
+      {
+        "name": "stethoscope",
+        "left": 18,
+        "top": 11,
+        "width": 243,
+        "height": 245,
+        "components": 1
+      },
+      {
+        "name": "thermometer",
+        "left": 269,
+        "top": 22,
+        "width": 231,
+        "height": 212,
+        "components": 3
+      },
+      {
+        "name": "bandage",
+        "left": 520,
+        "top": 36,
+        "width": 230,
+        "height": 195,
+        "components": 1
+      },
+      {
+        "name": "brush",
+        "left": 761,
+        "top": 11,
+        "width": 253,
+        "height": 238,
+        "components": 1
+      },
+      {
+        "name": "water",
+        "left": 1055,
+        "top": 24,
+        "width": 170,
+        "height": 216,
+        "components": 1
+      },
+      {
+        "name": "treat",
+        "left": 24,
+        "top": 299,
+        "width": 222,
+        "height": 177,
+        "components": 1
+      },
+      {
+        "name": "potato",
+        "left": 264,
+        "top": 282,
+        "width": 221,
+        "height": 202,
+        "components": 1
+      },
+      {
+        "name": "pot",
+        "left": 487,
+        "top": 268,
+        "width": 272,
+        "height": 211,
+        "components": 1
+      },
+      {
+        "name": "meal",
+        "left": 759,
+        "top": 291,
+        "width": 241,
+        "height": 196,
+        "components": 1
+      },
+      {
+        "name": "board",
+        "left": 1001,
+        "top": 261,
+        "width": 237,
+        "height": 229,
+        "components": 1
+      },
+      {
+        "name": "car",
+        "left": 7,
+        "top": 511,
+        "width": 255,
+        "height": 200,
+        "components": 1
+      },
+      {
+        "name": "boat",
+        "left": 266,
+        "top": 501,
+        "width": 237,
+        "height": 220,
+        "components": 2
+      },
+      {
+        "name": "plane",
+        "left": 503,
+        "top": 523,
+        "width": 249,
+        "height": 193,
+        "components": 2
+      },
+      {
+        "name": "train",
+        "left": 755,
+        "top": 505,
+        "width": 257,
+        "height": 221,
+        "components": 1
+      },
+      {
+        "name": "ball",
+        "left": 1016,
+        "top": 502,
+        "width": 219,
+        "height": 228,
+        "components": 1
+      },
+      {
+        "name": "bear",
+        "left": 18,
+        "top": 722,
+        "width": 229,
+        "height": 255,
+        "components": 1
+      },
+      {
+        "name": "duck",
+        "left": 267,
+        "top": 737,
+        "width": 203,
+        "height": 233,
+        "components": 1
+      },
+      {
+        "name": "bird",
+        "left": 482,
+        "top": 733,
+        "width": 243,
+        "height": 235,
+        "components": 1
+      },
+      {
+        "name": "cow",
+        "left": 733,
+        "top": 728,
+        "width": 259,
+        "height": 252,
+        "components": 1
+      },
+      {
+        "name": "butterfly",
+        "left": 992,
+        "top": 751,
+        "width": 251,
+        "height": 218,
+        "components": 1
+      },
+      {
+        "name": "fish",
+        "left": 1,
+        "top": 985,
+        "width": 246,
+        "height": 234,
+        "components": 1
+      },
+      {
+        "name": "tree",
+        "left": 247,
+        "top": 972,
+        "width": 265,
+        "height": 268,
+        "components": 1
+      },
+      {
+        "name": "flower",
+        "left": 525,
+        "top": 969,
+        "width": 205,
+        "height": 270,
+        "components": 1
+      },
+      {
+        "name": "star",
+        "left": 745,
+        "top": 989,
+        "width": 237,
+        "height": 243,
+        "components": 1
+      },
+      {
+        "name": "sun",
+        "left": 994,
+        "top": 974,
+        "width": 258,
+        "height": 267,
+        "components": 1
+      }
+    ],
+    "characters": [
+      {
+        "name": "child-happy",
+        "left": 68,
+        "top": 1,
+        "width": 307,
+        "height": 410,
+        "components": 1
+      },
+      {
+        "name": "child-sad",
+        "left": 522,
+        "top": 2,
+        "width": 205,
+        "height": 409,
+        "components": 1
+      },
+      {
+        "name": "child-angry",
+        "left": 936,
+        "top": 0,
+        "width": 204,
+        "height": 416,
+        "components": 1
+      },
+      {
+        "name": "child-scared",
+        "left": 106,
+        "top": 416,
+        "width": 209,
+        "height": 398,
+        "components": 1
+      },
+      {
+        "name": "child-surprised",
+        "left": 490,
+        "top": 411,
+        "width": 261,
+        "height": 404,
+        "components": 1
+      },
+      {
+        "name": "dog",
+        "left": 903,
+        "top": 433,
+        "width": 294,
+        "height": 357,
+        "components": 1
+      },
+      {
+        "name": "cat",
+        "left": 53,
+        "top": 832,
+        "width": 279,
+        "height": 375,
+        "components": 1
+      },
+      {
+        "name": "rabbit",
+        "left": 500,
+        "top": 825,
+        "width": 239,
+        "height": 384,
+        "components": 1
+      },
+      {
+        "name": "family",
+        "left": 856,
+        "top": 799,
+        "width": 371,
+        "height": 428,
+        "components": 1
+      }
+    ],
+    "tools": [
+      {
+        "name": "umbrella",
+        "left": 11,
+        "top": 0,
+        "width": 203,
+        "height": 200,
+        "components": 1
+      },
+      {
+        "name": "rainboots",
+        "left": 226,
+        "top": 15,
+        "width": 192,
+        "height": 191,
+        "components": 1
+      },
+      {
+        "name": "sunhat",
+        "left": 419,
+        "top": 26,
+        "width": 220,
+        "height": 176,
+        "components": 1
+      },
+      {
+        "name": "sunglasses",
+        "left": 640,
+        "top": 62,
+        "width": 197,
+        "height": 116,
+        "components": 1
+      },
+      {
+        "name": "gloves",
+        "left": 847,
+        "top": 19,
+        "width": 197,
+        "height": 188,
+        "components": 1
+      },
+      {
+        "name": "scarf",
+        "left": 1048,
+        "top": 11,
+        "width": 199,
+        "height": 196,
+        "components": 1
+      },
+      {
+        "name": "tap",
+        "left": 16,
+        "top": 207,
+        "width": 177,
+        "height": 217,
+        "components": 1
+      },
+      {
+        "name": "soap",
+        "left": 217,
+        "top": 239,
+        "width": 184,
+        "height": 160,
+        "components": 2
+      },
+      {
+        "name": "hands",
+        "left": 411,
+        "top": 231,
+        "width": 214,
+        "height": 181,
+        "components": 1
+      },
+      {
+        "name": "towel",
+        "left": 625,
+        "top": 235,
+        "width": 213,
+        "height": 162,
+        "components": 1
+      },
+      {
+        "name": "pajama",
+        "left": 847,
+        "top": 208,
+        "width": 178,
+        "height": 207,
+        "components": 1
+      },
+      {
+        "name": "book",
+        "left": 1043,
+        "top": 235,
+        "width": 211,
+        "height": 157,
+        "components": 1
+      },
+      {
+        "name": "toothbrush",
+        "left": 11,
+        "top": 425,
+        "width": 199,
+        "height": 192,
+        "components": 1
+      },
+      {
+        "name": "cup",
+        "left": 227,
+        "top": 434,
+        "width": 196,
+        "height": 165,
+        "components": 1
+      },
+      {
+        "name": "sock",
+        "left": 423,
+        "top": 428,
+        "width": 195,
+        "height": 191,
+        "components": 1
+      },
+      {
+        "name": "shirt",
+        "left": 625,
+        "top": 416,
+        "width": 206,
+        "height": 200,
+        "components": 1
+      },
+      {
+        "name": "bottle",
+        "left": 879,
+        "top": 416,
+        "width": 119,
+        "height": 199,
+        "components": 1
+      },
+      {
+        "name": "sandwich",
+        "left": 1032,
+        "top": 429,
+        "width": 218,
+        "height": 180,
+        "components": 1
+      },
+      {
+        "name": "picnicmat",
+        "left": 2,
+        "top": 640,
+        "width": 213,
+        "height": 157,
+        "components": 1
+      },
+      {
+        "name": "pillow",
+        "left": 215,
+        "top": 622,
+        "width": 203,
+        "height": 183,
+        "components": 1
+      },
+      {
+        "name": "pot-extra",
+        "left": 418,
+        "top": 631,
+        "width": 211,
+        "height": 163,
+        "components": 1
+      },
+      {
+        "name": "slipper",
+        "left": 629,
+        "top": 634,
+        "width": 212,
+        "height": 172,
+        "components": 1
+      },
+      {
+        "name": "drum",
+        "left": 842,
+        "top": 620,
+        "width": 184,
+        "height": 192,
+        "components": 1
+      },
+      {
+        "name": "tambourine",
+        "left": 1039,
+        "top": 639,
+        "width": 208,
+        "height": 162,
+        "components": 1
+      },
+      {
+        "name": "trumpet",
+        "left": 0,
+        "top": 815,
+        "width": 221,
+        "height": 175,
+        "components": 1
+      },
+      {
+        "name": "flute",
+        "left": 221,
+        "top": 813,
+        "width": 196,
+        "height": 188,
+        "components": 1
+      },
+      {
+        "name": "violin",
+        "left": 417,
+        "top": 794,
+        "width": 200,
+        "height": 215,
+        "components": 2
+      },
+      {
+        "name": "guitar",
+        "left": 619,
+        "top": 806,
+        "width": 209,
+        "height": 205,
+        "components": 1
+      },
+      {
+        "name": "cracker",
+        "left": 828,
+        "top": 822,
+        "width": 202,
+        "height": 188,
+        "components": 1
+      },
+      {
+        "name": "window",
+        "left": 1034,
+        "top": 804,
+        "width": 215,
+        "height": 192,
+        "components": 1
+      },
+      {
+        "name": "fridge",
+        "left": 8,
+        "top": 991,
+        "width": 162,
+        "height": 243,
+        "components": 1
+      },
+      {
+        "name": "pantry",
+        "left": 189,
+        "top": 1002,
+        "width": 214,
+        "height": 223,
+        "components": 1
+      },
+      {
+        "name": "kennel",
+        "left": 404,
+        "top": 1010,
+        "width": 197,
+        "height": 208,
+        "components": 1
+      },
+      {
+        "name": "barn",
+        "left": 601,
+        "top": 1011,
+        "width": 242,
+        "height": 204,
+        "components": 1
+      },
+      {
+        "name": "bed",
+        "left": 843,
+        "top": 1011,
+        "width": 207,
+        "height": 222,
+        "components": 1
+      },
+      {
+        "name": "basket",
+        "left": 1051,
+        "top": 1014,
+        "width": 195,
+        "height": 212,
+        "components": 1
+      }
+    ],
+    "extras1": [
+      {
+        "name": "lion",
+        "left": 10,
+        "top": 5,
+        "width": 222,
+        "height": 246,
+        "components": 1
+      },
+      {
+        "name": "elephant",
+        "left": 255,
+        "top": 11,
+        "width": 251,
+        "height": 240,
+        "components": 1
+      },
+      {
+        "name": "monkey",
+        "left": 521,
+        "top": 14,
+        "width": 205,
+        "height": 237,
+        "components": 1
+      },
+      {
+        "name": "pig",
+        "left": 758,
+        "top": 6,
+        "width": 229,
+        "height": 243,
+        "components": 1
+      },
+      {
+        "name": "frog",
+        "left": 1018,
+        "top": 39,
+        "width": 221,
+        "height": 204,
+        "components": 1
+      },
+      {
+        "name": "strawberry",
+        "left": 22,
+        "top": 261,
+        "width": 208,
+        "height": 231,
+        "components": 1
+      },
+      {
+        "name": "orange",
+        "left": 267,
+        "top": 262,
+        "width": 224,
+        "height": 230,
+        "components": 1
+      },
+      {
+        "name": "watermelon",
+        "left": 511,
+        "top": 264,
+        "width": 225,
+        "height": 227,
+        "components": 1
+      },
+      {
+        "name": "rice",
+        "left": 749,
+        "top": 286,
+        "width": 238,
+        "height": 202,
+        "components": 1
+      },
+      {
+        "name": "bus",
+        "left": 998,
+        "top": 277,
+        "width": 250,
+        "height": 202,
+        "components": 1
+      },
+      {
+        "name": "helicopter",
+        "left": 1,
+        "top": 508,
+        "width": 246,
+        "height": 206,
+        "components": 1
+      },
+      {
+        "name": "bicycle",
+        "left": 249,
+        "top": 499,
+        "width": 248,
+        "height": 219,
+        "components": 1
+      },
+      {
+        "name": "truck",
+        "left": 501,
+        "top": 513,
+        "width": 245,
+        "height": 194,
+        "components": 1
+      },
+      {
+        "name": "taxi",
+        "left": 750,
+        "top": 514,
+        "width": 253,
+        "height": 201,
+        "components": 1
+      },
+      {
+        "name": "ambulance",
+        "left": 1004,
+        "top": 509,
+        "width": 250,
+        "height": 206,
+        "components": 2
+      },
+      {
+        "name": "house",
+        "left": 0,
+        "top": 726,
+        "width": 249,
+        "height": 229,
+        "components": 1
+      },
+      {
+        "name": "chair",
+        "left": 289,
+        "top": 722,
+        "width": 188,
+        "height": 240,
+        "components": 1
+      },
+      {
+        "name": "table",
+        "left": 503,
+        "top": 763,
+        "width": 250,
+        "height": 186,
+        "components": 1
+      },
+      {
+        "name": "door",
+        "left": 776,
+        "top": 716,
+        "width": 180,
+        "height": 240,
+        "components": 1
+      },
+      {
+        "name": "lamp",
+        "left": 1037,
+        "top": 728,
+        "width": 181,
+        "height": 229,
+        "components": 1
+      },
+      {
+        "name": "bath",
+        "left": 3,
+        "top": 987,
+        "width": 258,
+        "height": 216,
+        "components": 3
+      },
+      {
+        "name": "clock",
+        "left": 262,
+        "top": 965,
+        "width": 230,
+        "height": 240,
+        "components": 1
+      },
+      {
+        "name": "pants",
+        "left": 520,
+        "top": 954,
+        "width": 207,
+        "height": 255,
+        "components": 1
+      },
+      {
+        "name": "shoes",
+        "left": 745,
+        "top": 1006,
+        "width": 257,
+        "height": 186,
+        "components": 1
+      },
+      {
+        "name": "jacket",
+        "left": 1002,
+        "top": 957,
+        "width": 250,
+        "height": 251,
+        "components": 1
+      }
+    ],
+    "extras2": [
+      {
+        "name": "dress",
+        "left": 3,
+        "top": 12,
+        "width": 206,
+        "height": 193,
+        "components": 1
+      },
+      {
+        "name": "bag",
+        "left": 218,
+        "top": 0,
+        "width": 187,
+        "height": 203,
+        "components": 1
+      },
+      {
+        "name": "moon",
+        "left": 436,
+        "top": 11,
+        "width": 182,
+        "height": 192,
+        "components": 1
+      },
+      {
+        "name": "cloud",
+        "left": 626,
+        "top": 59,
+        "width": 214,
+        "height": 132,
+        "components": 1
+      },
+      {
+        "name": "rain",
+        "left": 845,
+        "top": 5,
+        "width": 200,
+        "height": 165,
+        "components": 1
+      },
+      {
+        "name": "snow",
+        "left": 1065,
+        "top": 1,
+        "width": 174,
+        "height": 199,
+        "components": 1
+      },
+      {
+        "name": "mountain",
+        "left": 0,
+        "top": 216,
+        "width": 212,
+        "height": 183,
+        "components": 1
+      },
+      {
+        "name": "sea",
+        "left": 213,
+        "top": 214,
+        "width": 210,
+        "height": 184,
+        "components": 1
+      },
+      {
+        "name": "foot",
+        "left": 436,
+        "top": 211,
+        "width": 191,
+        "height": 181,
+        "components": 1
+      },
+      {
+        "name": "eye",
+        "left": 630,
+        "top": 217,
+        "width": 205,
+        "height": 168,
+        "components": 1
+      },
+      {
+        "name": "nose",
+        "left": 850,
+        "top": 208,
+        "width": 175,
+        "height": 199,
+        "components": 1
+      },
+      {
+        "name": "mouth",
+        "left": 1044,
+        "top": 240,
+        "width": 210,
+        "height": 145,
+        "components": 1
+      },
+      {
+        "name": "ear",
+        "left": 15,
+        "top": 402,
+        "width": 156,
+        "height": 202,
+        "components": 1
+      },
+      {
+        "name": "head",
+        "left": 205,
+        "top": 399,
+        "width": 215,
+        "height": 212,
+        "components": 1
+      },
+      {
+        "name": "hair",
+        "left": 435,
+        "top": 402,
+        "width": 166,
+        "height": 210,
+        "components": 1
+      },
+      {
+        "name": "tooth",
+        "left": 644,
+        "top": 410,
+        "width": 165,
+        "height": 187,
+        "components": 2
+      },
+      {
+        "name": "tummy",
+        "left": 828,
+        "top": 407,
+        "width": 220,
+        "height": 204,
+        "components": 1
+      },
+      {
+        "name": "blocks",
+        "left": 1049,
+        "top": 410,
+        "width": 203,
+        "height": 189,
+        "components": 1
+      },
+      {
+        "name": "robot",
+        "left": 16,
+        "top": 605,
+        "width": 191,
+        "height": 222,
+        "components": 1
+      },
+      {
+        "name": "balloon",
+        "left": 227,
+        "top": 611,
+        "width": 168,
+        "height": 209,
+        "components": 1
+      },
+      {
+        "name": "icecream",
+        "left": 438,
+        "top": 613,
+        "width": 141,
+        "height": 211,
+        "components": 1
+      },
+      {
+        "name": "key",
+        "left": 623,
+        "top": 621,
+        "width": 200,
+        "height": 191,
+        "components": 1
+      },
+      {
+        "name": "crown",
+        "left": 832,
+        "top": 622,
+        "width": 210,
+        "height": 197,
+        "components": 1
+      },
+      {
+        "name": "van",
+        "left": 1042,
+        "top": 637,
+        "width": 211,
+        "height": 178,
+        "components": 1
+      },
+      {
+        "name": "xylophone",
+        "left": 1,
+        "top": 848,
+        "width": 229,
+        "height": 171,
+        "components": 1
+      },
+      {
+        "name": "zebra",
+        "left": 230,
+        "top": 820,
+        "width": 172,
+        "height": 213,
+        "components": 1
+      },
+      {
+        "name": "puzzle",
+        "left": 423,
+        "top": 834,
+        "width": 203,
+        "height": 189,
+        "components": 1
+      },
+      {
+        "name": "dino",
+        "left": 643,
+        "top": 813,
+        "width": 184,
+        "height": 212,
+        "components": 1
+      },
+      {
+        "name": "rocket",
+        "left": 842,
+        "top": 820,
+        "width": 178,
+        "height": 200,
+        "components": 1
+      },
+      {
+        "name": "rainbow",
+        "left": 1033,
+        "top": 847,
+        "width": 221,
+        "height": 159,
+        "components": 1
+      },
+      {
+        "name": "heart",
+        "left": 7,
+        "top": 1044,
+        "width": 195,
+        "height": 182,
+        "components": 1
+      },
+      {
+        "name": "clap",
+        "left": 203,
+        "top": 1044,
+        "width": 194,
+        "height": 195,
+        "components": 1
+      },
+      {
+        "name": "village-icon",
+        "left": 401,
+        "top": 1024,
+        "width": 228,
+        "height": 197,
+        "components": 1
+      },
+      {
+        "name": "counting",
+        "left": 629,
+        "top": 1035,
+        "width": 199,
+        "height": 195,
+        "components": 1
+      },
+      {
+        "name": "elevator-icon",
+        "left": 839,
+        "top": 1021,
+        "width": 181,
+        "height": 215,
+        "components": 1
+      },
+      {
+        "name": "potty-icon",
+        "left": 1024,
+        "top": 1050,
+        "width": 230,
+        "height": 154,
+        "components": 1
+      }
+    ],
+    "finishing": [
+      {
+        "name": "meal-soup",
+        "left": 10,
+        "top": 104,
+        "width": 597,
+        "height": 474,
+        "components": 1
+      },
+      {
+        "name": "meal-omelet",
+        "left": 633,
+        "top": 110,
+        "width": 611,
+        "height": 463,
+        "components": 1
+      },
+      {
+        "name": "meal-stew",
+        "left": 27,
+        "top": 685,
+        "width": 569,
+        "height": 527,
+        "components": 1
+      },
+      {
+        "name": "rinse",
+        "left": 618,
+        "top": 617,
+        "width": 636,
+        "height": 637,
+        "components": 1
+      }
+    ]
+  }
 }

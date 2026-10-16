@@ -243,12 +243,14 @@ window.SEOWOO_EXPERIENCE_V2 = {
         ["s2", "2"],
         ["s3", "3"],
         ["s4", "4"],
+        ["s5", "5"],
       ],
       pieces: [
         ["water", "tap", "s1"],
         ["soap", "soap", "s2"],
         ["rub", "hands", "s3"],
-        ["towel", "towel", "s4"],
+        ["rinse", "rinse", "s4"],
+        ["towel", "towel", "s5"],
       ],
     },
     {

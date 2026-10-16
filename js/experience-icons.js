@@ -75,6 +75,7 @@
   }
   Object.assign(labels, {
     tap: "수도꼭지",
+    rinse: "물로 헹구기",
     soap: "비누",
     hands: "손",
     towel: "수건",

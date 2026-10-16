@@ -260,7 +260,7 @@
         <div class="kitchen-actions panel-glass">
           <button data-cook ${potReady && !S.kitchen.cooked ? "" : "disabled"}>불 켜고 요리하기</button>
           <button data-serve ${S.kitchen.cooked && !S.kitchen.served ? "" : "disabled"}>접시에 담기</button>
-          ${S.kitchen.served ? "<button data-kitchen-next>또 요리하기</button>" : ""}<div class="served-plate">${S.kitchen.served ? V("meal") + "<b>완성!</b>" : ""}</div>
+          ${S.kitchen.served ? "<button data-kitchen-next>또 요리하기</button>" : ""}<div class="served-plate">${S.kitchen.served ? V("meal-" + S.kitchen.recipe.id) + "<b>완성!</b>" : ""}</div>
         </div>
       </div>`,
       "v2-village v2-kitchen",
@@ -369,7 +369,8 @@
         s1: "tap",
         s2: "soap",
         s3: "hands",
-        s4: "towel",
+        s4: "rinse",
+        s5: "towel",
         applefull: "apple",
         ballfull: "ball",
         butterflyfull: "butterfly",

@@ -186,8 +186,3 @@
     font-size: 14px;
   }
 }
-
-/* Isolate the generous white margins of each generated atlas sprite. */
-.v2-icon img {
-  clip-path: inset(2% 3% 7% 3%);
-}
