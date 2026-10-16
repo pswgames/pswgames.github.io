@@ -635,5 +635,8 @@
     }
   ],
   "status": "in_progress",
-  "remaining": 70
+  "remaining": 70,
+  "failed": [
+    "market-start-0"
+  ]
 }
