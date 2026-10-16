@@ -48,7 +48,13 @@ module.exports=function(page,spec,context){
       return {from:{x:r.x+r.width/2,y:r.y+r.height/2},to:{x:a.x+col*step+width/2,y:a.y+row*step+(touch?height+24:height/2)}};
     },{index,col,row,touch:spec.touch});
     await path(info.from,info.to,options.cancel,async()=>{
-      await page.waitForTimeout(40);
+      // Wait for the final pointer location, not an intermediate drag frame.
+      await page.waitForFunction(({index,col,row})=>{
+        const s=SeowooBlockPang.snapshot(),p=s.tray[index];
+        const cls=SeowooBlockEngine.fits(s.board,p,col,row)?'preview':'preview-bad';
+        const cells=SeowooBlockEngine.shapes[p.shape].map(([x,y])=>[x+col,y+row]).filter(([x,y])=>x>=0&&x<8&&y>=0&&y<8);
+        return cells.length&&cells.every(([x,y])=>document.querySelector(`[data-board-cell="${y*8+x}"]`)?.classList.contains(cls));
+      },{index,col,row},{timeout:1500});
       const preview=await page.evaluate(({index,col,row})=>{
         const s=SeowooBlockPang.snapshot(),p=s.tray[index];
         return {valid:SeowooBlockEngine.fits(s.board,p,col,row),cells:SeowooBlockEngine.shapes[p.shape].length,good:document.querySelectorAll(".block-cell.preview").length,bad:document.querySelectorAll(".block-cell.preview-bad").length};

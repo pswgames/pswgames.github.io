@@ -25,15 +25,36 @@ module.exports=async function({page,spec,context,go,tap,layout,out,results}){
    },kind);await go('blockpang');
  }
  const snapshot=()=>page.evaluate(()=>SeowooBlockPang.snapshot());
+ async function stableBlock(index,col,row){
+   await page.evaluate(()=>{
+     const world=document.querySelector('.block-world'),board=document.querySelector('.block-board');
+     const rect=()=>{const r=board.getBoundingClientRect();return [r.x+scrollX,r.y+scrollY,r.width,r.height];},start=rect();
+     window.__blockStability={frames:0,errors:[]};
+     function sample(){
+       const result=window.__blockStability,style=getComputedStyle(world);
+       result.frames++;
+       if(!world.isConnected||!board.isConnected)result.errors.push('play screen was replaced');
+       if(style.opacity!=='1'||style.transform!=='none')result.errors.push('background faded or moved');
+       if(rect().some((v,i)=>Math.abs(v-start[i])>.5))result.errors.push('board shifted');
+       result.frame=requestAnimationFrame(sample);
+     }
+     sample();
+   });
+   await block(index,col,row);
+   const result=await page.evaluate(()=>{const r=window.__blockStability;cancelAnimationFrame(r.frame);delete window.__blockStability;return {frames:r.frames,errors:[...new Set(r.errors)]};});
+   assert(result.frames>1,'placement stability sampled across rendered frames');
+   assert.deepEqual(result.errors,[],'background and board stay fixed throughout placement and clearing');
+ }
+
  await seed('empty');await layout('blockpang');
  await page.evaluate(()=>{window.__blockTones=[];const a=SeowooCore.audio,orig=a.tone.bind(a);a.tone=(...args)=>{__blockTones.push(args);return orig(...args);};});
  await block(0,0,0,{cancel:true});assert.equal((await snapshot()).moves,0);
- await block(0,0,0);assert.equal((await snapshot()).score,10);
+ await stableBlock(0,0,0);assert.equal((await snapshot()).score,10);
  await block(1,0,0);assert.equal((await snapshot()).score,10,'occupied cell rejects');
  await block(1,1,0);await block(2,2,0);assert.equal((await snapshot()).moves,3);assert.equal((await snapshot()).tray.filter(Boolean).length,3,'refill after exactly three pieces');
  await tap('[data-block-pause]');assert(await page.locator('[data-block-resume]').isVisible());assert(await page.locator('[data-block-piece]').first().isDisabled());await tap('[data-block-resume]');assert.equal((await snapshot()).score,30);
  await go('home');await go('blockpang');assert.equal((await snapshot()).score,30,'resume board');
- await seed('cross');await block(0,0,0);let s=await snapshot();assert.equal(s.score,260);assert.equal(s.board.filter(Boolean).length,0);assert.equal(s.combo,1);
+ await seed('cross');await stableBlock(0,0,0);let s=await snapshot();assert.equal(s.score,260);assert.equal(s.board.filter(Boolean).length,0);assert.equal(s.combo,1);
  await seed('combo');await block(0,0,0);await block(1,1,1);s=await snapshot();assert.equal(s.score,270);assert.equal(s.combo,2);
  assert((await page.evaluate(()=>__blockTones)).some(a=>a[0]===1319),'original combo arpeggio');
  await seed('over');await block(0,0,0);assert((await snapshot()).over);assert(await page.locator('[data-block-restart]').isVisible());

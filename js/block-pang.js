@@ -11,10 +11,30 @@
     const cells=E.shapes[piece.shape],w=1+Math.max(...cells.map(c=>c[0])),h=1+Math.max(...cells.map(c=>c[1]));
     return `<span class="block-piece ${extra}" style="--cols:${w};--rows:${h}">${cells.map(([x,y])=>`<i class="block-tile color-${piece.color}" style="grid-column:${x+1};grid-row:${y+1}" data-cell-x="${x}" data-cell-y="${y}"></i>`).join("")}</span>`;
   }
+  function trayMarkup(){
+    return `${state.tray.map((p,i)=>`<div class="block-pocket">${p?`<button class="block-grab" data-block-piece="${i}" aria-label="${i+1}번 블록, ${E.shapes[p.shape].length}칸${E.canFit(state.board,p)?"":", 지금은 놓을 자리가 없어요"}" ${paused||state.over?"disabled":""}>${pieceMarkup(p)}</button>`:'<span class="block-used" aria-label="사용한 조각">✓</span>'}</div>`).join("")}`;
+  }
+  // Keep the screen, background and grid mounted throughout a move. Replacing
+  // the play-screen restarted its entrance animation twice on every drop.
+  function updatePlay(board=state.board){
+    const main=ctx.main;
+    main.querySelectorAll("[data-board-cell]").forEach((cell,i)=>{
+      const color=board[i],classes=`block-cell ${color?"filled color-"+color:""}`;
+      if(cell.className!==classes)cell.className=classes;
+      cell.setAttribute("aria-label",`${Math.floor(i/8)+1}행 ${i%8+1}열 ${color?"블록":"빈칸"}`);
+    });
+    main.querySelector("[data-block-score]").textContent=state.score.toLocaleString();
+    main.querySelector("[data-block-best]").textContent=best.toLocaleString();
+    main.querySelector(".block-combo b").textContent=state.combo?state.combo+" 콤보":"준비";
+    const tray=main.querySelector(".block-tray"),markup=trayMarkup();
+    if(tray._markup!==markup){tray.innerHTML=markup;tray._markup=markup;}
+    main.querySelector(".block-particles").replaceChildren();
+    main.querySelector(".block-banner").classList.remove("show");
+  }
   function render(){
     if(!ctx)return;
     const finished=state.over&&!locked;
-    ctx.main.innerHTML=`<section class="play-screen block-world">${ctx.header("서우 블록팡","home",`<button class="icon-btn" data-block-pause aria-label="잠깐 쉬기">Ⅱ</button><button class="icon-btn" data-block-sound aria-label="${soundEnabled?"효과음 끄기":"효과음 켜기"}" aria-pressed="${soundEnabled}">${ctx.icon(soundEnabled?"sound":"mute")}</button>`,false)}<div class="block-game"><div class="block-intro"><img src="assets/art/v3/blocks.webp" alt=""><div><span class="eyebrow">차곡차곡, 반짝!</span><p>빈칸에 놓고 한 줄을 채워봐</p></div></div><div class="block-scoreboard"><div><span>내 점수</span><strong data-block-score>${state.score.toLocaleString()}</strong></div><div><span>최고 기록</span><b data-block-best>${best.toLocaleString()}</b></div><div class="block-combo"><span>연속 팡!</span><b>${state.combo ? state.combo+" 콤보" : "준비"}</b></div></div><div class="block-board-wrap"><div class="block-board" role="grid" aria-label="8행 8열 블록판">${state.board.map((color,i)=>`<div class="block-cell ${color?"filled color-"+color:""}" role="gridcell" aria-label="${Math.floor(i/8)+1}행 ${i%8+1}열 ${color?"블록":"빈칸"}" data-board-cell="${i}"></div>`).join("")}</div><div class="block-particles" aria-hidden="true"></div><div class="block-banner" aria-live="polite"></div></div><div class="block-tray" aria-label="끌어서 놓을 세 조각">${state.tray.map((p,i)=>`<div class="block-pocket">${p?`<button class="block-grab" data-block-piece="${i}" aria-label="${i+1}번 블록, ${E.shapes[p.shape].length}칸${E.canFit(state.board,p)?"":", 지금은 놓을 자리가 없어요"}" ${paused||state.over?"disabled":""}>${pieceMarkup(p)}</button>`:'<span class="block-used" aria-label="사용한 조각">✓</span>'}</div>`).join("")}</div><div class="block-help"><span>블록을 잡고 빈칸으로 끌어봐. 한 줄을 채우면 팡!</span></div></div><div class="block-overlay" ${paused||finished?"":"hidden"} role="dialog" aria-modal="true" aria-label="${state.over?"놀이 완료":"잠깐 쉬기"}"><div class="block-modal"><img src="assets/art/v3/${state.over?"star":"cloud"}.webp" alt=""><h2>${state.over?"차곡차곡 잘했어!":"잠깐 쉬어가자"}</h2><p>${state.over?"놓을 수 있는 블록이 없어요":"준비되면 다시 이어서 놀아요"}</p><strong>${state.score.toLocaleString()}<small> 점</small></strong>${!state.over?'<button class="btn primary" data-block-resume>계속하기</button>':""}<button class="btn ${state.over?"primary":"soft"}" data-block-restart ${locked?"disabled":""}>새로 시작하기</button><button class="btn soft" data-go="home">놀이터로</button></div></div></section>`;
+    ctx.main.innerHTML=`<section class="play-screen block-world">${ctx.header("서우 블록팡","home",`<button class="icon-btn" data-block-pause aria-label="잠깐 쉬기">Ⅱ</button><button class="icon-btn" data-block-sound aria-label="${soundEnabled?"효과음 끄기":"효과음 켜기"}" aria-pressed="${soundEnabled}">${ctx.icon(soundEnabled?"sound":"mute")}</button>`,false)}<div class="block-game"><div class="block-intro"><img src="assets/art/v3/blocks.webp" alt=""><div><span class="eyebrow">차곡차곡, 반짝!</span><p>빈칸에 놓고 한 줄을 채워봐</p></div></div><div class="block-scoreboard"><div><span>내 점수</span><strong data-block-score>${state.score.toLocaleString()}</strong></div><div><span>최고 기록</span><b data-block-best>${best.toLocaleString()}</b></div><div class="block-combo"><span>연속 팡!</span><b>${state.combo ? state.combo+" 콤보" : "준비"}</b></div></div><div class="block-board-wrap"><div class="block-board" role="grid" aria-label="8행 8열 블록판">${state.board.map((color,i)=>`<div class="block-cell ${color?"filled color-"+color:""}" role="gridcell" aria-label="${Math.floor(i/8)+1}행 ${i%8+1}열 ${color?"블록":"빈칸"}" data-board-cell="${i}"></div>`).join("")}</div><div class="block-particles" aria-hidden="true"></div><div class="block-banner" aria-live="polite"></div></div><div class="block-tray" aria-label="끌어서 놓을 세 조각">${trayMarkup()}</div><div class="block-help"><span>블록을 잡고 빈칸으로 끌어봐. 한 줄을 채우면 팡!</span></div></div><div class="block-overlay" ${paused||finished?"":"hidden"} role="dialog" aria-modal="true" aria-label="${state.over?"놀이 완료":"잠깐 쉬기"}"><div class="block-modal"><img src="assets/art/v3/${state.over?"star":"cloud"}.webp" alt=""><h2>${state.over?"차곡차곡 잘했어!":"잠깐 쉬어가자"}</h2><p>${state.over?"놓을 수 있는 블록이 없어요":"준비되면 다시 이어서 놀아요"}</p><strong>${state.score.toLocaleString()}<small> 점</small></strong>${!state.over?'<button class="btn primary" data-block-resume>계속하기</button>':""}<button class="btn ${state.over?"primary":"soft"}" data-block-restart ${locked?"disabled":""}>새로 시작하기</button><button class="btn soft" data-go="home">놀이터로</button></div></div></section>`;
   }
   function cancel(){
     control=null;
@@ -91,11 +111,12 @@
     cancel();locked=true;state=result.state;best=Math.max(best,state.score);persist();
     const effect=result.effect,lines=effect.rows.length+effect.columns.length;
     // Render the placed squares before the simultaneous row/column removal.
-    const finalBoard=state.board;state.board=effect.beforeClear;render();state.board=finalBoard;
+    updatePlay(effect.beforeClear);
     effect.cells.forEach(i=>ctx.main.querySelector(`[data-board-cell="${i}"]`).classList.add("placed"));
     celebrate(effect);sound(lines?(state.combo>1?"combo":"clear"):"place");
     later(()=>{
-      locked=false;render();
+      locked=false;
+      if(state.over)render();else updatePlay();
       if(state.over){window.SeowooCore.complete("blockpang");sound("over");ctx.main.querySelector("[data-block-restart]")?.focus({preventScroll:true});}
     },lines?420:180);
   }
