@@ -158,6 +158,8 @@ const routes = [
         });
     }
     await go("village");
+    await dragTo('[data-kind="town-child"]', '.v2-world-title');
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.village.place),null,"village wrong destination returns");
     await dragTo('[data-kind="town-child"]', '[data-zone="visit-market"]');
     assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.village.place),"market","village character must enter the dropped building");
     await layout("market");
@@ -215,6 +217,8 @@ const routes = [
     const need = await page.evaluate(
       () => window.SeowooExperiencesV2.state.kitchen.recipe.need,
     );
+    await dragTo(`[data-drag="${need[0]}"][data-kind="raw"]`, '[data-zone="board"]');
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.kitchen.washed.size),0,"raw ingredient cannot skip washing");
     for (const id of need)
       for (const kind of ["raw", "washed", "chopped"])
         await dragTo(`[data-drag="${id}"][data-kind="${kind}"]`, `[data-zone="${{raw:"sink",washed:"board",chopped:"pot"}[kind]}"]`);
@@ -236,6 +240,9 @@ const routes = [
     const tools = await page.evaluate(
       () => window.SeowooExperiencesV2.state.clinic.required,
     );
+    const otherTool=await page.evaluate(()=>SEOWOO_EXPERIENCE_V2.village.clinic.tools.find(([id])=>!SeowooExperiencesV2.state.clinic.required.includes(id))[0]);
+    await dragTo(`[data-drag="${otherTool}"]`, '[data-zone="patient"]');
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.clinic.done.size),0,"unrequested tool must not progress treatment");
     for (const id of tools) await dragTo(`[data-drag="${id}"]`, '[data-zone="patient"]');
     assert.equal(
       await page.evaluate(
