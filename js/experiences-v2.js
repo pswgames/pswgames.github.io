@@ -96,7 +96,11 @@
         })[m],
     );
   const shell = (title, body, cls, back = "home") => {
+    const continuing = ctx.main.firstElementChild?.className === `play-screen v2-screen ${cls}`;
     ctx.main.innerHTML = `<section class="play-screen v2-screen ${cls}">${ctx.header(title, back)}<div class="v2-body">${body}<div class="story-guide" role="status"><span data-narration></span><button data-narration-repeat aria-label="안내 다시 듣기">${ctx.icon("sound")}</button></div></div></section>`;
+    // A successful drop updates this scene; replaying its entrance shifts the
+    // next draggable and can move WebKit's scroll position near the page edge.
+    if (continuing) ctx.main.firstElementChild.style.animation = "none";
     N?.paint();
   };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -290,7 +294,7 @@
         <button class="scene-back" data-village-home>← 마을로</button>
         <div class="patient-card panel-glass"><span>오늘의 친구</span><h2>${P.name}</h2><p>${finished ? "이제 건강해졌어!" : "필요한 도구 4개로 돌봐줘"}</p><div class="care-dots">${S.clinic.required.map((id) => `<span class="care-item ${done.has(id) ? "done" : ""}">${V(id)}${done.has(id) ? "✓" : ""}</span>`).join("")}</div></div>
         <img class="v2-patient ${finished ? "happy" : ""}" src="assets/art/v3/${P.id}.webp" alt="${P.name}" draggable="false">
-        <div class="patient-drop v2-drop" data-zone="patient" data-accept="clinic-tool"><span>그림에 나온 도구를 눌러줘</span></div>
+        <div class="patient-drop v2-drop" data-zone="patient" data-accept="clinic-tool"><span>그림에 나온 도구를 친구에게 끌어줘</span></div>
         <div class="clinic-toolbox panel-glass">${tools
           .map(
             ([id, name]) => `
