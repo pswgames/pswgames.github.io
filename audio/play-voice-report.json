@@ -638,6 +638,7 @@
   "remaining": 70,
   "failed": [
     "market-start-0",
-    "market-start-3"
+    "market-start-3",
+    "market-start-2"
   ]
 }
