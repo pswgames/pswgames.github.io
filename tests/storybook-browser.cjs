@@ -49,6 +49,7 @@ const routes = [
 (async () => {
   await ready;
   for (const spec of [
+    { id: "android-chromium", type: chromium, width:412, height:915, touch:true },
     {
       id: "desktop-chromium",
       type: chromium,
@@ -56,7 +57,6 @@ const routes = [
       height: 1000,
       touch: false,
     },
-    { id: "android-chromium", type: chromium, width:412, height:915, touch:true },
     { id: "tablet-landscape-webkit", type: webkit, width:1180, height:820, touch:true },
     { id: "iphone-webkit", type: webkit, width: 390, height: 844, touch: true },
     {
@@ -158,6 +158,7 @@ const routes = [
     }
     await go("village");
     await dragTo('[data-kind="town-child"]', '[data-zone="visit-market"]');
+    assert.equal(await page.evaluate(()=>SeowooExperiencesV2.state.village.place),"market","village character must enter the dropped building");
     await layout("market");
     await page.screenshot({
       path: out + "/" + spec.id + "-market.png",

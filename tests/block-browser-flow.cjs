@@ -38,6 +38,8 @@ module.exports=async function({page,spec,context,go,tap,layout,out,results}){
  await seed('over');await block(0,0,0);assert((await snapshot()).over);assert(await page.locator('[data-block-restart]').isVisible());
  await tap('[data-block-restart]');s=await snapshot();assert.equal(s.score,0);assert.equal(s.board.filter(Boolean).length,0);assert(!s.over);assert.equal(s.tray.filter(Boolean).length,3);
  assert(Number(await page.evaluate(()=>localStorage.getItem('seowoo-blockpang-best-v1')))>=270,'best score survives restart');
+ await page.waitForTimeout(6500);
+ assert(await page.evaluate(()=>__voiceQA.completed.includes("play-block-start")),"new Block Pang Sulafat MP3 completes");
  await page.screenshot({path:out+'/'+spec.id+'-blockpang.png',fullPage:true});
  results.push({profile:spec.id,flow:'block: drag/cancel/reject, preview, refill, cross clear, combo, score, pause, resume, game over, restart, best record, original sound',status:'pass'});
 };
