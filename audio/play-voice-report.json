@@ -1246,10 +1246,164 @@
       "model": "gemini-3.8-flash-tts",
       "voice": "Sulafat",
       "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-response-bubble"
+      ],
+      "text": "신나고 기쁜 마음이네. 같이 웃어보자.",
+      "path": "audio/voice/ko/12b4b62dc144f695.mp3",
+      "seconds": 4.68,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-toy"
+      ],
+      "text": "친구가 묻지 않고 내가 놀던 자동차를 가져갔어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/e30183f7009fdc3f.mp3",
+      "seconds": 7.22,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-toy"
+      ],
+      "text": "화가 날 수 있어. '나도 놀고 있었어'라고 말해보자.",
+      "path": "audio/voice/ko/840621f17e1fa352.mp3",
+      "seconds": 5.03,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-mom"
+      ],
+      "text": "집에 오니 엄마가 반갑게 꼭 안아줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/9fd84b8e89ff6692.mp3",
+      "seconds": 6.4,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-mom"
+      ],
+      "text": "마음이 따뜻하고 기쁘구나.",
+      "path": "audio/voice/ko/c82f70c339bc5716.mp3",
+      "seconds": 3.29,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-dark"
+      ],
+      "text": "불이 꺼져서 방이 아주 어두워졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/e502c8aba93530d4.mp3",
+      "seconds": 5.5,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-dark"
+      ],
+      "text": "깜깜하면 무서울 수 있어. 불을 켜고 천천히 둘러보자.",
+      "path": "audio/voice/ko/3c03d24c721f44b2.mp3",
+      "seconds": 6.02,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-cookie"
+      ],
+      "text": "먹으려고 들고 있던 쿠키가 바닥에 떨어졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/8503b2f92b7a45ff.mp3",
+      "seconds": 7.05,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-cookie"
+      ],
+      "text": "아쉽고 속상한 마음이 들 수 있어.",
+      "path": "audio/voice/ko/e1e114273ed214b9.mp3",
+      "seconds": 3.74,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-birthday"
+      ],
+      "text": "문을 열었더니 친구들이 갑자기 생일 노래를 불러줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/5c184b2ecdd28515.mp3",
+      "seconds": 6.64,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-birthday"
+      ],
+      "text": "깜짝 놀랐구나. 그리고 곧 기쁜 마음도 들 수 있어.",
+      "path": "audio/voice/ko/5484df89f0f2190d.mp3",
+      "seconds": 5.23,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-splash"
+      ],
+      "text": "친구가 뛰다가 내 옷에 물을 많이 튀겼어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/d5946afa9c772990.mp3",
+      "seconds": 6.15,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-splash"
+      ],
+      "text": "화가 날 수 있어. 먼저 몸을 닦고 천천히 말해보자.",
+      "path": "audio/voice/ko/5a9d8b9df6ecdf37.mp3",
+      "seconds": 4.98,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-story-puppy"
+      ],
+      "text": "강아지가 달려와서 꼬리를 흔들며 반겨줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/37fd1e826b4971d6.mp3",
+      "seconds": 6.18,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4"
     }
   ],
   "status": "in_progress",
-  "remaining": 28,
+  "remaining": 14,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
