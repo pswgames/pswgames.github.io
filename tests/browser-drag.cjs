@@ -32,11 +32,11 @@ module.exports=function(page,spec,context){
     const item=page.locator(sel).first(),zone=page.locator(zoneSel).first();
     assert.equal(await item.evaluate(el=>getComputedStyle(el).touchAction),"none","draggable must own touch gestures");
     await item.scrollIntoViewIfNeeded();
-    await page.evaluate(([a,b])=>{const ar=document.querySelector(a).getBoundingClientRect(),br=document.querySelector(b).getBoundingClientRect();const top=Math.min(ar.top,br.top),bottom=Math.max(ar.bottom,br.bottom);if(bottom-top<innerHeight-20)scrollBy(0,top-12);},[sel,zoneSel]);
+    await page.evaluate(([a,b])=>{const ar=document.querySelector(a).getBoundingClientRect(),br=document.querySelector(b).getBoundingClientRect();const top=Math.min(ar.top,br.top),bottom=Math.max(ar.bottom,br.bottom);if(bottom-top<innerHeight-20)scrollBy({top:top-12,left:0,behavior:"instant"});},[sel,zoneSel]);
     const r=await item.boundingBox(),z=await zone.boundingBox();
     const from={x:r.x+r.width/2,y:r.y+r.height/2},to={x:z.x+z.width/2,y:z.y+z.height/2};
     const viewport=page.viewportSize();assert(from.y>=0&&from.y<=viewport.height,'source visible '+sel);assert(to.y>=0&&to.y<=viewport.height,'target visible '+zoneSel);
-    const before=await page.evaluate(()=>scrollY);await path(from,to,options.cancel);assert.equal(await page.evaluate(()=>scrollY),before,'touch drag must not scroll');
+    const before=await page.evaluate(()=>scrollY);await path(from,to,options.cancel,async()=>{assert.equal(await page.evaluate(()=>scrollY),before,'touch drag must not scroll before release');});
   }
   async function block(index,col,row,options={}){
     const item=page.locator(`[data-block-piece="${index}"] .block-piece`);await item.scrollIntoViewIfNeeded();

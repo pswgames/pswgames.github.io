@@ -6,7 +6,7 @@ window.SEOWOO_INTERACTIONS = {
     {zone:"toilet", label:"변기에 앉기", icon:"potty-icon", x:52, y:61},
     {zone:null, label:"편안하게 기다려요", x:52, y:61},
     {zone:"paper", label:"휴지로 쓱쓱", icon:"paper", x:72, y:45},
-    {zone:"flush", label:"물 내리기", icon:"tap", x:61, y:38},
+    {zone:"flush", label:"물 내리기", icon:"flush", x:61, y:38},
     {zone:"clothes", label:"바지 올리기", icon:"pants", x:24, y:67},
     {zone:"sink", label:"손 씻기", icon:"soap", x:87, y:47},
     {zone:null, label:"혼자서도 잘했어!", x:51, y:75},

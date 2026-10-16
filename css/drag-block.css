@@ -45,3 +45,10 @@
 .potty-target .potty-art{width:52px;height:52px;flex-shrink:0}
 @media(max-width:600px){.town-child{width:100px;height:140px;flex-basis:100px}.town-child .story-child{width:100%;height:100%}}
 @media(max-width:360px){.block-game{--unit:16px}}
+@media(max-width:600px){
+  .home-featured-card{grid-template-columns:54px minmax(0,1fr) 12px;gap:6px;padding:8px 7px;min-height:92px}
+  .home-featured-card .featured-art{width:54px;height:62px}
+  .home-featured-card b{font-size:16px;line-height:1.25;word-break:keep-all}
+  .home-featured-card small{display:none}
+}
+@media(max-width:360px){.home-featured-grid{grid-template-columns:1fr}.home-featured-card{min-height:76px}.home-featured-card b{font-size:18px}}
