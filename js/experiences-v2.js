@@ -601,9 +601,9 @@
       reject: rejectDrop,
       tap(item) {if(active === "puzzle") {selected=item.dataset.drag; puzzleCase(false); say("puzzle-select");}},
     });
-    ctx.main.addEventListener(
-      "click",
-      (e) => {
+    const controls = "[data-place],[data-village-home],[data-market-checkout],[data-cook],[data-serve],[data-kitchen-next],[data-clinic-next]";
+    let control = null, ignoreControlClick = 0;
+    const activate = (e) => {
         const b = e.target.closest("button");
         if (!b || b.disabled) return;
         const d = b.dataset;
@@ -766,9 +766,23 @@
           say("calm-" + S.feelings.calmType);
           return;
         }
-      },
-      { signal: sig },
-    );
+      };
+    ctx.main.addEventListener("pointerdown", e => {
+      const button=e.target.closest(controls);
+      if(button&&!button.disabled&&e.isPrimary!==false) control={button,id:e.pointerId,x:e.clientX,y:e.clientY};
+    }, {signal:sig});
+    ctx.main.addEventListener("pointerup", e => {
+      const c=control;control=null;
+      if(e.pointerType!=="touch"||!c||c.id!==e.pointerId||e.target.closest(controls)!==c.button||Math.hypot(e.clientX-c.x,e.clientY-c.y)>12)return;
+      // Chrome can suppress the next compatibility click after a captured drag.
+      // A completed touch on the same control still activates exactly once.
+      e.preventDefault();ignoreControlClick=Date.now()+400;activate({target:c.button});
+    }, {signal:sig});
+    ctx.main.addEventListener("pointercancel",()=>{control=null;},{signal:sig});
+    ctx.main.addEventListener("click", e => {
+      if(e.target.closest(controls)&&Date.now()<ignoreControlClick)return;
+      activate(e);
+    }, {signal:sig});
   }
 
   function mount(kind, options) {
