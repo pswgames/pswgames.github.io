@@ -1556,8 +1556,9 @@
       "group": "gemini38-5"
     }
   ],
-  "status": "in_progress",
+  "status": "complete",
   "remaining": 0,
   "failed": [],
-  "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
+  "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved",
+  "catalog_entries": 148
 }
