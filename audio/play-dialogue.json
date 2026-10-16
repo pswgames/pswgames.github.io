@@ -1,6 +1,70 @@
 {
+  "drag-help": {
+    "text": "그림을 잡고, 반짝이는 자리로 끌어다 놓아봐.",
+    "lang": "ko-KR"
+  },
+  "potty-drag-0": {
+    "text": "서우를 문 앞으로 끌어다 놓아볼까?",
+    "lang": "ko-KR"
+  },
+  "potty-drag-1": {
+    "text": "옷 그림으로 서우를 옮겨서 바지를 내려보자.",
+    "lang": "ko-KR"
+  },
+  "potty-drag-2": {
+    "text": "서우를 변기로 옮겨서 편안하게 앉아보자.",
+    "lang": "ko-KR"
+  },
+  "potty-drag-4": {
+    "text": "휴지 쪽으로 서우를 옮겨서 깨끗이 닦아보자.",
+    "lang": "ko-KR"
+  },
+  "potty-drag-5": {
+    "text": "물 내리는 버튼으로 서우를 옮겨볼까?",
+    "lang": "ko-KR"
+  },
+  "potty-drag-6": {
+    "text": "옷 그림으로 서우를 옮겨서 바지를 올려보자.",
+    "lang": "ko-KR"
+  },
+  "potty-drag-7": {
+    "text": "세면대로 서우를 옮겨서 손을 씻어보자. 세 번 뽀득뽀득!",
+    "lang": "ko-KR"
+  },
+  "block-start": {
+    "text": "블록을 끌어서 빈칸에 놓아봐. 한 줄을 채우면 반짝하고 사라져!",
+    "lang": "ko-KR"
+  },
+  "block-place": {
+    "text": "블록이 쏙! 다른 블록도 놓아볼까?",
+    "lang": "ko-KR"
+  },
+  "block-clear": {
+    "text": "한 줄을 가득 채웠네! 반짝반짝!",
+    "lang": "ko-KR"
+  },
+  "block-multi": {
+    "text": "여러 줄을 한꺼번에 채웠어! 멋지다!",
+    "lang": "ko-KR"
+  },
+  "block-combo": {
+    "text": "또 한 줄! 연달아 잘했어!",
+    "lang": "ko-KR"
+  },
+  "block-over": {
+    "text": "놓을 자리가 없네. 다시 시작해볼까?",
+    "lang": "ko-KR"
+  },
+  "block-pause": {
+    "text": "잠깐 쉬자. 계속하기를 누르면 다시 놀 수 있어.",
+    "lang": "ko-KR"
+  },
+  "block-retry": {
+    "text": "괜찮아. 빈칸이 있는 다른 자리에 놓아볼까?",
+    "lang": "ko-KR"
+  },
   "village-start": {
-    "text": "서우야, 오늘은 어디에서 놀까? 가고 싶은 집을 눌러봐.",
+    "text": "서우를 끌어서 가고 싶은 집에 놓아볼까?",
     "lang": "ko-KR"
   },
   "market-ready": {
@@ -16,7 +80,7 @@
     "lang": "ko-KR"
   },
   "kitchen-wash": {
-    "text": "깨끗하게 씻었어! 씻은 재료를 눌러서 도마로 옮겨보자.",
+    "text": "깨끗하게 씻었어! 씻은 재료를 끌어서 도마로 옮겨보자.",
     "lang": "ko-KR"
   },
   "kitchen-chop": {
@@ -164,7 +228,7 @@
     "lang": "ko-KR"
   },
   "market-pick-apple": {
-    "text": "사과, 잘 찾았어!",
+    "text": "사과를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-apple": {
@@ -176,7 +240,7 @@
     "lang": "ko-KR"
   },
   "market-pick-banana": {
-    "text": "바나나, 잘 찾았어!",
+    "text": "바나나를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-banana": {
@@ -188,7 +252,7 @@
     "lang": "ko-KR"
   },
   "market-pick-milk": {
-    "text": "우유, 잘 찾았어!",
+    "text": "우유를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-milk": {
@@ -200,7 +264,7 @@
     "lang": "ko-KR"
   },
   "market-pick-bread": {
-    "text": "식빵, 잘 찾았어!",
+    "text": "식빵을 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-bread": {
@@ -212,7 +276,7 @@
     "lang": "ko-KR"
   },
   "market-pick-carrot": {
-    "text": "당근, 잘 찾았어!",
+    "text": "당근을 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-carrot": {
@@ -224,7 +288,7 @@
     "lang": "ko-KR"
   },
   "market-pick-egg": {
-    "text": "달걀, 잘 찾았어!",
+    "text": "달걀을 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-egg": {
@@ -236,7 +300,7 @@
     "lang": "ko-KR"
   },
   "market-pick-cheese": {
-    "text": "치즈, 잘 찾았어!",
+    "text": "치즈를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-cheese": {
@@ -248,7 +312,7 @@
     "lang": "ko-KR"
   },
   "market-pick-grape": {
-    "text": "포도, 잘 찾았어!",
+    "text": "포도를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-grape": {
@@ -260,7 +324,7 @@
     "lang": "ko-KR"
   },
   "market-pick-pear": {
-    "text": "배, 잘 찾았어!",
+    "text": "배를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-pear": {
@@ -272,7 +336,7 @@
     "lang": "ko-KR"
   },
   "market-pick-cereal": {
-    "text": "시리얼, 잘 찾았어!",
+    "text": "시리얼을 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-cereal": {
@@ -284,7 +348,7 @@
     "lang": "ko-KR"
   },
   "market-pick-yogurt": {
-    "text": "요거트, 잘 찾았어!",
+    "text": "요거트를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-yogurt": {
@@ -296,7 +360,7 @@
     "lang": "ko-KR"
   },
   "market-pick-juice": {
-    "text": "주스, 잘 찾았어!",
+    "text": "주스를 장바구니에 담았네!",
     "lang": "ko-KR"
   },
   "market-next-juice": {
@@ -340,15 +404,15 @@
     "lang": "ko-KR"
   },
   "kitchen-start-soup": {
-    "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
     "lang": "ko-KR"
   },
   "kitchen-start-omelet": {
-    "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
     "lang": "ko-KR"
   },
   "kitchen-start-stew": {
-    "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.",
     "lang": "ko-KR"
   },
   "clinic-use-stethoscope": {
@@ -412,7 +476,7 @@
     "lang": "ko-KR"
   },
   "puzzle-shape-garden": {
-    "text": "같은 모양의 화분을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "text": "같은 모양끼리 맞춰보자. 그림을 고르고, 놓을 자리를 눌러봐.",
     "lang": "ko-KR"
   },
   "puzzle-animal-home": {
