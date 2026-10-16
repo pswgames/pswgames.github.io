@@ -212,6 +212,12 @@
         "meal-stew",
         "rinse"
       ]
+    ],
+    "shopping-basket": [
+      1,
+      [
+        "shopping-basket"
+      ]
     ]
   },
   "prompts": [
@@ -250,6 +256,10 @@
     {
       "key": "finishing",
       "prompt": "Four isolated sprites: vegetable soup, cheese omelet with broccoli, potato-carrot-corn stew, child hands rinsing under running water. Same warm dimensional 3D style; generated 2026-10-16."
+    },
+    {
+      "key": "shopping-basket",
+      "prompt": "An empty supermarket shopping basket with a sage-green handle and cream woven wicker body; no laundry, clothes, food or objects inside. Soft dimensional preschool picture-book art on white. Generated 2026-10-16."
     }
   ],
   "sprite_bounds": {
@@ -1473,6 +1483,16 @@
         "top": 617,
         "width": 636,
         "height": 637,
+        "components": 1
+      }
+    ],
+    "shopping-basket": [
+      {
+        "name": "shopping-basket",
+        "left": 0,
+        "top": 0,
+        "width": 1254,
+        "height": 1254,
         "components": 1
       }
     ]
