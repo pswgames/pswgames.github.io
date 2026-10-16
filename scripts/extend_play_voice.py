@@ -16,8 +16,12 @@ def one(id,attempt):
     direction=voice.STYLE_DIRECTION['warm']
     prompt=direction+' Read the following Korean sentence exactly once. Output only speech. Do not read instructions or add any words.\n\n'+row['text']
     if attempt: prompt='Say exactly this in warm, natural standard Korean, with the Sulafat voice. Audio only:\n'+row['text']
-    response=client.interactions.create(model=voice.MODEL,input=prompt,response_format={'type':'audio'},generation_config={'speech_config':[{'voice':voice.VOICE}]},timeout=60)
-    data=response.output_audio.data
+    if attempt == 0:
+        response=client.models.generate_content(model=voice.MODEL,contents=prompt,config={'response_modalities':['AUDIO'],'speech_config':{'voice_config':{'prebuilt_voice_config':{'voice_name':voice.VOICE}}}})
+        data=next(p.inline_data.data for p in response.candidates[0].content.parts if p.inline_data)
+    else:
+        response=client.interactions.create(model=voice.MODEL,input=prompt,response_format={'type':'audio'},generation_config={'speech_config':[{'voice':voice.VOICE}]},timeout=60)
+        data=response.output_audio.data
     pcm=base64.b64decode(data) if isinstance(data,str) else bytes(data)
     samples=voice.pcm_samples(pcm);energies=voice.frame_rms(samples)
     if not energies or max(energies)<=0: raise RuntimeError('Silent recording')
@@ -48,6 +52,7 @@ def main():
     pending=[id for id in ROWS if not (ROOT/MAPPING['play-'+id]).exists()]
     report['status']='in_progress';report['remaining']=len(pending);checkpoint(report)
     try:
+        failures=[]
         for n,id in enumerate(pending):
             print(f'Generating sentence {n+1}/{len(pending)}: {id}',flush=True)
             for attempt in range(2):
@@ -55,10 +60,12 @@ def main():
                     subprocess.run([sys.executable,__file__,'--one',id,str(attempt)],cwd=ROOT,timeout=65,check=True)
                     break
                 except (subprocess.TimeoutExpired,subprocess.CalledProcessError):
-                    if attempt: raise
+                    if attempt:
+                        failures.append(id);break
                     print(f'Retrying one bounded request: {id}',flush=True);time.sleep(3)
+            if id in failures: continue
             report['clips'].append(json.loads((RESULTS/(id+'.json')).read_text()))
-            report['remaining']=len(pending)-n-1
+            report['remaining']=len(pending)-n-1+len(failures)
             # Keep successful clips safe even when a later provider request stalls.
             checkpoint(report)
             time.sleep(2)
