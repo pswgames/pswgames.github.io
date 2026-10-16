@@ -784,10 +784,164 @@
       "model": "gemini-3.1-flash-tts-preview",
       "voice": "Sulafat",
       "single_utterance": true
+    },
+    {
+      "ids": [
+        "play-market-start-0"
+      ],
+      "text": "오늘은 사과, 우유, 식빵. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/f48f4dbc0124af9e.mp3",
+      "seconds": 6.02,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-2"
+      ],
+      "text": "오늘은 포도, 요거트, 시리얼. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/77ee685acbb33fe6.mp3",
+      "seconds": 6.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-3"
+      ],
+      "text": "오늘은 배, 주스, 당근. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/4361d0a0909ae6ab.mp3",
+      "seconds": 5.84,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-4"
+      ],
+      "text": "오늘은 우유, 달걀, 식빵. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/92ca4fdc34e3aec7.mp3",
+      "seconds": 6.19,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-5"
+      ],
+      "text": "오늘은 사과, 바나나, 요거트. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/b5c584344f6fa4ec.mp3",
+      "seconds": 5.89,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-6"
+      ],
+      "text": "오늘은 치즈, 식빵, 주스. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/925c5654b4c6b5ed.mp3",
+      "seconds": 5.43,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-market-start-7"
+      ],
+      "text": "오늘은 당근, 배, 달걀. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/3058796265ad4e89.mp3",
+      "seconds": 5.39,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-soup"
+      ],
+      "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/f5f11439f05e71c2.mp3",
+      "seconds": 6.45,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-omelet"
+      ],
+      "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/953de82540fc4d44.mp3",
+      "seconds": 6.24,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-kitchen-start-stew"
+      ],
+      "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/344d16609a768b07.mp3",
+      "seconds": 6.78,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-clinic-use-stethoscope"
+      ],
+      "text": "청진기로 콩닥콩닥 심장 소리를 들었어.",
+      "path": "audio/voice/ko/055b49e5d68bc183.mp3",
+      "seconds": 4.01,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-clinic-use-thermometer"
+      ],
+      "text": "체온계로 체온을 쟀어.",
+      "path": "audio/voice/ko/b3a8730808c213b5.mp3",
+      "seconds": 2.25,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-clinic-use-bandage"
+      ],
+      "text": "반창고를 살포시 붙였어.",
+      "path": "audio/voice/ko/466487de6430a4a1.mp3",
+      "seconds": 2.48,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
+    },
+    {
+      "ids": [
+        "play-clinic-use-brush"
+      ],
+      "text": "빗으로 털을 살살 빗어줬어.",
+      "path": "audio/voice/ko/5a44154df9a09998.mp3",
+      "seconds": 3.07,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1"
     }
   ],
   "status": "in_progress",
-  "remaining": 70,
+  "remaining": 56,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
