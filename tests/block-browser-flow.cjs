@@ -36,9 +36,8 @@ module.exports=async function({page,spec,context,go,tap,layout,out,results}){
  await seed('combo');await block(0,0,0);await block(1,1,1);s=await snapshot();assert.equal(s.score,270);assert.equal(s.combo,2);
  assert((await page.evaluate(()=>__blockTones)).some(a=>a[0]===1319),'original combo arpeggio');
  await seed('over');await block(0,0,0);assert((await snapshot()).over);assert(await page.locator('[data-block-restart]').isVisible());
- await page.evaluate(()=>{window.__restartEvents=[];for(const type of ["pointerdown","pointerup","click"])document.addEventListener(type,e=>__restartEvents.push({type,target:e.target.outerHTML?.slice(0,180),score:SeowooBlockPang.snapshot()?.score}),{capture:true});});
  await tap('[data-block-restart]');
- try{await page.waitForFunction(()=>SeowooBlockPang.snapshot().score===0,null,{timeout:1500});}catch(e){console.log("RESTART EVENTS",await page.evaluate(()=>__restartEvents));throw e;}
+ await page.waitForFunction(()=>SeowooBlockPang.snapshot().score===0,null,{timeout:1500});
  s=await snapshot();assert.equal(s.score,0);assert.equal(s.board.filter(Boolean).length,0);assert(!s.over);assert.equal(s.tray.filter(Boolean).length,3);
  assert(Number(await page.evaluate(()=>localStorage.getItem('seowoo-blockpang-best-v1')))>=270,'best score survives restart');
  await page.waitForTimeout(6500);

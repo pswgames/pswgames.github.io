@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   const E=window.SeowooBlockEngine, KEY="seowoo-blockpang-v1", BEST="seowoo-blockpang-best-v1";
-  let ctx=null,state=null,best=0,paused=false,locked=false,drag=null,abort=null,frame=0;
+  let ctx=null,state=null,best=0,paused=false,locked=false,drag=null,abort=null,frame=0,control=null,ignoreControlClick=0;
   const timers=new Set();
   const later=(fn,ms)=>{const t=setTimeout(()=>{timers.delete(t);if(ctx)fn();},ms);timers.add(t);};
   const audio=()=>window.SeowooCore.audio;
@@ -14,10 +14,12 @@
   }
   function render(){
     if(!ctx)return;
-    ctx.main.innerHTML=`<section class="play-screen block-world">${ctx.header("서우 블록팡","home",'<button class="icon-btn" data-block-pause aria-label="잠깐 쉬기">Ⅱ</button>')}<div class="block-game"><div class="block-intro"><img src="assets/art/v3/blocks.webp" alt=""><div><span class="eyebrow">차곡차곡, 반짝!</span><p>빈칸에 놓고 한 줄을 채워봐</p></div></div><div class="block-scoreboard"><div><span>내 점수</span><strong data-block-score>${state.score.toLocaleString()}</strong></div><div><span>최고 기록</span><b data-block-best>${best.toLocaleString()}</b></div><div class="block-combo"><span>연속 팡!</span><b>${state.combo ? state.combo+" 콤보" : "준비"}</b></div></div><div class="block-board-wrap"><div class="block-board" role="grid" aria-label="8행 8열 블록판">${state.board.map((color,i)=>`<div class="block-cell ${color?"filled color-"+color:""}" role="gridcell" aria-label="${Math.floor(i/8)+1}행 ${i%8+1}열 ${color?"블록":"빈칸"}" data-board-cell="${i}"></div>`).join("")}</div><div class="block-particles" aria-hidden="true"></div><div class="block-banner" aria-live="polite"></div></div><div class="block-tray" aria-label="끌어서 놓을 세 조각">${state.tray.map((p,i)=>`<div class="block-pocket">${p?`<button class="block-grab" data-block-piece="${i}" aria-label="${i+1}번 블록, ${E.shapes[p.shape].length}칸${E.canFit(state.board,p)?"":", 지금은 놓을 자리가 없어요"}" ${paused||state.over?"disabled":""}>${pieceMarkup(p)}</button>`:'<span class="block-used" aria-label="사용한 조각">✓</span>'}</div>`).join("")}</div><div class="block-help"><span data-narration></span><button class="listen-btn" data-narration-repeat aria-label="안내 다시 듣기">${ctx.icon("sound")}</button></div></div><div class="block-overlay" ${paused||state.over?"":"hidden"} role="dialog" aria-modal="true" aria-label="${state.over?"놀이 완료":"잠깐 쉬기"}"><div class="block-modal"><img src="assets/art/v3/${state.over?"star":"cloud"}.webp" alt=""><h2>${state.over?"차곡차곡 잘했어!":"잠깐 쉬어가자"}</h2><p>${state.over?"놓을 수 있는 블록이 없어요":"준비되면 다시 이어서 놀아요"}</p><strong>${state.score.toLocaleString()}<small> 점</small></strong>${!state.over?'<button class="btn primary" data-block-resume>계속하기</button>':""}<button class="btn ${state.over?"primary":"soft"}" data-block-restart>새로 시작하기</button><button class="btn soft" data-go="home">놀이터로</button></div></div></section>`;
+    const finished=state.over&&!locked;
+    ctx.main.innerHTML=`<section class="play-screen block-world">${ctx.header("서우 블록팡","home",'<button class="icon-btn" data-block-pause aria-label="잠깐 쉬기">Ⅱ</button>')}<div class="block-game"><div class="block-intro"><img src="assets/art/v3/blocks.webp" alt=""><div><span class="eyebrow">차곡차곡, 반짝!</span><p>빈칸에 놓고 한 줄을 채워봐</p></div></div><div class="block-scoreboard"><div><span>내 점수</span><strong data-block-score>${state.score.toLocaleString()}</strong></div><div><span>최고 기록</span><b data-block-best>${best.toLocaleString()}</b></div><div class="block-combo"><span>연속 팡!</span><b>${state.combo ? state.combo+" 콤보" : "준비"}</b></div></div><div class="block-board-wrap"><div class="block-board" role="grid" aria-label="8행 8열 블록판">${state.board.map((color,i)=>`<div class="block-cell ${color?"filled color-"+color:""}" role="gridcell" aria-label="${Math.floor(i/8)+1}행 ${i%8+1}열 ${color?"블록":"빈칸"}" data-board-cell="${i}"></div>`).join("")}</div><div class="block-particles" aria-hidden="true"></div><div class="block-banner" aria-live="polite"></div></div><div class="block-tray" aria-label="끌어서 놓을 세 조각">${state.tray.map((p,i)=>`<div class="block-pocket">${p?`<button class="block-grab" data-block-piece="${i}" aria-label="${i+1}번 블록, ${E.shapes[p.shape].length}칸${E.canFit(state.board,p)?"":", 지금은 놓을 자리가 없어요"}" ${paused||state.over?"disabled":""}>${pieceMarkup(p)}</button>`:'<span class="block-used" aria-label="사용한 조각">✓</span>'}</div>`).join("")}</div><div class="block-help"><span data-narration></span><button class="listen-btn" data-narration-repeat aria-label="안내 다시 듣기">${ctx.icon("sound")}</button></div></div><div class="block-overlay" ${paused||finished?"":"hidden"} role="dialog" aria-modal="true" aria-label="${state.over?"놀이 완료":"잠깐 쉬기"}"><div class="block-modal"><img src="assets/art/v3/${state.over?"star":"cloud"}.webp" alt=""><h2>${state.over?"차곡차곡 잘했어!":"잠깐 쉬어가자"}</h2><p>${state.over?"놓을 수 있는 블록이 없어요":"준비되면 다시 이어서 놀아요"}</p><strong>${state.score.toLocaleString()}<small> 점</small></strong>${!state.over?'<button class="btn primary" data-block-resume>계속하기</button>':""}<button class="btn ${state.over?"primary":"soft"}" data-block-restart ${locked?"disabled":""}>새로 시작하기</button><button class="btn soft" data-go="home">놀이터로</button></div></div></section>`;
     window.SeowooNarrator?.paint();
   }
   function cancel(){
+    control=null;
     if(!drag)return;
     const d=drag;drag=null;cancelAnimationFrame(frame);frame=0;
     d.ghost.remove();d.item.classList.remove("lifting");
@@ -105,12 +107,30 @@
     try{state=E.restore(JSON.parse(localStorage.getItem(KEY)));best=Math.max(0,Number(localStorage.getItem(BEST))||0);}catch{state=null;}
     state ||= E.create();best=Math.max(best,state.score);paused=false;locked=false;render();say(state.over?"over":"start");
     abort=new AbortController();const signal=abort.signal;
-    ctx.main.addEventListener("pointerdown",down,{signal});document.addEventListener("pointermove",move,{signal,passive:false});document.addEventListener("pointerup",up,{signal});document.addEventListener("pointercancel",cancel,{signal});
+    const controlSelector="[data-block-pause],[data-block-resume],[data-block-restart]";
+    function activate(button){
+      if(button.disabled)return;
+      if(button.hasAttribute("data-block-pause")){if(!locked&&!state.over)setPaused(true);return;}
+      if(button.hasAttribute("data-block-resume")){setPaused(false);return;}
+      cancel();timers.forEach(clearTimeout);timers.clear();state=E.create();paused=false;locked=false;persist();render();say("start");
+    }
+    ctx.main.addEventListener("pointerdown",e=>{
+      const button=e.target.closest(controlSelector);
+      if(button&&!button.disabled){control={button,id:e.pointerId,x:e.clientX,y:e.clientY};return;}
+      down(e);
+    },{signal});
+    // Some mobile browsers suppress the compatibility click after a captured
+    // drag. Use the same button's completed touch, retaining normal mouse/keys.
+    ctx.main.addEventListener("pointerup",e=>{
+      const c=control;control=null;
+      if(e.pointerType!=="touch"||!c||e.pointerId!==c.id||e.target.closest(controlSelector)!==c.button||Math.hypot(e.clientX-c.x,e.clientY-c.y)>12)return;
+      e.preventDefault();ignoreControlClick=Date.now()+400;activate(c.button);
+    },{signal});
+    document.addEventListener("pointermove",move,{signal,passive:false});document.addEventListener("pointerup",up,{signal});document.addEventListener("pointercancel",cancel,{signal});
     ctx.main.addEventListener("lostpointercapture",cancel,{signal});ctx.main.addEventListener("dragstart",e=>e.preventDefault(),{signal});
     ctx.main.addEventListener("click",e=>{
-      if(e.target.closest("[data-block-pause]")&&!locked&&!state.over)setPaused(true);
-      if(e.target.closest("[data-block-resume]"))setPaused(false);
-      if(e.target.closest("[data-block-restart]")){cancel();state=E.create();paused=false;locked=false;persist();render();say("start");}
+      const button=e.target.closest(controlSelector);
+      if(button&&Date.now()>=ignoreControlClick)activate(button);
     },{signal});
     document.addEventListener("visibilitychange",()=>{if(document.hidden&&!state.over){cancel();paused=true;render();}},{signal});
     window.addEventListener("resize",cancel,{signal});window.addEventListener("blur",cancel,{signal});
