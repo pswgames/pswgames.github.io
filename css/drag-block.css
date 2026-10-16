@@ -3,6 +3,9 @@
 .v2-drag img,.potty-child img,.block-grab *{pointer-events:none;-webkit-user-drag:none}
 .pointer-dragging{opacity:.22!important}.pointer-ghost{cursor:grabbing;will-change:transform;box-shadow:0 12px 25px #24446624;contain:layout style;animation:none!important}
 .drag-over{outline:5px solid #8bcbaa!important;outline-offset:4px;box-shadow:0 0 0 10px #c9f3dd90!important}
+/* The existing completion particles must never add height to the next game. */
+.confetti{position:fixed;z-index:1000;pointer-events:none;user-select:none;font-size:24px;line-height:1;will-change:transform,opacity;animation:play-confetti .9s ease-out both}
+@keyframes play-confetti{from{transform:translate3d(0,0,0) scale(.7);opacity:1}to{transform:translate3d(var(--dx),var(--dy),0) rotate(80deg);opacity:0}}
 .town-child{padding:0;background:none;border:0;border-radius:35%;width:160px;height:190px;flex:0 0 160px;min-height:80px}
 .town-child .story-child{width:100%;height:100%;object-fit:contain}.town-child.pointer-ghost{background:transparent;box-shadow:none}
 .v2-town-kid{pointer-events:auto}.v2-town-kid .kid-talk{pointer-events:none}
