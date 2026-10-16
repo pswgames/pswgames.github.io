@@ -170,7 +170,7 @@
       window.SeowooNarrator?.say(
         "menu-" + (route === "think" ? "more" : route),
       );
-    window.scrollTo(0, 0);
+    window.scrollTo({top:0,left:0,behavior:"instant"});
     main.querySelector("h1")?.focus({ preventScroll: true });
   }
   function header(title, back = "home", extra = "") {

@@ -64,6 +64,7 @@
       const item=e.target.closest(options.items);
       if (!item || item.disabled || drag || settling || (e.button != null && e.button !== 0) || e.isPrimary === false) return;
       e.preventDefault();
+      window.scrollTo({top:window.scrollY,left:window.scrollX,behavior:"instant"});
       options.start?.(item);
       const rect=item.getBoundingClientRect(); ghost=item.cloneNode(true);
       ghost.removeAttribute("id"); ghost.setAttribute("aria-hidden","true"); ghost.tabIndex=-1;

@@ -50,7 +50,7 @@
   function down(e){
     const item=e.target.closest("[data-block-piece]");
     if(!item||item.disabled||drag||paused||locked||state.over||(e.button!=null&&e.button!==0)||e.isPrimary===false)return;
-    e.preventDefault();audio().unlock();window.SeowooNarrator?.invalidate();sound("pick");
+    e.preventDefault();window.scrollTo({top:scrollY,left:scrollX,behavior:"instant"});audio().unlock();window.SeowooNarrator?.invalidate();sound("pick");
     const index=Number(item.dataset.blockPiece),piece=state.tray[index],geometry=dimensions();
     const span=item.querySelector(".block-piece"),r=span.getBoundingClientRect();
     const shape=E.shapes[piece.shape],cols=1+Math.max(...shape.map(c=>c[0])),rows=1+Math.max(...shape.map(c=>c[1]));
@@ -65,7 +65,7 @@
     try{item.setPointerCapture(e.pointerId);}catch{}
     preview();
   }
-  function move(e){if(!drag||e.pointerId!==drag.id)return;e.preventDefault();drag.x=e.clientX;drag.y=e.clientY;drag.moved ||= Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>6;if(!frame)frame=requestAnimationFrame(preview);}
+  function move(e){if(!drag||drag.returning||e.pointerId!==drag.id)return;e.preventDefault();drag.x=e.clientX;drag.y=e.clientY;drag.moved ||= Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>6;if(!frame)frame=requestAnimationFrame(preview);}
   function celebrate(effect){
     const grid=ctx.main.querySelector(".block-board"),layer=ctx.main.querySelector(".block-particles");
     const rect=grid.getBoundingClientRect();
@@ -79,10 +79,11 @@
     banner.classList.add("show");
   }
   function up(e){
-    if(!drag||e.pointerId!==drag.id)return;
+    if(!drag||drag.returning||e.pointerId!==drag.id)return;
     drag.x=e.clientX;drag.y=e.clientY;preview();
     const d=drag,result=d.moved&&d.valid?E.place(state,d.index,d.col,d.row):null;
     if(!result){
+      d.returning=true;
       const r=d.item.getBoundingClientRect();
       d.ghost.style.transition="transform 150ms ease, opacity 150ms ease";
       d.ghost.style.transform=`translate3d(${r.left}px,${r.top}px,0) scale(.65)`;d.ghost.style.opacity="0";
@@ -110,6 +111,7 @@
     const controlSelector="[data-block-pause],[data-block-resume],[data-block-restart]";
     function activate(button){
       if(button.disabled)return;
+      audio().unlock();
       if(button.hasAttribute("data-block-pause")){if(!locked&&!state.over)setPaused(true);return;}
       if(button.hasAttribute("data-block-resume")){setPaused(false);return;}
       cancel();timers.forEach(clearTimeout);timers.clear();state=E.create();paused=false;locked=false;persist();render();say("start");
@@ -127,7 +129,7 @@
       e.preventDefault();ignoreControlClick=Date.now()+400;activate(c.button);
     },{signal});
     document.addEventListener("pointermove",move,{signal,passive:false});document.addEventListener("pointerup",up,{signal});document.addEventListener("pointercancel",cancel,{signal});
-    ctx.main.addEventListener("lostpointercapture",cancel,{signal});ctx.main.addEventListener("dragstart",e=>e.preventDefault(),{signal});
+    ctx.main.addEventListener("lostpointercapture",()=>{if(!drag?.returning)cancel();},{signal});ctx.main.addEventListener("dragstart",e=>e.preventDefault(),{signal});
     ctx.main.addEventListener("click",e=>{
       const button=e.target.closest(controlSelector);
       if(button&&Date.now()>=ignoreControlClick)activate(button);
