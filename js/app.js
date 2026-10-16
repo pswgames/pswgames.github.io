@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.3.0";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.4.0";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -55,8 +55,9 @@
   const picture = (pic) => window.SeowooArt?.picture(pic) || pic;
   const gameArt = (name) => window.SeowooArt?.icon(name) || "";
   const featuredArt = (kind) =>
-    `<span class="featured-art featured-${kind}">${gameArt({ village: "village-icon", puzzle: "puzzle", feelings: "heart" }[kind])}</span>`;
+    `<span class="featured-art featured-${kind}">${gameArt({ village: "village-icon", puzzle: "puzzle", feelings: "heart", blockpang: "blocks" }[kind])}</span>`;
   const featuredActivities = [
+    ["blockpang", "서우 블록팡", "차곡차곡 한 줄 팡!", "blockpang"],
     ["village", "역할놀이 마을", "마트·주방·동물병원", "village"],
     ["puzzle", "퍼즐 탐험대", "끌어서 맞추는 퍼즐", "puzzle"],
     ["feelings", "마음친구", "기분을 고르고 표현해요", "feelings"],
@@ -94,6 +95,8 @@
     audio.stopAll();
     window.SeowooElevator.unmount();
     window.SeowooExperiences?.unmount?.();
+    window.SeowooPottyDrag?.unmount();
+    window.SeowooBlockPang?.unmount();
     quiz = null;
     memory = null;
   }
@@ -101,6 +104,7 @@
     home: "서우놀이터",
     elevator: "투명 엘리베이터",
     potty: "화장실 탐험대",
+    blockpang: "서우 블록팡",
     language: "말글 놀이터",
     numbers: "숫자 놀이",
     shape: "도형 찾기",
@@ -166,7 +170,7 @@
       window.SeowooNarrator?.say(
         "menu-" + (route === "think" ? "more" : route),
       );
-    window.scrollTo(0, 0);
+    window.scrollTo({top:0,left:0,behavior:"instant"});
     main.querySelector("h1")?.focus({ preventScroll: true });
   }
   function header(title, back = "home", extra = "") {
@@ -198,6 +202,9 @@
         break;
       case "elevator":
         renderElevator();
+        break;
+      case "blockpang":
+        window.SeowooBlockPang?.mount({main,header,icon});
         break;
       case "potty":
         renderPotty();
@@ -531,8 +538,15 @@
     const p = potty,
       x = pottySteps[p.step];
     const stages = [0, 2, 4, 5, 7, 8];
-    main.innerHTML = `<section class="play-screen theme-potty">${header("화장실 탐험대")}<div class="potty-layout"><div class="potty-scene"><img src="assets/art/bathroom.webp" alt="깨끗한 화장실에서 변기에 앉아 엄지를 든 서우와 노란 오리"><div class="potty-speech">${x[1]}<button class="listen-btn" data-potty-listen aria-label="다시 듣기">${icon("sound")}</button></div>${p.step === 5 ? '<div class="flush-ripple" aria-hidden="true"></div>' : ""}${p.step === 7 ? `<div class="wash-status">${"●".repeat(p.wash)}${"○".repeat(3 - p.wash)}</div>` : ""}</div><div class="potty-play"><div class="potty-heading"><span class="eyebrow">${p.step === 8 ? "탐험 완료!" : `${p.step + 1} / 8`}</span><h2>${x[0]}</h2></div><div class="potty-step-grid">${stages.map((n, i) => `<div class="potty-step ${p.step >= n ? "reached" : ""} ${p.step === n ? "current" : ""} pastel-${i}"><span class="step-number">${p.step > n ? "✓" : i + 1}</span><span class="potty-art step-art-${i}" aria-hidden="true"></span><b>${pottySteps[n][0]}</b></div>`).join("")}</div><div class="potty-controls">${p.step === 3 ? `<div class="potty-options"><button class="btn sky" data-potty="kind">쉬 했어요</button><button class="btn yellow" data-potty="kind">응가 했어요</button><button class="btn soft" data-potty="kind">안 나와도 괜찮아</button></div>` : `<button class="btn primary large" data-potty="${p.step === 8 ? "restart" : p.step === 7 ? "wash" : "next"}" ${p.busy ? "disabled" : ""}>${p.busy ? "빙글빙글…" : x[2]} ${p.step === 7 ? `${p.wash}/3` : icon(p.step === 8 ? "refresh" : "chevron")}</button>`}${p.step === 8 ? '<button class="btn soft" data-potty="real">진짜 화장실 가보기</button>' : ""}</div></div></div></section>`;
-    if (speak) audio.speak(x[1]);
+    const goal=window.SEOWOO_INTERACTIONS.potty[p.step];
+    const pos=p.position || {x:22,y:75};
+    const guidance=goal.zone ? window.SEOWOO_AUDIO?.["play-potty-drag-"+p.step]?.text || "서우를 반짝이는 곳으로 끌어다 놓아봐" : x[1];
+    main.innerHTML = `<section class="play-screen theme-potty">${header("화장실 탐험대")}<div class="potty-layout"><div class="potty-drag-panel"><div class="potty-scene potty-drag-scene" data-step="${p.step}"><img class="potty-room" src="assets/art/v3/bathroom-empty.webp" alt="변기와 휴지, 세면대가 있는 깨끗한 화장실" draggable="false">${goal.zone ? `<div class="potty-target" data-potty-zone="${goal.zone}" data-x="${goal.x}" data-y="${goal.y}" style="left:${goal.x}%;top:${goal.y}%">${["paper","flush"].includes(goal.icon) ? `<span class="potty-art step-art-${goal.icon === "paper" ? 2 : 3}"></span>` : gameArt(goal.icon)}<b>${goal.label}</b></div>` : ""}<button class="potty-child ${p.motion || ""}" style="left:${pos.x}%;top:${pos.y}%" aria-label="서우를 잡고 끌어 옮기기" ${p.busy || !goal.zone ? "disabled" : ""}><img src="assets/art/v3/seowoo-drag.webp" alt="서우" draggable="false"></button>${p.busy ? '<div class="potty-water" aria-hidden="true"></div>' : ""}${p.step === 7 ? `<div class="wash-status">${"●".repeat(p.wash)}${"○".repeat(3-p.wash)}</div>` : ""}</div><div class="potty-drag-guide" role="status">${guidance}<button class="listen-btn" data-potty-listen aria-label="다시 듣기">${icon("sound")}</button></div></div><div class="potty-play"><div class="potty-heading"><span class="eyebrow">${p.step === 8 ? "탐험 완료!" : `${p.step + 1} / 8`}</span><h2>${x[0]}</h2></div><div class="potty-step-grid">${stages.map((n, i) => `<div class="potty-step ${p.step >= n ? "reached" : ""} ${p.step === n ? "current" : ""} pastel-${i}"><span class="step-number">${p.step > n ? "✓" : i + 1}</span><span class="potty-art step-art-${i}" aria-hidden="true"></span><b>${pottySteps[n][0]}</b></div>`).join("")}</div><div class="potty-controls">${p.step === 3 ? `<div class="potty-options"><button class="btn sky" data-potty="kind">쉬 했어요</button><button class="btn yellow" data-potty="kind">응가 했어요</button><button class="btn soft" data-potty="kind">안 나와도 괜찮아</button></div>` : p.step === 8 ? `<button class="btn primary large" data-potty="restart">다시 탐험하기 ${icon("refresh")}</button>` : `<div class="potty-drag-hint">${p.busy ? "빙글빙글 물이 내려가요" : "서우를 잡고 반짝이는 곳으로!"}${p.step === 7 ? ` · ${p.wash}/3` : ""}</div>`}${p.step === 8 ? '<button class="btn soft" data-potty="real">진짜 화장실 가보기</button>' : ""}</div></div></div></section>`;
+    window.SeowooPottyDrag?.mount(main, p, pottyAction);
+    if (speak) {
+      if (goal.zone) window.SeowooNarrator?.event("potty-drag-"+p.step);
+      else {window.SeowooNarrator?.reset(); audio.speak(x[1]);}
+    }
   }
   function pottyAction(action) {
     if (potty.busy) return;
@@ -566,7 +580,8 @@
       return;
     }
     if (action === "wash") {
-      potty.wash++;
+      potty.wash = Math.min(3,potty.wash+1);
+      potty.position={x:62,y:75};
       audio.button();
       if (potty.wash < 3) {
         renderPotty(false);
@@ -641,6 +656,7 @@
       "plain",
       route === "think" ? "생각 놀이터" : "더 많은 놀이",
       `<div class="more-intro"><span class="eyebrow">새로 생긴 놀이</span><h2>서우가 직접 만지고 움직이는 놀이</h2><p>정답보다 탐색과 표현을 먼저 생각했어.</p></div><div class="more-grid premium-first">${[
+        ["blockpang", "서우 블록팡", ""],
         ["village", "역할놀이 마을", "🏘️"],
         ["puzzle", "퍼즐 탐험대", "🧩"],
         ["feelings", "마음친구", "💛"],
@@ -1064,7 +1080,8 @@
       return;
     }
     if ("pottyListen" in d) {
-      audio.speak(pottySteps[potty.step][1]);
+      if (window.SEOWOO_INTERACTIONS.potty[potty.step].zone) window.SeowooNarrator?.event("potty-drag-"+potty.step);
+      else audio.speak(pottySteps[potty.step][1]);
       return;
     }
     if (d.city) {

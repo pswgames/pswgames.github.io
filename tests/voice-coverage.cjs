@@ -1,6 +1,6 @@
 const fs=require("fs"),path=require("path"),vm=require("vm"),assert=require("assert/strict");
 const root=path.resolve(__dirname,".."),sandbox={window:{}};
-for(const file of ["data/content.js","audio/catalog.js","audio/extra-catalog.js","audio/play-catalog.js","audio/files.js","audio/play-files.js"])
+for(const file of ["data/content.js","data/experience-v2.js","data/interactions.js","audio/catalog.js","audio/extra-catalog.js","audio/play-catalog.js","audio/files.js","audio/play-files.js"])
   vm.runInNewContext(fs.readFileSync(path.join(root,file),"utf8"),sandbox,{filename:file});
 const C=sandbox.window.SEOWOO_CONTENT, catalog=sandbox.window.SEOWOO_AUDIO, files=sandbox.window.SEOWOO_AUDIO_FILES;
 const normalize=s=>String(s).replace(/[.!? ,\s]/g,"");
@@ -63,3 +63,10 @@ for(let n=1;n<=100;n++){
 }
 assert.deepEqual(missing,[],`Finite app speech paths without local audio:\n${JSON.stringify(missing,null,2)}`);
 console.log(`Voice coverage passed: all finite and literal app speech paths resolve to local audio (${Object.keys(catalog).length} catalog entries)`);
+
+for(const [id,name] of sandbox.window.SEOWOO_EXPERIENCE_V2.village.market.products){
+ const line=catalog["play-market-pick-"+id].text;
+ assert(line.startsWith(name));assert(line.includes("장바구니에 담았네"),"success must describe the committed drop");
+}
+for(const [step,action] of sandbox.window.SEOWOO_INTERACTIONS.potty.entries())if(action.zone)assert(files["play-potty-drag-"+step],"every drag stage has its actual target instruction");
+console.log("PASS market object-name/action mapping and all potty drag instructions");

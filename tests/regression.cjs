@@ -71,6 +71,11 @@ for (const p of [
   "js/screen-lock.js",
   "data/art-v3.js",
   "js/experience-icons.js",
+  "data/interactions.js",
+  "js/pointer-drag.js",
+  "js/potty-drag.js",
+  "js/block-engine.js",
+  "js/block-pang.js",
   "js/experiences-v2.js",
   "js/app.js",
 ])
@@ -88,12 +93,13 @@ const doc = w.document,
 (async () => {
   await wait(20);
   const report = [];
+  const dragPotty=()=>require("./drag-helper.cjs")(w,".potty-child","[data-potty-zone]",{wait:20});
   assert.equal(doc.querySelectorAll(".activity-card").length, 6);
-  assert.equal(doc.querySelectorAll(".home-featured-card").length, 3);
+  assert.equal(doc.querySelectorAll(".home-featured-card").length, 4);
   assert(doc.querySelector('[data-go="village"].home-featured-card'));
   assert(doc.querySelector('[data-go="puzzle"].home-featured-card'));
   assert(doc.querySelector('[data-go="feelings"].home-featured-card'));
-  report.push("홈: 기존 여섯 활동 + 신규 3개 놀이 직접 진입");
+  report.push("홈: 기존 여섯 활동 + 신규 4개 놀이 직접 진입");
   go("elevator");
   const floorOrder = Array.from({ length: 10 }, (_, row) => [
     19 - row * 2,
@@ -159,14 +165,14 @@ const doc = w.document,
   await wait(40);
   assert($(".home-world"));
   go("potty");
-  for (let i = 0; i < 3; i++) click('[data-potty="next"]');
+  for (let i = 0; i < 3; i++) await dragPotty();
   click('[data-potty="kind"]');
-  click('[data-potty="next"]');
-  click('[data-potty="next"]');
+  await dragPotty();
+  await dragPotty();
   go("home");
   go("potty");
-  assert.equal($('[data-potty="next"]').disabled, false);
-  click('[data-potty="next"]');
+  assert.equal($(".potty-child").disabled, false);
+  await dragPotty();
   await wait(30);
   go("home");
   report.push("화면 전환 뒤 오래된 문제 콜백 취소");
@@ -229,18 +235,18 @@ const doc = w.document,
   assert.equal(feelingSeen.size, 12, "12개 감정상황은 한 순환 안에서 중복되면 안 됩니다");
   report.push("V2 역할놀이·12개 퍼즐·12개 감정상황 진입 및 무중복 랜덤 순환");
   go("potty");
-  click('[data-potty="next"]');
-  for (let i = 0; i < 3; i++) click('[data-potty="wash"]');
+  await dragPotty();
+  for (let i = 0; i < 3; i++) await dragPotty();
   click('[data-potty="restart"]');
   const before = w.SeowooCore.state.stats.byGame.potty || 0;
-  for (let i = 0; i < 3; i++) click('[data-potty="next"]');
+  for (let i = 0; i < 3; i++) await dragPotty();
   click('[data-potty="kind"]');
-  click('[data-potty="next"]');
-  click('[data-potty="next"]');
-  assert.equal($('[data-potty="next"]').disabled, true);
+  await dragPotty();
+  await dragPotty();
+  assert.equal($(".potty-child").disabled, true);
   await wait(30);
-  click('[data-potty="next"]');
-  for (let i = 0; i < 3; i++) click('[data-potty="wash"]');
+  await dragPotty();
+  for (let i = 0; i < 3; i++) await dragPotty();
   assert($('[data-potty="restart"]'));
   assert.equal(w.SeowooCore.state.stats.byGame.potty, before + 1);
   click('[data-potty="real"]');

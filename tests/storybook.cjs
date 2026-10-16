@@ -63,6 +63,11 @@ for (const p of [
   "js/narrator.js",
   "js/screen-lock.js",
   "js/experience-icons.js",
+  "data/interactions.js",
+  "js/pointer-drag.js",
+  "js/potty-drag.js",
+  "js/block-engine.js",
+  "js/block-pang.js",
   "js/experiences-v2.js",
   "js/app.js",
 ])
@@ -79,6 +84,7 @@ const $ = (s) => doc.querySelector(s),
   D = w.SEOWOO_EXPERIENCE_V2;
 const tick = () => new Promise((r) => setImmediate(r));
 (async () => {
+  const dragTo=(s,z)=>require("./drag-helper.cjs")(w,s,z);
   const missions = [...D.village.market.missions];
   for (const mission of missions) {
     D.village.market.missions = [mission];
@@ -88,11 +94,13 @@ const tick = () => new Promise((r) => setImmediate(r));
     const wrong = D.village.market.products.find(
       (p) => !mission.includes(p[0]),
     )[0];
-    click(`[data-drag="${wrong}"]`);
+    await dragTo(`[data-drag="${wrong}"]`,S.village.place === "market" ? '[data-zone="market-cart"]' : '[data-zone="patient"]');
     assert.equal(S.market.cart.length, 0);
     for (const id of mission) {
       click(`[data-drag="${id}"]`);
-      click(`[data-drag="${id}"]`);
+      assert(!S.market.cart.includes(id), "tap cannot move products");
+      await dragTo(`[data-drag="${id}"]`, '[data-zone="market-cart"]');
+      await dragTo(`[data-drag="${id}"]`, '[data-zone="market-cart"]');
     }
     assert.equal(S.market.cart.length, 3);
     click("[data-market-checkout]");
@@ -111,7 +119,7 @@ const tick = () => new Promise((r) => setImmediate(r));
     assert($("[data-serve]").disabled);
     for (const id of recipe.need) {
       for (const kind of ["raw", "washed", "chopped"])
-        click(`[data-drag="${id}"][data-kind="${kind}"]`);
+        await dragTo(`[data-drag="${id}"][data-kind="${kind}"]`, `[data-zone="${{raw:"sink",washed:"board",chopped:"pot"}[kind]}"]`);
     }
     assert.equal(S.kitchen.pot.size, 3);
     click("[data-cook]");
@@ -130,9 +138,9 @@ const tick = () => new Promise((r) => setImmediate(r));
     const wrong = D.village.clinic.tools.find(
       (p) => !S.clinic.required.includes(p[0]),
     )[0];
-    click(`[data-drag="${wrong}"]`);
+    await dragTo(`[data-drag="${wrong}"]`,S.village.place === "market" ? '[data-zone="market-cart"]' : '[data-zone="patient"]');
     assert.equal(S.clinic.done.size, 0);
-    for (const id of S.clinic.required) click(`[data-drag="${id}"]`);
+    for (const id of S.clinic.required) await dragTo(`[data-drag="${id}"]`, '[data-zone="patient"]');
     assert.equal(S.clinic.done.size, 4);
     assert($("[data-clinic-next]"));
     assert([...doc.querySelectorAll(".clinic-tool")].every((b) => b.disabled));

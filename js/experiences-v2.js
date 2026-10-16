@@ -4,7 +4,7 @@
   const D = window.SEOWOO_EXPERIENCE_V2;
   const V = window.SeowooV2Icon;
   const N = window.SeowooNarrator;
-  const say = (...keys) => N?.say(...keys);
+  const say = (...keys) => N?.event(...keys);
   let selected = null,
     suppressClick = 0;
   const marketNext = () =>
@@ -29,7 +29,7 @@
   let ctx = null;
   let active = null;
   let abort = null;
-  let drag = null;
+  let unbindDrag = null;
   let timers = new Set();
 
   const S = {
@@ -96,7 +96,11 @@
         })[m],
     );
   const shell = (title, body, cls, back = "home") => {
+    const continuing = ctx.main.firstElementChild?.className === `play-screen v2-screen ${cls}`;
     ctx.main.innerHTML = `<section class="play-screen v2-screen ${cls}">${ctx.header(title, back)}<div class="v2-body">${body}<div class="story-guide" role="status"><span data-narration></span><button data-narration-repeat aria-label="안내 다시 듣기">${ctx.icon("sound")}</button></div></div></section>`;
+    // A successful drop updates this scene; replaying its entrance shifts the
+    // next draggable and can move WebKit's scroll position near the page edge.
+    if (continuing) ctx.main.firstElementChild.style.animation = "none";
     N?.paint();
   };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
@@ -134,11 +138,11 @@
       `
       <div class="v2-world-hub">
         <img class="v2-scene-img" src="assets/art/v3/village.webp" alt="마트와 주방, 동물병원이 이어진 서우 역할놀이 마을">
-        <div class="v2-world-title"><span>서우의 작은 마을</span><h2>오늘은 어디에서 놀까?</h2><p>건물을 누르면 바로 들어갈 수 있어</p></div>
-        <button class="world-building market" data-place="market">${V("apple")}<span class="building-badge">장보기</span><b>알록달록 마트</b><small>필요한 물건을 골라봐</small></button>
-        <button class="world-building kitchen" data-place="kitchen">${V("meal")}<span class="building-badge">요리</span><b>우리집 주방</b><small>씻고, 썰고, 보글보글</small></button>
-        <button class="world-building clinic" data-place="clinic">${V("dog")}<span class="building-badge">돌보기</span><b>동물 병원</b><small>아픈 친구를 건강하게</small></button>
-        <div class="v2-town-kid">${character("happy")}<div class="kid-talk">서우야, 같이 놀러 가자!</div></div>
+        <div class="v2-world-title"><span>서우의 작은 마을</span><h2>오늘은 어디에서 놀까?</h2><p>서우를 잡고 가고 싶은 집으로 끌어봐</p></div>
+        <button class="world-building market v2-drop" data-zone="visit-market" data-accept="town-child" data-place="market">${V("apple")}<span class="building-badge">장보기</span><b>알록달록 마트</b><small>필요한 물건을 골라봐</small></button>
+        <button class="world-building kitchen v2-drop" data-zone="visit-kitchen" data-accept="town-child" data-place="kitchen">${V("meal")}<span class="building-badge">요리</span><b>우리집 주방</b><small>씻고, 썰고, 보글보글</small></button>
+        <button class="world-building clinic v2-drop" data-zone="visit-clinic" data-accept="town-child" data-place="clinic">${V("dog")}<span class="building-badge">돌보기</span><b>동물 병원</b><small>아픈 친구를 건강하게</small></button>
+        <div class="v2-town-kid"><button class="v2-drag town-child" data-drag="seowoo" data-kind="town-child" aria-label="서우를 집으로 끌어 옮기기"><img class="story-child" src="assets/art/v3/seowoo-drag.webp" alt="서우" draggable="false"></button><div class="kid-talk">나를 잡고 집으로 데려다줘!</div></div>
       </div>`,
       "v2-village",
     );
@@ -290,7 +294,7 @@
         <button class="scene-back" data-village-home>← 마을로</button>
         <div class="patient-card panel-glass"><span>오늘의 친구</span><h2>${P.name}</h2><p>${finished ? "이제 건강해졌어!" : "필요한 도구 4개로 돌봐줘"}</p><div class="care-dots">${S.clinic.required.map((id) => `<span class="care-item ${done.has(id) ? "done" : ""}">${V(id)}${done.has(id) ? "✓" : ""}</span>`).join("")}</div></div>
         <img class="v2-patient ${finished ? "happy" : ""}" src="assets/art/v3/${P.id}.webp" alt="${P.name}" draggable="false">
-        <div class="patient-drop v2-drop" data-zone="patient" data-accept="clinic-tool"><span>그림에 나온 도구를 눌러줘</span></div>
+        <div class="patient-drop v2-drop" data-zone="patient" data-accept="clinic-tool"><span>그림에 나온 도구를 친구에게 끌어줘</span></div>
         <div class="clinic-toolbox panel-glass">${tools
           .map(
             ([id, name]) => `
@@ -469,55 +473,11 @@
       .split(/\s+/)
       .includes(item.dataset.kind);
   }
-  function startDrag(e, item) {
-    if (drag || (e.button != null && e.button !== 0)) return;
-    audio.unlock();
-    const r = item.getBoundingClientRect(),
-      ghost = item.cloneNode(true);
-    ghost.classList.add("v2-drag-ghost");
-    Object.assign(ghost.style, {
-      left: r.left + "px",
-      top: r.top + "px",
-      width: r.width + "px",
-      height: r.height + "px",
-    });
-    document.body.appendChild(ghost);
-    item.classList.add("dragging");
-    item.setPointerCapture?.(e.pointerId);
-    drag = {
-      item,
-      ghost,
-      id: e.pointerId,
-      ox: e.clientX - r.left,
-      oy: e.clientY - r.top,
-      x: e.clientX,
-      y: e.clientY,
-      sx: e.clientX,
-      sy: e.clientY,
-      moved: false,
-    };
-    audio.button();
-  }
-  function moveDrag(e) {
-    if (!drag || e.pointerId !== drag.id) return;
-    drag.x = e.clientX;
-    drag.y = e.clientY;
-    if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 7)
-      drag.moved = true;
-    drag.ghost.style.left = e.clientX - drag.ox + "px";
-    drag.ghost.style.top = e.clientY - drag.oy + "px";
-    ctx.main
-      .querySelectorAll(".v2-drop.over")
-      .forEach((z) => z.classList.remove("over"));
-    const z = document
-      .elementFromPoint?.(e.clientX, e.clientY)
-      ?.closest?.(".v2-drop");
-    if (z && validDrop(drag.item, z)) z.classList.add("over");
-  }
   function dropAction(item, zone) {
     const id = item.dataset.drag,
       z = zone.dataset.zone;
     selected = null;
+    if (item.dataset.kind === "town-child") {openPlace(z.replace("visit-", "")); return;}
     if (
       active === "village" &&
       S.village.place === "market" &&
@@ -607,63 +567,43 @@
       return;
     }
   }
-  function endDrag(e) {
-    if (!drag || (e.pointerId != null && e.pointerId !== drag.id)) return;
-    const d = drag;
-    drag = null;
-    d.item.classList.remove("dragging");
-    d.ghost.remove();
-    ctx.main
-      .querySelectorAll(".v2-drop.over")
-      .forEach((z) => z.classList.remove("over"));
-    let zone = document.elementFromPoint?.(d.x, d.y)?.closest?.(".v2-drop");
-    if (e.type === "pointercancel") return;
-    suppressClick = Date.now() + 350;
-    if (!d.moved && active === "puzzle") {
-      selected = d.item.dataset.drag;
-      puzzleCase(false);
-      say("puzzle-select");
-      return;
-    }
-    if (!d.moved && d.item.dataset.defaultZone)
-      zone = ctx.main.querySelector(
-        `[data-zone="${d.item.dataset.defaultZone}"]`,
-      );
-    if (zone && validDrop(d.item, zone)) dropAction(d.item, zone);
-    else {
-      if (active === "puzzle") {
-        S.puzzle.tries++;
-        recordChoice(false, false);
-        say("puzzle-wrong");
-      }
-      if (S.village.place === "kitchen") say("kitchen-" + d.item.dataset.kind);
-      d.item.classList.add("bounce");
-      later(() => d.item?.classList.remove("bounce"), 320);
-      tone([320]);
-    }
+  function openPlace(place) {
+    resetVoice();
+    if (place === "market") {resetMarket(); market(); marketIntro();}
+    else if (place === "kitchen") {resetKitchen(); kitchen(); say("kitchen-start-" + S.kitchen.recipe.id);}
+    else {resetClinic(); clinic(); say("clinic-start-" + S.clinic.patient.id, "clinic-next-" + clinicNext());}
   }
-
+  function accepts(item, zone) {
+    if (!validDrop(item, zone)) return false;
+    const id=item.dataset.drag;
+    if (item.dataset.kind === "market-product") return !S.market.checked && S.market.mission.includes(id) && !S.market.cart.includes(id);
+    if (item.dataset.kind === "clinic-tool") return S.clinic.required.includes(id) && !S.clinic.done.has(id);
+    return true;
+  }
+  function rejectDrop(item, zone) {
+    const id=item.dataset.drag;
+    if (active === "puzzle") {S.puzzle.tries++; recordChoice(false,false); say("puzzle-wrong");}
+    else if (S.village.place === "market" && zone?.dataset.zone === "market-cart") {
+      say(S.market.cart.includes(id) ? "market-duplicate" : "market-other-"+id, "market-next-"+marketNext());
+    } else if (S.village.place === "kitchen") say("kitchen-"+item.dataset.kind);
+    else if (S.village.place === "clinic") say("clinic-wrong", "clinic-next-"+clinicNext());
+    else say("drag-help");
+    tone([320]);
+  }
   function bind() {
     abort?.abort();
     abort = new AbortController();
     const sig = abort.signal;
-    ctx.main.addEventListener(
-      "pointerdown",
-      (e) => {
-        const i = e.target.closest(".v2-drag");
-        if (i && !i.disabled) startDrag(e, i);
-      },
-      { signal: sig },
-    );
-    document.addEventListener("pointermove", moveDrag, {
-      signal: sig,
-      passive: false,
+    unbindDrag = window.SeowooPointerDrag.bind(ctx.main, {
+      items: ".v2-drag", zones: ".v2-drop", accept: accepts,
+      start() {audio.unlock(); audio.button(); N?.invalidate(); suppressClick=Date.now()+500;},
+      drop(item, zone) {suppressClick=Date.now()+400; dropAction(item,zone);},
+      reject: rejectDrop,
+      tap(item) {if(active === "puzzle") {selected=item.dataset.drag; puzzleCase(false); say("puzzle-select");}},
     });
-    document.addEventListener("pointerup", endDrag, { signal: sig });
-    document.addEventListener("pointercancel", endDrag, { signal: sig });
-    ctx.main.addEventListener(
-      "click",
-      (e) => {
+    const controls = "[data-place],[data-village-home],[data-market-checkout],[data-cook],[data-serve],[data-kitchen-next],[data-clinic-next]";
+    let control = null, ignoreControlClick = 0;
+    const activate = (e) => {
         const b = e.target.closest("button");
         if (!b || b.disabled) return;
         const d = b.dataset;
@@ -674,10 +614,7 @@
             selected = d.drag;
             puzzleCase(false);
             say("puzzle-select");
-          } else {
-            const z = ctx.main.querySelector(`[data-zone="${d.defaultZone}"]`);
-            if (validDrop(b, z)) dropAction(b, z);
-          }
+          } else say("drag-help");
           return;
         }
         if (b.classList.contains("v2-slot") && selected) {
@@ -690,26 +627,7 @@
           }
           return;
         }
-        if (d.place) {
-          resetVoice();
-          if (d.place === "market") {
-            resetMarket();
-            market();
-            marketIntro();
-          } else if (d.place === "kitchen") {
-            resetKitchen();
-            kitchen();
-            say("kitchen-start-" + S.kitchen.recipe.id);
-          } else {
-            resetClinic();
-            clinic();
-            say(
-              "clinic-start-" + S.clinic.patient.id,
-              "clinic-next-" + clinicNext(),
-            );
-          }
-          return;
-        }
+        if (d.place) {openPlace(d.place); return;}
         if ("villageHome" in d) {
           resetVoice();
           villageHub();
@@ -848,9 +766,23 @@
           say("calm-" + S.feelings.calmType);
           return;
         }
-      },
-      { signal: sig },
-    );
+      };
+    ctx.main.addEventListener("pointerdown", e => {
+      const button=e.target.closest(controls);
+      if(button&&!button.disabled&&e.isPrimary!==false) control={button,id:e.pointerId,x:e.clientX,y:e.clientY};
+    }, {signal:sig});
+    ctx.main.addEventListener("pointerup", e => {
+      const c=control;control=null;
+      if(e.pointerType!=="touch"||!c||c.id!==e.pointerId||e.target.closest(controls)!==c.button||Math.hypot(e.clientX-c.x,e.clientY-c.y)>12)return;
+      // Chrome can suppress the next compatibility click after a captured drag.
+      // A completed touch on the same control still activates exactly once.
+      e.preventDefault();ignoreControlClick=Date.now()+400;activate({target:c.button});
+    }, {signal:sig});
+    ctx.main.addEventListener("pointercancel",()=>{control=null;},{signal:sig});
+    ctx.main.addEventListener("click", e => {
+      if(e.target.closest(controls)&&Date.now()<ignoreControlClick)return;
+      activate(e);
+    }, {signal:sig});
   }
 
   function mount(kind, options) {
@@ -869,12 +801,11 @@
     stopTimers();
     abort?.abort();
     abort = null;
-    if (drag) {
-      drag.ghost?.remove();
-      drag = null;
-    }
+    unbindDrag?.();
+    unbindDrag = null;
     N?.reset();
     selected = null;
+    suppressClick = 0;
     ctx = null;
     active = null;
   }

@@ -17,6 +17,7 @@
     village: "village-icon",
     music: "xylophone",
     memory: "blocks",
+    blockpang: "blocks",
     alphabet: "book",
     koreanWords: "book",
     englishWords: "dog",
