@@ -123,6 +123,7 @@ const routes = [
         .evaluateAll((es) => es.forEach((e) => (e.loading = "eager")));
       await page.waitForFunction(
         () => [...document.images].every((i) => i.complete),
+        null,
         { timeout: 10000 },
       );
       const check = await page.evaluate(() => ({

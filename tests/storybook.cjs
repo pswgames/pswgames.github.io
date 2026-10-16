@@ -205,10 +205,15 @@ const tick = () => new Promise((r) => setImmediate(r));
     );
   for (const [key, asset] of Object.entries(w.SEOWOO_ART))
     assert(fs.existsSync(asset), "Missing art " + key);
-  for (const f of ["js/elevator.js", "js/panorama.js"]) {
-    const cp = require("child_process");
-    const original = cp.execFileSync("git", ["show", "ea7a866:" + f]);
-    assert(original.equals(fs.readFileSync(f)), f + " must remain unchanged");
+  // Baseline SHA-256s also work in a shallow CI checkout.
+  const preserved = {
+    "js/elevator.js": "1de5da475f94c2eae77272ec84867a5270bde6fabb74e25d18756e44d4b834d7",
+    "js/panorama.js": "202de9d9cf267fea31db9c776dd9832b48566c1eda075d1be7220fc38d522405",
+    "js/audio.js": "895a9810b157ccb94cd87914d1c58fa350416a6f00a4eb0505f4aaf74cf1a111",
+    "audio/files.js": "78495e9cfb874e695d4416f6c31ea6b548cd6039811cabfe8aac442ed4152774"
+};
+  for (const [file, digest] of Object.entries(preserved)) {
+    assert.equal(require('crypto').createHash('sha256').update(fs.readFileSync(file)).digest('hex'), digest, file + ' must remain unchanged');
   }
   console.log(
     "PASS storybook: 8 shopping lists, 3 recipes, 3 patients, 12 puzzles, 12 emotion stories, retry/duplicates/wrong choices, all illustrations, elevator source preservation",

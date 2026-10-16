@@ -1,8 +1,10 @@
 name: Storybook browser QA
 on:
   push:
-    branches: [feat/playground-art-voice-20261016, feat/playground-art-qa-20261016]
+    branches: [main, feat/playground-art-qa-20261016]
     paths: [js/**, css/**, data/**, audio/**, tests/**, index.html, sw.js, package.json, .github/workflows/storybook-browser-qa.yml]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

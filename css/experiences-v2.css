@@ -1729,3 +1729,9 @@
     height: 72px;
   }
 }
+
+/* A solid examination mat keeps pale fur legible over the detailed clinic. */
+.patient-drop {
+  background: #fffdf6;
+  box-shadow: 0 12px 25px #67857718;
+}

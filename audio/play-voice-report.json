@@ -1,0 +1,1868 @@
+{
+  "voice": "Sulafat",
+  "model": "mixed: original 3.1 and successor 3.8 / Sulafat",
+  "scope": "new play dialogue only",
+  "clips": [
+    {
+      "ids": [
+        "play-village-start"
+      ],
+      "text": "서우야, 오늘은 어디에서 놀까? 가고 싶은 집을 눌러봐.",
+      "path": "audio/voice/ko/cc339fd4671fc539.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.68,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-ready"
+      ],
+      "text": "필요한 물건을 다 담았어! 이제 계산하기를 눌러볼까?",
+      "path": "audio/voice/ko/ddd2c0c8bcc943cd.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.008,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-done"
+      ],
+      "text": "장보기 성공! 필요한 물건을 모두 샀어. 한 번 더 해볼까?",
+      "path": "audio/voice/ko/df9019536f8de4ec.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.92,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-duplicate"
+      ],
+      "text": "이미 장바구니에 담았네. 다른 물건도 찾아볼까?",
+      "path": "audio/voice/ko/abfa94cb8a90a0ed.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.696,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-wash"
+      ],
+      "text": "깨끗하게 씻었어! 씻은 재료를 눌러서 도마로 옮겨보자.",
+      "path": "audio/voice/ko/01ec4d690606ffc5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.296,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-chop"
+      ],
+      "text": "톡톡! 잘랐어. 이제 재료를 냄비에 넣어볼까?",
+      "path": "audio/voice/ko/c10dc4fe32aaeae1.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.032,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-add"
+      ],
+      "text": "냄비에 쏙! 남은 재료도 준비해보자.",
+      "path": "audio/voice/ko/1e266ecda67de0b0.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.048,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-ready"
+      ],
+      "text": "재료를 모두 넣었어! 요리하기를 눌러보자.",
+      "path": "audio/voice/ko/bc873c1cb64df497.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.216,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-cook"
+      ],
+      "text": "보글보글! 요리가 다 됐어. 접시에 담아볼까?",
+      "path": "audio/voice/ko/6ef1aa96988f260c.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.96,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-done"
+      ],
+      "text": "맛있는 요리 완성! 정말 멋진 요리사네.",
+      "path": "audio/voice/ko/12c9d8bf1496deff.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.408,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-raw"
+      ],
+      "text": "먼저 재료를 깨끗이 씻어보자. 싱크대로 옮겨볼까?",
+      "path": "audio/voice/ko/d2185c29da0e348e.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.96,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-washed"
+      ],
+      "text": "씻은 재료는 도마로 옮겨서 잘라보자.",
+      "path": "audio/voice/ko/3a09bd87336289b6.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.568,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-chopped"
+      ],
+      "text": "잘라 놓은 재료는 냄비에 넣어보자.",
+      "path": "audio/voice/ko/e6e3017344c4bf94.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.76,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-wrong"
+      ],
+      "text": "그 도구도 좋지만, 그림에 나온 도구부터 골라볼까?",
+      "path": "audio/voice/ko/93e417c57f3ce235.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.792,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-done"
+      ],
+      "text": "동물 친구를 잘 돌봐줬어. 정말 고마워! 다른 친구도 만나볼까?",
+      "path": "audio/voice/ko/99072bc07d0c12b4.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 5.544,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-start"
+      ],
+      "text": "그림을 누르고, 알맞은 자리를 눌러봐. 끌어서 놓아도 좋아.",
+      "path": "audio/voice/ko/e65c1551dea4f626.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.44,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-select"
+      ],
+      "text": "어디에 놓으면 좋을까? 알맞은 자리를 눌러봐.",
+      "path": "audio/voice/ko/869d96b7af390f9d.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.408,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-right"
+      ],
+      "text": "잘 찾았어! 다른 그림도 제자리에 놓아볼까?",
+      "path": "audio/voice/ko/004ff049281656d2.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.152,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-wrong"
+      ],
+      "text": "괜찮아. 그림을 보고 다른 자리에 놓아볼까?",
+      "path": "audio/voice/ko/9702b538fe18641d.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.768,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-done"
+      ],
+      "text": "그림을 모두 맞췄네! 다음 퍼즐도 해볼까?",
+      "path": "audio/voice/ko/49a69c083f500c32.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.384,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-feelings-start"
+      ],
+      "text": "서우야, 지금 기분이 어때? 네 마음과 닮은 얼굴을 골라봐.",
+      "path": "audio/voice/ko/fdb5d22ba29a0b2a.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.896,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-feelings-try"
+      ],
+      "text": "그렇게 느낄 수도 있어. 그림 속 친구의 표정도 살펴볼까?",
+      "path": "audio/voice/ko/7aa36f09967c7c05.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.392,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-calm-breathe"
+      ],
+      "text": "동그라미를 누르고, 풍선처럼 천천히 숨을 쉬어보자.",
+      "path": "audio/voice/ko/48d5ea198360833f.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.056,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-calm-count"
+      ],
+      "text": "반짝이는 별을 천천히 세 번 눌러보자.",
+      "path": "audio/voice/ko/71012bbab6f1d3ce.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.168,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-calm-stretch"
+      ],
+      "text": "동그라미를 누르고, 어깨를 으쓱 올렸다가 툭 내려보자.",
+      "path": "audio/voice/ko/d46c9a7b1b6387cd.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 7.872,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-calm-done"
+      ],
+      "text": "천천히 잘했어. 마음이 조금 편안해졌니?",
+      "path": "audio/voice/ko/3f227199b6988dd7.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.368,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-numbers"
+      ],
+      "text": "숫자랑 놀아볼까? 하고 싶은 그림을 눌러봐.",
+      "path": "audio/voice/ko/e03fc030c29d7e81.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.296,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-more"
+      ],
+      "text": "재미있는 놀이가 모였네! 마음에 드는 그림을 눌러봐.",
+      "path": "audio/voice/ko/97c5b985d2c9e967.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.992,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-numberBoard"
+      ],
+      "text": "좋아하는 숫자를 눌러봐. 하나부터 백까지 같이 읽어보자.",
+      "path": "audio/voice/ko/cea086fa20842eb3.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 7.08,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-alphabet"
+      ],
+      "text": "알파벳 카드를 눌러봐. 영어 이름을 들려줄게.",
+      "path": "audio/voice/ko/3450bb03fa050c2c.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.984,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-englishWords"
+      ],
+      "text": "궁금한 그림을 눌러봐. 영어로 이름을 들어보자.",
+      "path": "audio/voice/ko/bd84a0f058ac26f3.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 5.04,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-koreanWords"
+      ],
+      "text": "그림을 누르면 이름을 들려줄게. 어떤 그림이 궁금하니?",
+      "path": "audio/voice/ko/d4c6248838fed44d.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.872,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-hangul"
+      ],
+      "text": "글자를 눌러서 소리를 들어보자. 가, 나, 다!",
+      "path": "audio/voice/ko/33a1fb07b2db03da.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.608,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-music"
+      ],
+      "text": "어떤 멜로디를 들어볼까? 좋아하는 그림을 눌러봐.",
+      "path": "audio/voice/ko/3a2053ecbe889e6f.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.344,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-menu-treasure"
+      ],
+      "text": "서우가 모은 스티커야! 놀이를 마치면 하나씩 모을 수 있어.",
+      "path": "audio/voice/ko/4f0cf4d62428f2ca.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.728,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-memory-watch"
+      ],
+      "text": "그림을 잘 봐. 같은 순서로 눌러보자.",
+      "path": "audio/voice/ko/0ea09f676768ec71.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.016,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-done"
+      ],
+      "text": "멜로디가 끝났어. 또 들어볼까?",
+      "path": "audio/voice/ko/9b47b8e0755a56ea.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.784,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-stop"
+      ],
+      "text": "음악을 잠깐 멈췄어. 듣고 싶으면 다시 골라봐.",
+      "path": "audio/voice/ko/28485e7377dd7f27.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.128,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-all-done"
+      ],
+      "text": "끝까지 잘했어! 한 번 더 해볼까?",
+      "path": "audio/voice/ko/0213f05a5832a43c.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.248,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-quiz-english-start"
+      ],
+      "text": "영어 소리를 듣고 같은 글자를 찾아보자.",
+      "path": "audio/voice/ko/9455fa440888a9a4.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.2,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-listen-ready"
+      ],
+      "text": "다시 듣기를 누르면 안내를 들려줄게.",
+      "path": "audio/voice/ko/89ce5ef6307f90d5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.288,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-apple"
+      ],
+      "text": "사과, 잘 찾았어!",
+      "path": "audio/voice/ko/661ab9f0d96630f2.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.928,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-apple"
+      ],
+      "text": "이번에는 사과, 찾아볼까?",
+      "path": "audio/voice/ko/09fcb9e1c14bbd27.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.824,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-apple"
+      ],
+      "text": "사과도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/4b22f9412ad0591d.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.52,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-banana"
+      ],
+      "text": "바나나, 잘 찾았어!",
+      "path": "audio/voice/ko/74aee00f7bf028ce.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.128,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-banana"
+      ],
+      "text": "이번에는 바나나, 찾아볼까?",
+      "path": "audio/voice/ko/52fb7a8052cb66a0.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.824,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-banana"
+      ],
+      "text": "바나나도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/cbb00645751a6a51.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.248,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-milk"
+      ],
+      "text": "우유, 잘 찾았어!",
+      "path": "audio/voice/ko/9f607938a748ef6a.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.68,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-milk"
+      ],
+      "text": "이번에는 우유, 찾아볼까?",
+      "path": "audio/voice/ko/0d644decdc2e4f83.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.616,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-milk"
+      ],
+      "text": "우유도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/4082489c13d8c311.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.896,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-bread"
+      ],
+      "text": "식빵, 잘 찾았어!",
+      "path": "audio/voice/ko/3c631ee31dfd85cc.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.808,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-bread"
+      ],
+      "text": "이번에는 식빵, 찾아볼까?",
+      "path": "audio/voice/ko/2b78b1ebc622e7c5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.04,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-bread"
+      ],
+      "text": "식빵도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/38e3e403c1c12862.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.832,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-carrot"
+      ],
+      "text": "당근, 잘 찾았어!",
+      "path": "audio/voice/ko/ae110c4a5f5f05e4.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.992,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-carrot"
+      ],
+      "text": "이번에는 당근, 찾아볼까?",
+      "path": "audio/voice/ko/6690e74bfe1ce765.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.736,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-carrot"
+      ],
+      "text": "당근도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/ae2ea8da1ea9ebc0.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 7.344,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-egg"
+      ],
+      "text": "달걀, 잘 찾았어!",
+      "path": "audio/voice/ko/0a8adea8038dab3d.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.76,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-egg"
+      ],
+      "text": "이번에는 달걀, 찾아볼까?",
+      "path": "audio/voice/ko/ecf51f57f84782db.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.04,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-egg"
+      ],
+      "text": "달걀도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/501576fcd422c8a4.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 7.608,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-cheese"
+      ],
+      "text": "치즈, 잘 찾았어!",
+      "path": "audio/voice/ko/1cfb5c2a213f1939.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.896,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-cheese"
+      ],
+      "text": "이번에는 치즈, 찾아볼까?",
+      "path": "audio/voice/ko/1f0a29166b7168c5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.496,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-cheese"
+      ],
+      "text": "치즈도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/99472bcb5d1addf5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.32,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-grape"
+      ],
+      "text": "포도, 잘 찾았어!",
+      "path": "audio/voice/ko/7f2d960d1fd20c9b.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.896,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-grape"
+      ],
+      "text": "이번에는 포도, 찾아볼까?",
+      "path": "audio/voice/ko/dbd5f16374c4b46a.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.52,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-grape"
+      ],
+      "text": "포도도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/525de39f95acd478.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.2,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-pear"
+      ],
+      "text": "배, 잘 찾았어!",
+      "path": "audio/voice/ko/746c6ee9b56f7c06.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 1.872,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-pear"
+      ],
+      "text": "이번에는 배, 찾아볼까?",
+      "path": "audio/voice/ko/66c52cba2188ea5c.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.448,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-pear"
+      ],
+      "text": "배도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/7b00df20c4726fa5.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.104,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-cereal"
+      ],
+      "text": "시리얼, 잘 찾았어!",
+      "path": "audio/voice/ko/5838c42cbb147437.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.064,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-cereal"
+      ],
+      "text": "이번에는 시리얼, 찾아볼까?",
+      "path": "audio/voice/ko/7cfe663b59c85d68.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.688,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-cereal"
+      ],
+      "text": "시리얼도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/660d4d2a5ba311a6.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.368,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-yogurt"
+      ],
+      "text": "요거트, 잘 찾았어!",
+      "path": "audio/voice/ko/faf14a342f7aebca.mp3",
+      "recovered_checkpoint": true,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.16,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-yogurt"
+      ],
+      "text": "이번에는 요거트, 찾아볼까?",
+      "path": "audio/voice/ko/7a10f265caf127de.mp3",
+      "seconds": 3.09,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 3.144,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-yogurt"
+      ],
+      "text": "요거트도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/c2bbc7fa393e12ed.mp3",
+      "seconds": 4.63,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 4.68,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-pick-juice"
+      ],
+      "text": "주스, 잘 찾았어!",
+      "path": "audio/voice/ko/7decf87b8ce2e156.mp3",
+      "seconds": 2.13,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.184,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-next-juice"
+      ],
+      "text": "이번에는 주스, 찾아볼까?",
+      "path": "audio/voice/ko/d5dc0fb9c5ac0068.mp3",
+      "seconds": 2.68,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "file_seconds": 2.736,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-other-juice"
+      ],
+      "text": "주스도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+      "path": "audio/voice/ko/eb9b99cc8cb4ec65.mp3",
+      "seconds": 4.73,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "single_utterance": true,
+      "file_seconds": 4.8,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-1"
+      ],
+      "text": "오늘은 바나나, 달걀, 치즈. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/1b85c9d88623219b.mp3",
+      "seconds": 5.21,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "single_utterance": true,
+      "file_seconds": 5.28,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-0"
+      ],
+      "text": "오늘은 사과, 우유, 식빵. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/f48f4dbc0124af9e.mp3",
+      "seconds": 6.02,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.072,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-2"
+      ],
+      "text": "오늘은 포도, 요거트, 시리얼. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/77ee685acbb33fe6.mp3",
+      "seconds": 6.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.432,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-3"
+      ],
+      "text": "오늘은 배, 주스, 당근. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/4361d0a0909ae6ab.mp3",
+      "seconds": 5.84,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 5.904,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-4"
+      ],
+      "text": "오늘은 우유, 달걀, 식빵. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/92ca4fdc34e3aec7.mp3",
+      "seconds": 6.19,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.24,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-5"
+      ],
+      "text": "오늘은 사과, 바나나, 요거트. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/b5c584344f6fa4ec.mp3",
+      "seconds": 5.89,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 5.952,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-6"
+      ],
+      "text": "오늘은 치즈, 식빵, 주스. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/925c5654b4c6b5ed.mp3",
+      "seconds": 5.43,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 5.496,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-market-start-7"
+      ],
+      "text": "오늘은 당근, 배, 달걀. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/3058796265ad4e89.mp3",
+      "seconds": 5.39,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 5.448,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-start-soup"
+      ],
+      "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/f5f11439f05e71c2.mp3",
+      "seconds": 6.45,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.504,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-start-omelet"
+      ],
+      "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/953de82540fc4d44.mp3",
+      "seconds": 6.24,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.288,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-kitchen-start-stew"
+      ],
+      "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+      "path": "audio/voice/ko/344d16609a768b07.mp3",
+      "seconds": 6.78,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 6.84,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-stethoscope"
+      ],
+      "text": "청진기로 콩닥콩닥 심장 소리를 들었어.",
+      "path": "audio/voice/ko/055b49e5d68bc183.mp3",
+      "seconds": 4.01,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 4.08,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-thermometer"
+      ],
+      "text": "체온계로 체온을 쟀어.",
+      "path": "audio/voice/ko/b3a8730808c213b5.mp3",
+      "seconds": 2.25,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 2.304,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-bandage"
+      ],
+      "text": "반창고를 살포시 붙였어.",
+      "path": "audio/voice/ko/466487de6430a4a1.mp3",
+      "seconds": 2.48,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 2.544,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-brush"
+      ],
+      "text": "빗으로 털을 살살 빗어줬어.",
+      "path": "audio/voice/ko/5a44154df9a09998.mp3",
+      "seconds": 3.07,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-1",
+      "file_seconds": 3.12,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-water"
+      ],
+      "text": "목마른 친구에게 물을 줬어.",
+      "path": "audio/voice/ko/9921ef61f963b92b.mp3",
+      "seconds": 3.06,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 3.12,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-use-treat"
+      ],
+      "text": "친구에게 간식을 줬어.",
+      "path": "audio/voice/ko/28a758bf1bcb6325.mp3",
+      "seconds": 2.09,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.16,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-stethoscope"
+      ],
+      "text": "이번에는 청진기, 골라볼까?",
+      "path": "audio/voice/ko/ff5197080f832883.mp3",
+      "seconds": 2.91,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.976,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-thermometer"
+      ],
+      "text": "이번에는 체온계, 골라볼까?",
+      "path": "audio/voice/ko/4dfe0d57290989e9.mp3",
+      "seconds": 2.8,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.856,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-bandage"
+      ],
+      "text": "이번에는 반창고, 골라볼까?",
+      "path": "audio/voice/ko/f8785b588612e0a4.mp3",
+      "seconds": 2.95,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 3.0,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-brush"
+      ],
+      "text": "이번에는 빗, 골라볼까?",
+      "path": "audio/voice/ko/d755bf710020f397.mp3",
+      "seconds": 2.47,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.52,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-water"
+      ],
+      "text": "이번에는 물, 골라볼까?",
+      "path": "audio/voice/ko/a004a923f9ab8f54.mp3",
+      "seconds": 2.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.424,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-next-treat"
+      ],
+      "text": "이번에는 간식, 골라볼까?",
+      "path": "audio/voice/ko/d634781d0f788491.mp3",
+      "seconds": 2.57,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 2.64,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-start-dog"
+      ],
+      "text": "멍멍이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/1f5a9dc6641d684e.mp3",
+      "seconds": 4.44,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 4.488,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-start-cat"
+      ],
+      "text": "야옹이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/9b0d4d84b3f8605d.mp3",
+      "seconds": 4.37,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 4.44,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-clinic-start-rabbit"
+      ],
+      "text": "토끼를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+      "path": "audio/voice/ko/9ae20be84d35064a.mp3",
+      "seconds": 4.13,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 4.2,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-shape-garden"
+      ],
+      "text": "같은 모양의 화분을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/4d490b1328763e3a.mp3",
+      "seconds": 5.42,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 5.472,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-animal-home"
+      ],
+      "text": "동물 친구를 알맞은 집으로 데려가줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/6517e363f764eaaf.mp3",
+      "seconds": 5.99,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 6.048,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-vehicle-place"
+      ],
+      "text": "탈것을 알맞은 곳으로 보내줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/07d31e47cc5154b0.mp3",
+      "seconds": 5.44,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-2",
+      "file_seconds": 5.496,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-fruit-color"
+      ],
+      "text": "과일을 같은 색 바구니에 담아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/76f25b65637b4bb1.mp3",
+      "seconds": 6.23,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 6.288,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-big-small"
+      ],
+      "text": "큰 것은 큰 집, 작은 것은 작은 집. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/461247bde551e010.mp3",
+      "seconds": 8.65,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 8.712,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-food-place"
+      ],
+      "text": "음식을 알맞은 곳에 정리해줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/b872072374cb0482.mp3",
+      "seconds": 7.03,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 7.08,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-weather-wear"
+      ],
+      "text": "날씨에 맞는 물건을 골라줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/07b40bd70cd84ae8.mp3",
+      "seconds": 5.73,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.784,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-bathroom-order"
+      ],
+      "text": "손 씻는 순서대로 놓아보자. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/328efe78e8e13cf2.mp3",
+      "seconds": 5.43,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.496,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-half-match"
+      ],
+      "text": "반쪽을 맞춰 하나로 만들어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/7e81d9f174176922.mp3",
+      "seconds": 5.66,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.712,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-bedtime"
+      ],
+      "text": "잠자기 전에 필요한 것을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/6f0742e903d0c3fa.mp3",
+      "seconds": 6.33,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 6.384,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-picnic"
+      ],
+      "text": "소풍에 필요한 것만 가방에 넣어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/629a15f2354938fd.mp3",
+      "seconds": 5.61,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.664,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-puzzle-music-family"
+      ],
+      "text": "같은 악기 가족끼리 모아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/bcbcfcae13b2d302.mp3",
+      "seconds": 5.27,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.328,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-tower"
+      ],
+      "text": "열심히 쌓은 블록 탑이 갑자기 무너졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/ac35de16f9275c52.mp3",
+      "seconds": 6.6,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 6.648,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-tower"
+      ],
+      "text": "속상할 수 있어. 다시 천천히 쌓아보자.",
+      "path": "audio/voice/ko/48cc7497ff15dca2.mp3",
+      "seconds": 4.08,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 4.128,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-thunder"
+      ],
+      "text": "창밖에서 아주 큰 천둥소리가 났어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/4c6030bc92cd96d9.mp3",
+      "seconds": 6.5,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 6.552,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-thunder"
+      ],
+      "text": "무서울 수 있어. 어른 손을 잡고 천천히 숨 쉬어보자.",
+      "path": "audio/voice/ko/8c440236a2286737.mp3",
+      "seconds": 5.19,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.256,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-bubble"
+      ],
+      "text": "커다란 비눗방울이 반짝이며 날아가. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/3db3dd57d563a795.mp3",
+      "seconds": 5.74,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3",
+      "file_seconds": 5.808,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-bubble"
+      ],
+      "text": "신나고 기쁜 마음이네. 같이 웃어보자.",
+      "path": "audio/voice/ko/12b4b62dc144f695.mp3",
+      "seconds": 4.68,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 4.728,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-toy"
+      ],
+      "text": "친구가 묻지 않고 내가 놀던 자동차를 가져갔어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/e30183f7009fdc3f.mp3",
+      "seconds": 7.22,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 7.272,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-toy"
+      ],
+      "text": "화가 날 수 있어. '나도 놀고 있었어'라고 말해보자.",
+      "path": "audio/voice/ko/840621f17e1fa352.mp3",
+      "seconds": 5.03,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 5.088,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-mom"
+      ],
+      "text": "집에 오니 엄마가 반갑게 꼭 안아줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/9fd84b8e89ff6692.mp3",
+      "seconds": 6.4,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 6.456,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-mom"
+      ],
+      "text": "마음이 따뜻하고 기쁘구나.",
+      "path": "audio/voice/ko/c82f70c339bc5716.mp3",
+      "seconds": 3.29,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 3.36,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-dark"
+      ],
+      "text": "불이 꺼져서 방이 아주 어두워졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/e502c8aba93530d4.mp3",
+      "seconds": 5.5,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 5.568,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-dark"
+      ],
+      "text": "깜깜하면 무서울 수 있어. 불을 켜고 천천히 둘러보자.",
+      "path": "audio/voice/ko/3c03d24c721f44b2.mp3",
+      "seconds": 6.02,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 6.072,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-cookie"
+      ],
+      "text": "먹으려고 들고 있던 쿠키가 바닥에 떨어졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/8503b2f92b7a45ff.mp3",
+      "seconds": 7.05,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 7.104,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-cookie"
+      ],
+      "text": "아쉽고 속상한 마음이 들 수 있어.",
+      "path": "audio/voice/ko/e1e114273ed214b9.mp3",
+      "seconds": 3.74,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 3.792,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-birthday"
+      ],
+      "text": "문을 열었더니 친구들이 갑자기 생일 노래를 불러줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/5c184b2ecdd28515.mp3",
+      "seconds": 6.64,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 6.696,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-birthday"
+      ],
+      "text": "깜짝 놀랐구나. 그리고 곧 기쁜 마음도 들 수 있어.",
+      "path": "audio/voice/ko/5484df89f0f2190d.mp3",
+      "seconds": 5.23,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 5.28,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-splash"
+      ],
+      "text": "친구가 뛰다가 내 옷에 물을 많이 튀겼어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/d5946afa9c772990.mp3",
+      "seconds": 6.15,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 6.216,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-splash"
+      ],
+      "text": "화가 날 수 있어. 먼저 몸을 닦고 천천히 말해보자.",
+      "path": "audio/voice/ko/5a9d8b9df6ecdf37.mp3",
+      "seconds": 4.98,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 5.04,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-puppy"
+      ],
+      "text": "강아지가 달려와서 꼬리를 흔들며 반겨줬어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/37fd1e826b4971d6.mp3",
+      "seconds": 6.18,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-4",
+      "file_seconds": 6.24,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-puppy"
+      ],
+      "text": "반갑고 기쁜 마음이 들었겠네.",
+      "path": "audio/voice/ko/e00a2b1cd8c25fdc.mp3",
+      "seconds": 2.49,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 2.544,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-balloon"
+      ],
+      "text": "옆에 있던 풍선이 갑자기 큰 소리를 내며 터졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/ab5d7b44b711f2da.mp3",
+      "seconds": 7.71,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 7.776,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-balloon"
+      ],
+      "text": "깜짝 놀랄 수 있어. 놀란 몸을 천천히 진정시켜보자.",
+      "path": "audio/voice/ko/4156d00ea5f00813.mp3",
+      "seconds": 5.08,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 5.136,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-story-turn"
+      ],
+      "text": "미끄럼틀에서 친구가 새치기를 했어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/905a07dafaf3e690.mp3",
+      "seconds": 6.66,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 6.72,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-response-turn"
+      ],
+      "text": "화가 날 수 있어. '내 차례야'라고 또박또박 말해보자.",
+      "path": "audio/voice/ko/959d390c6d73e9d6.mp3",
+      "seconds": 5.05,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 5.112,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-mood-happy"
+      ],
+      "text": "기뻐요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/7ae5c62eca95e9ec.mp3",
+      "seconds": 4.25,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 4.32,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-mood-sad"
+      ],
+      "text": "속상해요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/16aa16d52be29e71.mp3",
+      "seconds": 4.13,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 4.2,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-mood-angry"
+      ],
+      "text": "화나요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/66531dcc05494a05.mp3",
+      "seconds": 3.79,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 3.84,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-mood-scared"
+      ],
+      "text": "무서워요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/c91e89e119b79a3c.mp3",
+      "seconds": 4.7,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 4.752,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-mood-surprised"
+      ],
+      "text": "놀랐어요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/bfbee80d222c3318.mp3",
+      "seconds": 4.64,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 4.704,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-0"
+      ],
+      "text": "토끼 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/c9b7cd1624e9a960.mp3",
+      "seconds": 3.04,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 3.096,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-1"
+      ],
+      "text": "자동차 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/a99c3d86bdf71865.mp3",
+      "seconds": 2.38,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 2.448,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-2"
+      ],
+      "text": "잘자요 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/a9ae7b3a469531e0.mp3",
+      "seconds": 3.07,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 3.12,
+      "decode_verified": true
+    },
+    {
+      "ids": [
+        "play-music-3"
+      ],
+      "text": "신나는 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/90be2274ff41706b.mp3",
+      "seconds": 2.88,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5",
+      "file_seconds": 2.928,
+      "decode_verified": true
+    }
+  ],
+  "status": "complete",
+  "remaining": 0,
+  "failed": [],
+  "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved",
+  "catalog_entries": 148,
+  "validation": {
+    "mp3_decode": "148/148 passed",
+    "duration_seconds": [
+      1.2,
+      8.712
+    ],
+    "all_transcripts_human_auditioned": false
+  }
+}

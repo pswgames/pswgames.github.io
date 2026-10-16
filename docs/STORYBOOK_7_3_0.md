@@ -15,7 +15,7 @@
 
 ## 음성 구조
 
-기존 `SeowooAudioManager`와 로컬 MP3 재생 경로를 공유한다. 한국어는 기존 Gemini 3.1 Flash TTS Preview / Sulafat 설정을 사용한다. 영어 JennyNeural 음원은 유지한다. 새 음원 매핑을 별도 `play-files.js`로 추가하므로 기존 `audio/files.js`와 기존 MP3를 덮어쓰지 않는다. 배포 후 음성 서비스에 요청하거나 비밀 키를 클라이언트에 넣지 않는다.
+기존 `SeowooAudioManager`와 로컬 MP3 재생 경로를 공유한다. 기존 한국어 Gemini 3.1 Flash TTS Preview / Sulafat 음원은 그대로 보존한다. 신규 148개 중 78개는 같은 모델·목소리로 생성했다. 기존 모델의 무료 일일 생성 한도에 도달해 나머지 70개는 후속 Gemini 3.8 Flash TTS의 같은 Sulafat 프리셋으로 생성했다. 목소리 프리셋은 같지만 모델 간 억양·리듬이 완전히 동일하다고 보장하지 않는다. 개별 음원의 모델과 길이는 `audio/play-voice-report.json`에 기록한다. 영어 JennyNeural 음원은 유지한다. 새 음원 매핑을 별도 `play-files.js`로 추가하므로 기존 `audio/files.js`와 기존 MP3를 덮어쓰지 않는다. 배포 후 음성 서비스에 요청하거나 비밀 키를 클라이언트에 넣지 않는다.
 
 `play-dialogue.json`의 148개 대사는 실제 상태에 연결한다. 장보기 목록·찾은 상품·다음 상품, 재료 준비 단계·요리 완성, 진료 도구·완료, 퍼즐 안내·선택·재시도, 감정 이야기·공감, 음악과 메뉴 안내를 포함한다. 녹음 생성 스크립트는 기존 파일을 건너뛴다. 사용하지 않는 준비 대사는 재생하지 않는다.
 
