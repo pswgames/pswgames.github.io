@@ -166,3 +166,28 @@
     height: 115px;
   }
 }
+
+.category-tabs {
+  flex-wrap: wrap;
+  overflow: visible;
+  gap: 8px;
+}
+.category-tabs button {
+  min-height: 48px;
+}
+@media (max-width: 600px) {
+  .category-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .category-tabs button {
+    padding: 8px 3px;
+    min-width: 0;
+    font-size: 14px;
+  }
+}
+
+/* Isolate the generous white margins of each generated atlas sprite. */
+.v2-icon img {
+  clip-path: inset(2% 3% 7% 3%);
+}

@@ -1705,3 +1705,27 @@
     transition: none !important;
   }
 }
+
+/* Size is a game rule: card sizing must never erase the big/small difference. */
+.v2-piece .v2-icon.icon-small,
+.slot-visual > .v2-icon.icon-small {
+  width: 48px;
+  height: 48px;
+}
+.v2-piece .v2-icon.icon-big,
+.slot-visual > .v2-icon.icon-big {
+  width: 96px;
+  height: 96px;
+}
+@media (max-width: 600px) {
+  .v2-piece .v2-icon.icon-small,
+  .slot-visual > .v2-icon.icon-small {
+    width: 36px;
+    height: 36px;
+  }
+  .v2-piece .v2-icon.icon-big,
+  .slot-visual > .v2-icon.icon-big {
+    width: 72px;
+    height: 72px;
+  }
+}

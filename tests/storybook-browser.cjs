@@ -103,6 +103,16 @@ const routes = [
     };
     await tap("[data-sound]");
     await tap("[data-sound]");
+    await page.evaluate(() => {
+      const a = window.SeowooCore.audio,
+        original = a.playVoice.bind(a);
+      window.__voiceQA.completed = [];
+      a.playVoice = async (id) => {
+        const ok = await original(id);
+        if (ok) window.__voiceQA.completed.push(id);
+        return ok;
+      };
+    });
     const go = async (r) => {
       await page.evaluate((r) => window.SeowooApp.go(r), r);
       await page.waitForTimeout(100);
@@ -271,6 +281,21 @@ const routes = [
       await page.waitForTimeout(9000);
       const voice = await page.evaluate(() => window.__voiceQA);
       assert(voice.starts > 0, "No decoded MP3 started");
+      assert(
+        voice.completed.some((id) => id.startsWith("play-calm-")),
+        "New recorded prompt did not finish",
+      );
+      assert(
+        await page.evaluate(() => {
+          const a = window.SeowooCore.audio;
+          return a.decodedVoices.has(
+            a.manifest[
+              "play-calm-" + window.SeowooExperiencesV2.state.feelings.calmType
+            ].src,
+          );
+        }),
+        "New MP3 not decoded",
+      );
       assert.deepEqual(voice.fallbacks, [], "Unexpected device TTS fallback");
       await go("elevator");
       await tap('[data-floor="2"]');
@@ -313,7 +338,24 @@ const routes = [
         .locator(".v2-scene-img")
         .evaluate((i) => i.complete && i.naturalWidth > 0),
     );
-    results.push({ profile: "offline-chromium", cachedArt: "pass" });
+    await page.locator("[data-narration-repeat]").click();
+    const offlineVoice = await page.evaluate(async () => {
+      const a = window.SeowooCore.audio;
+      const ok = await a.playVoice("play-village-start");
+      return {
+        ok,
+        decoded: a.decodedVoices.has(a.manifest["play-village-start"].src),
+      };
+    });
+    assert(
+      offlineVoice.ok && offlineVoice.decoded,
+      "Offline local voice did not play",
+    );
+    results.push({
+      profile: "offline-chromium",
+      cachedArt: "pass",
+      cachedVoice: "pass",
+    });
     await browser.close();
   }
   fs.writeFileSync(
