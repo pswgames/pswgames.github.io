@@ -40,6 +40,11 @@
       drag = null; cancelAnimationFrame(frame); frame=0; clearOver();
       try { d.item.releasePointerCapture?.(d.id); } catch {}
       const cancelled = e.type !== "pointerup", zone = cancelled ? null : target(d.x,d.y);
+      if (!d.moved) {
+        d.ghost.remove(); ghost=null; d.item.classList.remove("pointer-dragging");
+        if (!cancelled) options.tap?.(d.item);
+        return;
+      }
       const ok = d.moved && zone && options.accept(d.item, zone);
       settling = true;
       const dest = ok ? zone.getBoundingClientRect() : d.rect;

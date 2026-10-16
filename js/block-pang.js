@@ -93,7 +93,7 @@
     const finalBoard=state.board;state.board=effect.beforeClear;render();state.board=finalBoard;
     effect.cells.forEach(i=>ctx.main.querySelector(`[data-board-cell="${i}"]`).classList.add("placed"));
     celebrate(effect);sound(lines?(state.combo>1?"combo":"clear"):"place");
-    say(lines?(state.combo>1?"combo":lines>1?"multi":"clear"):"place");
+    if(!state.over) say(lines?(state.combo>1?"combo":lines>1?"multi":"clear"):"place");
     later(()=>{
       locked=false;render();
       if(state.over){window.SeowooCore.complete("blockpang");say("over");ctx.main.querySelector("[data-block-restart]")?.focus({preventScroll:true});}
@@ -112,7 +112,7 @@
       if(e.target.closest("[data-block-resume]"))setPaused(false);
       if(e.target.closest("[data-block-restart]")){cancel();state=E.create();paused=false;locked=false;persist();render();say("start");}
     },{signal});
-    document.addEventListener("visibilitychange",()=>{if(document.hidden&&!state.over){cancel();paused=true;if(!locked)render();}},{signal});
+    document.addEventListener("visibilitychange",()=>{if(document.hidden&&!state.over){cancel();paused=true;render();}},{signal});
     window.addEventListener("resize",cancel,{signal});window.addEventListener("blur",cancel,{signal});
   }
   function unmount(){cancel();abort?.abort();abort=null;timers.forEach(clearTimeout);timers.clear();ctx=null;locked=false;}

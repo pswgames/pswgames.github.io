@@ -257,9 +257,7 @@ const routes = [
       const [id, , target] = await page.evaluate(
         () => window.SeowooExperiencesV2.state.puzzle.case.pieces[0],
       );
-      await page
-        .locator(`[data-drag="${id}"]`)
-        .dragTo(page.locator(`[data-zone="p-${target}"]`));
+      await dragTo(`[data-drag="${id}"]`, `[data-zone="p-${target}"]`);
       assert(
         await page.evaluate(
           (id) => window.SeowooExperiencesV2.state.puzzle.placed.has(id),
