@@ -12,9 +12,34 @@ concurrency:
   group: storybook-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  browser:
+  source:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
+      - run: npm test
+  browser:
+    needs: source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: desktop-chromium
+            engine: chromium
+          - profile: android-chromium
+            engine: chromium
+          - profile: iphone-webkit
+            engine: webkit
+          - profile: tablet-webkit
+            engine: webkit
+          - profile: tablet-landscape-webkit
+            engine: webkit
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,12 +47,13 @@ jobs:
           node-version: '22'
       - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
       - run: npm install --no-save --ignore-scripts --no-audit --no-fund --no-package-lock playwright@1.58.2
-      - run: npx playwright install --with-deps chromium webkit
-      - run: npm test
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
       - run: node tests/storybook-browser.cjs
+        env:
+          QA_PROFILE: ${{ matrix.profile }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: storybook-browser-qa
+          name: storybook-browser-qa-${{ matrix.profile }}
           path: .test-results/storybook
           retention-days: 7

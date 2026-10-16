@@ -1,15 +1,15 @@
 module.exports=async function({page,spec,context,go,tap,layout,out,results}){
  const assert=require('assert/strict'),{dragTo,block,path}=require('./browser-drag.cjs')(page,spec,context);
  await go('potty');
- await dragTo('.potty-child','[data-potty-zone]',{cancel:true});assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),'0');
- const child=await page.locator('.potty-child').boundingBox(),room=await page.locator('.potty-drag-scene').boundingBox();
+ await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]',{cancel:true});assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),'0');
+ const child=await page.locator('.potty-drag-scene .potty-child').boundingBox(),room=await page.locator('.potty-drag-scene').boundingBox();
  await path({x:child.x+child.width/2,y:child.y+child.height/2},{x:room.x+room.width*.45,y:room.y+room.height*.85});
  assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),'0','wrong potty target returns');
- for(let step=0;step<3;step++){await dragTo('.potty-child','[data-potty-zone]');assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),String(step+1));}
- await tap('[data-potty="kind"]');await dragTo('.potty-child','[data-potty-zone]');
- assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),'5');await dragTo('.potty-child','[data-potty-zone]');assert(await page.locator('.potty-child').isDisabled());
- await page.waitForTimeout(850);await dragTo('.potty-child','[data-potty-zone]');
- for(let i=0;i<3;i++)await dragTo('.potty-child','[data-potty-zone]');
+ for(let step=0;step<3;step++){await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]');assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),String(step+1));}
+ await tap('[data-potty="kind"]');await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]');
+ assert.equal(await page.locator('.potty-drag-scene').getAttribute('data-step'),'5');await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]');assert(await page.locator('.potty-drag-scene .potty-child').isDisabled());
+ await page.waitForTimeout(850);await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]');
+ for(let i=0;i<3;i++)await dragTo('.potty-drag-scene .potty-child','[data-potty-zone]');
  assert(await page.locator('[data-potty="restart"]').isVisible());await layout('potty-drag-complete');
  await tap('[data-potty="restart"]');await page.screenshot({path:out+'/'+spec.id+'-potty-drag.png',fullPage:true});
  results.push({profile:spec.id,flow:'potty: cancel, wrong target, 8 stages, flush lock, 3 washes, restart',status:'pass'});

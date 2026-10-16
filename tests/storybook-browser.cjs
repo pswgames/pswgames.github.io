@@ -4,6 +4,7 @@ const { chromium, webkit } = require("playwright"),
   fs = require("fs"),
   { spawn } = require("child_process");
 const visualOnly = process.argv.includes("--visual-only");
+const profileOnly = process.env.QA_PROFILE;
 const out = ".test-results/storybook";
 fs.mkdirSync(out, { recursive: true });
 const browsers = [];
@@ -66,7 +67,7 @@ const routes = [
       height: 1180,
       touch: true,
     },
-  ]) {
+  ].filter(spec=>!profileOnly||spec.id===profileOnly)) {
     const browser = await spec.type.launch({ headless: true });
     browsers.push(browser);
     const context = await browser.newContext({
@@ -326,7 +327,8 @@ const routes = [
     }
     await browser.close();
   }
-  if (!visualOnly) {
+  assert(results.length>0,"Unknown or empty browser profile");
+  if (!visualOnly && (!profileOnly || profileOnly === "desktop-chromium")) {
     // Install real service worker, then reload offline and decode a cached new clip.
     const browser = await chromium.launch();
     browsers.push(browser);

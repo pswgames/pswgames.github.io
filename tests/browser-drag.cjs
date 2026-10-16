@@ -27,6 +27,7 @@ module.exports=function(page,spec,context){
       await page.mouse.up();
     }
     await page.waitForTimeout(210);
+    await page.locator(".pointer-ghost").waitFor({state:"detached",timeout:2000});
   }
   async function dragTo(sel,zoneSel,options={}){
     const item=page.locator(sel).first(),zone=page.locator(zoneSel).first();
