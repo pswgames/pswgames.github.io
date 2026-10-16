@@ -12,6 +12,10 @@ window.SEOWOO_INTERACTIONS = {
     {zone:null, label:"혼자서도 잘했어!", x:51, y:75},
   ],
   blockSounds: {
+    start: [[392,.12,"sine",0],[523,.18,"sine",.09],[659,.22,"sine",.18]],
+    pause: [[440,.12,"sine",0],[330,.18,"sine",.09]],
+    resume: [[330,.12,"sine",0],[440,.18,"sine",.09]],
+    over: [[523,.2,"sine",0],[440,.22,"sine",.15],[392,.32,"sine",.3]],
     pick: [[440,.07,"sine",0],[660,.08,"sine",.035]],
     place: [[294,.1,"triangle",0],[588,.14,"sine",.055]],
     clear: [[523,.16,"sine",0],[659,.18,"sine",.06],[784,.26,"sine",.12]],
