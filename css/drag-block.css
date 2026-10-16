@@ -3,8 +3,8 @@
 .v2-drag img,.potty-child img,.block-grab *{pointer-events:none;-webkit-user-drag:none}
 .pointer-dragging{opacity:.22!important}.pointer-ghost{cursor:grabbing;will-change:transform;box-shadow:0 12px 25px #24446624;contain:layout style;animation:none!important}
 .drag-over{outline:5px solid #8bcbaa!important;outline-offset:4px;box-shadow:0 0 0 10px #c9f3dd90!important}
-.town-child{padding:0;background:none;border:0;border-radius:35%;width:100%;min-height:80px}
-.v2-town-kid .town-child .story-child{width:100%;height:auto}.town-child.pointer-ghost{background:transparent;box-shadow:none}
+.town-child{padding:0;background:none;border:0;border-radius:35%;width:160px;height:190px;flex:0 0 160px;min-height:80px}
+.town-child .story-child{width:100%;height:100%;object-fit:contain}.town-child.pointer-ghost{background:transparent;box-shadow:none}
 .v2-town-kid{pointer-events:auto}.v2-town-kid .kid-talk{pointer-events:none}
 .home-featured-card.blockpang{background:#e1f6ed}.home-featured-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 @media(max-width:1100px){.home-featured-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -41,3 +41,7 @@
 @media(max-width:600px){.block-world .play-header{margin-bottom:4px}.block-game{padding:0 12px 18px;--unit:18px;--gap:2px}.block-intro img{width:48px;height:48px}.block-intro p{font-size:14px}.block-scoreboard{padding:9px 2px;margin-bottom:12px}.block-board-wrap{padding:9px;border-radius:20px}.block-board{gap:3px}.block-cell,.block-tile{border-radius:5px}.block-cell.filled:after,.block-tile:after{inset:4px}.block-tray{margin-top:18px;min-height:110px;padding:5px;gap:5px}.block-pocket,.block-grab{min-height:92px}.block-help{margin-top:8px}.potty-drag-guide{font-size:16px;padding:10px}.potty-target{border-radius:16px}.potty-drag-hint{font-size:15px}.potty-layout{gap:12px!important}}
 @media(orientation:landscape) and (max-height:600px){.block-game{width:440px}.block-world{overflow:auto}}
 @media(prefers-reduced-motion:reduce){.potty-target,.potty-child img,.block-cell,.block-spark,.block-banner{animation:none!important}.pointer-ghost,.block-ghost{transition:none!important}}
+
+.potty-target .potty-art{width:52px;height:52px;flex-shrink:0}
+@media(max-width:600px){.town-child{width:100px;height:140px;flex-basis:100px}.town-child .story-child{width:100%;height:100%}}
+@media(max-width:360px){.block-game{--unit:16px}}

@@ -138,7 +138,7 @@
         <button class="world-building market v2-drop" data-zone="visit-market" data-accept="town-child" data-place="market">${V("apple")}<span class="building-badge">장보기</span><b>알록달록 마트</b><small>필요한 물건을 골라봐</small></button>
         <button class="world-building kitchen v2-drop" data-zone="visit-kitchen" data-accept="town-child" data-place="kitchen">${V("meal")}<span class="building-badge">요리</span><b>우리집 주방</b><small>씻고, 썰고, 보글보글</small></button>
         <button class="world-building clinic v2-drop" data-zone="visit-clinic" data-accept="town-child" data-place="clinic">${V("dog")}<span class="building-badge">돌보기</span><b>동물 병원</b><small>아픈 친구를 건강하게</small></button>
-        <div class="v2-town-kid"><button class="v2-drag town-child" data-drag="seowoo" data-kind="town-child" aria-label="서우를 집으로 끌어 옮기기">${character("happy")}</button><div class="kid-talk">나를 잡고 집으로 데려다줘!</div></div>
+        <div class="v2-town-kid"><button class="v2-drag town-child" data-drag="seowoo" data-kind="town-child" aria-label="서우를 집으로 끌어 옮기기"><img class="story-child" src="assets/art/v3/seowoo-drag.webp" alt="서우" draggable="false"></button><div class="kid-talk">나를 잡고 집으로 데려다줘!</div></div>
       </div>`,
       "v2-village",
     );

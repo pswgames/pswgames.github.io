@@ -59,6 +59,16 @@ const n = box.window.SeowooNarrator,
   await tick();
   assert.equal(plays.at(-1), "play-d");
   n.reset();
+  finishes.shift()?.(false);
+  const before=plays.length;
+  n.event("a"); n.event("b");
+  await new Promise(r=>setTimeout(r,65));
+  assert.equal(plays.length,before+1,"rapid state changes only narrate the latest event");
+  assert.equal(plays.at(-1),"play-b");
+  n.invalidate(); finishes.shift()?.(true); await tick();
+  n.event("c"); n.reset();
+  await new Promise(r=>setTimeout(r,65));
+  assert.equal(plays.at(-1),"play-b","route reset cancels delayed state narration");
   console.log(
     "PASS narration: serialized playback, latest pending event only, navigation cancellation, mute and replay",
   );
