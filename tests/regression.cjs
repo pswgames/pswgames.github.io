@@ -63,13 +63,13 @@ w.SeowooPanorama = {
 // Exercise pending callbacks quickly while keeping callback order intact.
 const realTimeout = w.setTimeout.bind(w);
 w.setTimeout = (fn, ms, ...args) =>
-  realTimeout(fn, ms >= 500 ? 15 : ms, ...args);
+  realTimeout(fn, ms >= 100 ? 15 : ms, ...args);
 for (const p of [
   "data/content.js",
   "data/experience-v2.js",
   "js/core.js",
   "js/screen-lock.js",
-  "js/experiences.js",
+  "data/art-v3.js",
   "js/experience-icons.js",
   "js/experiences-v2.js",
   "js/app.js",

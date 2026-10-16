@@ -1,0 +1,29 @@
+name: Storybook browser QA
+on:
+  push:
+    branches: [feat/playground-art-voice-20261016, feat/playground-art-qa-20261016]
+    paths: [js/**, css/**, data/**, tests/**, .github/workflows/storybook-browser-qa.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
+      - run: npm install --no-save --ignore-scripts --no-audit --no-fund --no-package-lock playwright@1.58.2
+      - run: npx playwright install --with-deps chromium webkit
+      - run: node tests/storybook-browser.cjs --visual-only
+      - run: npm test
+      - run: node tests/storybook-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: storybook-browser-qa
+          path: .test-results/storybook
+          retention-days: 7

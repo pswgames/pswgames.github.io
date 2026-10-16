@@ -1,0 +1,242 @@
+{
+  "method": "built-in image generation; exact atlas crops and WebP encoding",
+  "assets": {
+    "worlds": [
+      2,
+      [
+        "village",
+        "market",
+        "kitchen",
+        "clinic"
+      ]
+    ],
+    "food": [
+      4,
+      [
+        "apple",
+        "banana",
+        "milk",
+        "bread",
+        "carrot",
+        "egg",
+        "cheese",
+        "grape",
+        "pear",
+        "cereal",
+        "yogurt",
+        "juice",
+        "tomato",
+        "mushroom",
+        "broccoli",
+        "corn"
+      ]
+    ],
+    "objects": [
+      5,
+      [
+        "stethoscope",
+        "thermometer",
+        "bandage",
+        "brush",
+        "water",
+        "treat",
+        "potato",
+        "pot",
+        "meal",
+        "board",
+        "car",
+        "boat",
+        "plane",
+        "train",
+        "ball",
+        "bear",
+        "duck",
+        "bird",
+        "cow",
+        "butterfly",
+        "fish",
+        "tree",
+        "flower",
+        "star",
+        "sun"
+      ]
+    ],
+    "characters": [
+      3,
+      [
+        "child-happy",
+        "child-sad",
+        "child-angry",
+        "child-scared",
+        "child-surprised",
+        "dog",
+        "cat",
+        "rabbit",
+        "family"
+      ]
+    ],
+    "stories": [
+      4,
+      [
+        "story-tower",
+        "story-thunder",
+        "story-bubble",
+        "story-toy",
+        "story-mom",
+        "story-dark",
+        "story-cookie",
+        "story-birthday",
+        "story-splash",
+        "story-puppy",
+        "story-balloon",
+        "story-turn"
+      ]
+    ],
+    "tools": [
+      6,
+      [
+        "umbrella",
+        "rainboots",
+        "sunhat",
+        "sunglasses",
+        "gloves",
+        "scarf",
+        "tap",
+        "soap",
+        "hands",
+        "towel",
+        "pajama",
+        "book",
+        "toothbrush",
+        "cup",
+        "sock",
+        "shirt",
+        "bottle",
+        "sandwich",
+        "picnicmat",
+        "pillow",
+        "pot-extra",
+        "slipper",
+        "drum",
+        "tambourine",
+        "trumpet",
+        "flute",
+        "violin",
+        "guitar",
+        "cracker",
+        "window",
+        "fridge",
+        "pantry",
+        "kennel",
+        "barn",
+        "bed",
+        "basket"
+      ]
+    ],
+    "extras1": [
+      5,
+      [
+        "lion",
+        "elephant",
+        "monkey",
+        "pig",
+        "frog",
+        "strawberry",
+        "orange",
+        "watermelon",
+        "rice",
+        "bus",
+        "helicopter",
+        "bicycle",
+        "truck",
+        "taxi",
+        "ambulance",
+        "house",
+        "chair",
+        "table",
+        "door",
+        "lamp",
+        "bath",
+        "clock",
+        "pants",
+        "shoes",
+        "jacket"
+      ]
+    ],
+    "extras2": [
+      6,
+      [
+        "dress",
+        "bag",
+        "moon",
+        "cloud",
+        "rain",
+        "snow",
+        "mountain",
+        "sea",
+        "foot",
+        "eye",
+        "nose",
+        "mouth",
+        "ear",
+        "head",
+        "hair",
+        "tooth",
+        "tummy",
+        "blocks",
+        "robot",
+        "balloon",
+        "icecream",
+        "key",
+        "crown",
+        "van",
+        "xylophone",
+        "zebra",
+        "puzzle",
+        "dino",
+        "rocket",
+        "rainbow",
+        "heart",
+        "clap",
+        "village-icon",
+        "counting",
+        "elevator-icon",
+        "potty-icon"
+      ]
+    ]
+  },
+  "prompts": [
+    {
+      "key": "worlds",
+      "prompt": "Use case: illustration-story. Asset type: production 2x2 background atlas for a premium Korean toddler game. Make one square 2048x2048 image divided into EXACT equal four 1024x1024 square scenes, no borders or gutters, no text anywhere. Style: high-end soft 3D animated children's movie, warm sunlight, dimensional rounded forms, realistic soft wood and fabric textures, sweet pastel mint/cream/peach/sky blue, beautifully rendered, no flat vector art. Each quadrant is a separate full scene framed so that the lower half is open space for interactive game objects. TOP LEFT: a delightful little pedestrian village square, three small shops: fruit grocery with red-striped awning at left, cozy kitchen cottage center, pastel mint veterinary clinic right, green trees and flowers, welcoming paths, no cars. TOP RIGHT: interior of a cozy premium mini grocery store, wooden shelves framing sides, distant pastel produce and bread, sunny window, empty central counter and floor, no people. BOTTOM LEFT: a beautiful home kitchen with mint cabinets, rounded sunny window, warm wood countertop, sink on left, blank chopping work area center, stove right, empty central foreground. BOTTOM RIGHT: a comforting toy veterinary clinic, mint cabinets, rounded window, clean cream examination table centered, tiny paw sign without text, shelves of pastel jars in back, no people and no animals, ample uncluttered foreground. Match camera height and gentle light throughout. These will be cropped by exact quadrants for backgrounds; keep contents completely inside their own quadrant. No lettering, words, labels, watermarks, UI or emojis."
+    },
+    {
+      "key": "food",
+      "prompt": "Use case: stylized-concept. Asset type: 4 by 4 sprite atlas, one square 2048x2048 illustration, sixteen EXACT equal cells, no drawn grid, each subject isolated centered with wide margin on a pure white background. Premium dimensional 3D children's game art, tactile realistic textures, subtle warm contact shadow, rounded soft shapes, appetizing natural food colors, directional soft studio lighting, not flat vector or emoji. All sprites fully contained within their square cell. Row 1 left to right: shiny red apple with green leaf; yellow banana bunch; pale blue milk carton with small cow picture but NO letters; loaf of sliced white bread. Row 2: orange carrot with green top; two eggs one cracked shell; wedge of Swiss cheese; purple grape bunch. Row 3: pale green pear; cereal bowl with little blank box; yogurt cup; orange juice in clear glass with straw. Row 4: red tomato; mushroom; broccoli; yellow sweetcorn. No text, no numbers, no captions, no borders, no extra unrelated items. Equal 4x4 exact layout for automated slicing."
+    },
+    {
+      "key": "objects",
+      "prompt": "Use case: stylized-concept. Production sprite atlas for a premium toddler game. Single square 2048x2048 image, EXACT 5 by 5 equally sized cells, each isolated 3D object centered with generous clear padding against pure white. No grid lines. Consistent high-end animated movie prop art, soft realistic material textures and gentle lighting, pastel colors and tiny contact shadows, no flat vectors or emoji. Read the ordered subjects precisely. Row 1: blue stethoscope; digital thermometer; pink adhesive bandage; wooden hairbrush; clear glass of water. Row 2: small dog biscuit; brown potato; teal frying pot; ceramic soup bowl; wooden cutting board. Row 3: toy red car; blue toy boat; white toy airplane; colorful toy steam train; striped beach ball. Row 4: teddy bear; yellow rubber duck; small songbird; fluffy black-white cow; butterfly. Row 5: orange goldfish; leafy green tree; sunflower; glowing golden star; warm smiling sun. Everything inside its own equal cell, no lettering, no text, no labels, no border."
+    },
+    {
+      "key": "characters",
+      "prompt": "Use case: illustration-story. Production character sprite atlas, one square 2048x2048 image containing EXACT 3x3 equal panels. All subjects centered fully visible with generous margins on pure white background, no borders. Soft premium 3D animated children's movie rendering with fine hair/fur and fabric textures, gentle warm lighting, adorable expressive faces. Same Korean toddler boy (three-year-old, tousled brown hair, large brown eyes, cream hoodie with small bear applique and blue shorts) in first FIVE cells. Row 1: boy smiling joyfully; same boy sad with drooping eyebrows and small frown; same boy frustrated with knitted eyebrows and folded arms. Row 2: same boy frightened, worried eyes and hands by mouth; same boy surprised, raised eyebrows and round mouth; cute fluffy caramel and white puppy sitting. Row 3: gentle lilac-gray kitten sitting; cute cream rabbit sitting; same boy and his mother sharing a comforting hug. All full-body portraits, clear emotional distinctions suitable for three-year-olds, kind not scary. Do not add text, symbols, emoji, speech bubbles, captions or grid."
+    },
+    {
+      "key": "stories",
+      "prompt": "Use case: illustration-story. Production story scene atlas for a premium toddler emotions game. Landscape 2048x1536, EXACT 4 columns by 3 rows of equal panels, no borders or gutters or text. High-end soft 3D children's animation, warm inviting dimensional pastel environments, detailed textures, clear story in each scene, same little Korean boy with brown hair and cream hoodie throughout. Each cell must read independently. Row 1 left-right: a colorful block tower has fallen, boy looks sad at toppled blocks; thunder flashes outside a window, boy indoors worried; boy happily playing with floating iridescent soap bubbles outdoors; another toddler taking the boy's red toy car, boy frustrated. Row 2: mother warmly hugging happy boy at home; bedroom light off, boy worried in gentle blue darkness (not frightening); cookie lying on floor, sad boy looking at it; boy surprised by friends bringing birthday cake with three candles. Row 3: friend splashes water onto boy's shirt, boy annoyed; fluffy puppy happily greeting boy with wagging tail; popped balloon fragments near boy, surprised face; another child stepping ahead at a playground slide queue, boy disappointed. No text, no labels, no watermark. Clear actions and coherent anatomy. The scenes will be cropped into 12 equal tiles."
+    },
+    {
+      "key": "tools",
+      "prompt": "Use case: stylized-concept. Production sprite atlas for premium toddler learning games. Single square 2048x2048 image divided into EXACT 6 columns and 6 rows of equal cells. Each separate object centered within its cell with at least 12% empty margins, completely isolated on pure white, no visible grid. Beautiful soft 3D animated movie quality, rounded shapes, detailed tactile wood fabric and natural textures, warm studio lighting, subtle contact shadow, gentle harmonious pastel colors, no flat vector or emoji. No letters, numbers, labels or text. Strict row-major reading order left to right, top to bottom: 1: umbrella; 2: rain boots pair; 3: sunhat; 4: sunglasses; 5: mittens pair; 6: knitted scarf; 7: water faucet; 8: bar of soap with bubbles; 9: two hands rubbing together; 10: folded towel; 11: pajamas; 12: open storybook; 13: toothbrush; 14: ceramic cup; 15: pair of socks; 16: t-shirt; 17: water bottle; 18: sandwich; 19: folded picnic mat; 20: pillow; 21: cooking pot; 22: slippers; 23: toy drum; 24: tambourine; 25: trumpet; 26: flute; 27: violin; 28: guitar; 29: crackers; 30: wooden window; 31: refrigerator; 32: wooden kitchen pantry cupboard; 33: dog kennel; 34: red barn; 35: bed; 36: woven laundry basket. Keep all 36 subjects distinct and fully inside their own cell. Anatomical subjects must be friendly stylized educational forms."
+    },
+    {
+      "key": "extras1",
+      "prompt": "Use case: stylized-concept. Production sprite atlas for premium toddler learning games. Single square 2048x2048 image divided into EXACT 5 columns and 5 rows of equal cells. Each separate object centered within its cell with at least 12% empty margins, completely isolated on pure white, no visible grid. Beautiful soft 3D animated movie quality, rounded shapes, detailed tactile wood fabric and natural textures, warm studio lighting, subtle contact shadow, gentle harmonious pastel colors, no flat vector or emoji. No letters, numbers, labels or text. Strict row-major reading order left to right, top to bottom: 1: gentle lion; 2: elephant; 3: monkey; 4: pig; 5: frog; 6: strawberry; 7: orange fruit; 8: slice of watermelon; 9: bowl of rice; 10: yellow bus; 11: toy helicopter; 12: bicycle; 13: delivery truck; 14: yellow taxi; 15: ambulance; 16: cozy house; 17: wooden chair; 18: dining table; 19: wooden door; 20: table lamp; 21: bathtub; 22: round clock; 23: blue pants; 24: sneakers; 25: yellow jacket. Keep all 25 subjects distinct and fully inside their own cell. Anatomical subjects must be friendly stylized educational forms."
+    },
+    {
+      "key": "extras2",
+      "prompt": "Use case: stylized-concept. Production sprite atlas for premium toddler learning games. Single square 2048x2048 image divided into EXACT 6 columns and 6 rows of equal cells. Each separate object centered within its cell with at least 12% empty margins, completely isolated on pure white, no visible grid. Beautiful soft 3D animated movie quality, rounded shapes, detailed tactile wood fabric and natural textures, warm studio lighting, subtle contact shadow, gentle harmonious pastel colors, no flat vector or emoji. No letters, numbers, labels or text. Strict row-major reading order left to right, top to bottom: 1: pink dress; 2: backpack; 3: crescent moon; 4: fluffy cloud; 5: rainy cloud; 6: snowflake; 7: green mountain; 8: ocean wave; 9: child foot; 10: human eye; 11: human nose; 12: smiling human mouth; 13: human ear; 14: child head; 15: lock of brown hair; 16: tooth; 17: child belly with shirt lifted only slightly; 18: colorful building blocks; 19: friendly toy robot; 20: balloon; 21: ice cream cone; 22: key; 23: golden crown; 24: toy van; 25: xylophone; 26: friendly zebra; 27: jigsaw puzzle pieces; 28: friendly dinosaur; 29: toy rocket; 30: rainbow; 31: pink heart; 32: hands clapping; 33: small toy village; 34: colorful counting beads; 35: tiny toy glass elevator; 36: rubber duck beside tiny potty. Keep all 36 subjects distinct and fully inside their own cell. Anatomical subjects must be friendly stylized educational forms."
+    }
+  ]
+}

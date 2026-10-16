@@ -49,6 +49,8 @@ for (const test of [
   "panorama",
   "pwa",
   "migration",
+  "storybook",
+  "narrator",
 ]) {
   const r = spawnSync(process.execPath, [`tests/${test}.cjs`], {
     stdio: "inherit",

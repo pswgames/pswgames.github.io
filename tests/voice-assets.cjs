@@ -1,6 +1,6 @@
 const fs=require("fs"),path=require("path"),vm=require("vm"),assert=require("assert/strict"),crypto=require("crypto");
 const root=path.resolve(__dirname,".."),sandbox={window:{}};
-for(const file of ["audio/catalog.js","audio/extra-catalog.js","audio/files.js","audio/sfx.js"])
+for(const file of ["audio/catalog.js","audio/extra-catalog.js","audio/play-catalog.js","audio/files.js","audio/play-files.js","audio/sfx.js"])
   vm.runInNewContext(fs.readFileSync(path.join(root,file),"utf8"),sandbox,{filename:file});
 const catalog=sandbox.window.SEOWOO_AUDIO||{}, files=sandbox.window.SEOWOO_AUDIO_FILES||{}, sfx=sandbox.window.SEOWOO_SFX||{};
 const ids=Object.keys(catalog);

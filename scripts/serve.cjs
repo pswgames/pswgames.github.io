@@ -10,6 +10,9 @@ const mime = {
   ".webp": "image/webp",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".mp3": "audio/mpeg",
+  ".wav": "audio/wav",
+  ".woff2": "font/woff2",
 };
 http
   .createServer((req, res) => {

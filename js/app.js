@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.2.2";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.3.0";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -52,17 +52,9 @@
     );
   const art = (n) =>
     `<span class="toy-art art-${n}" aria-hidden="true"></span>`;
-  const featuredArt = (kind) => {
-    const svg = {
-      village:
-        '<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M8 66h104v15H8z" fill="#8fd19a"/><path d="M13 58 35 38l22 20v23H13z" fill="#fff3d7"/><path d="M8 59 35 34l27 25" fill="none" stroke="#ef8b78" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><rect x="25" y="60" width="13" height="21" rx="3" fill="#7fc4e7"/><path d="M59 54 82 31l28 23v27H59z" fill="#eef8ff"/><path d="M55 55 82 27l31 28" fill="none" stroke="#73baa9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><rect x="73" y="60" width="16" height="21" rx="3" fill="#f1b8cb"/><circle cx="99" cy="20" r="8" fill="#ffe277"/></svg>',
-      puzzle:
-        '<svg viewBox="0 0 120 90" aria-hidden="true"><rect x="17" y="15" width="39" height="34" rx="10" fill="#ffd167"/><circle cx="56" cy="32" r="9" fill="#eaf8ff"/><rect x="62" y="15" width="41" height="34" rx="10" fill="#ef90ae"/><circle cx="62" cy="32" r="9" fill="#f7fbff"/><rect x="17" y="52" width="39" height="29" rx="10" fill="#78c7e7"/><circle cx="56" cy="66" r="9" fill="#f7fbff"/><rect x="62" y="52" width="41" height="29" rx="10" fill="#9a86d8"/><circle cx="62" cy="66" r="9" fill="#f7fbff"/></svg>',
-      feelings:
-        '<svg viewBox="0 0 120 90" aria-hidden="true"><path d="M60 80C13 54 22 15 46 21c7 2 12 7 14 13 2-6 7-11 14-13 24-6 33 33-14 59z" fill="#ffad9b"/><circle cx="47" cy="46" r="4" fill="#5c5b67"/><circle cx="73" cy="46" r="4" fill="#5c5b67"/><path d="M48 61c8 8 16 8 24 0" fill="none" stroke="#6d5351" stroke-width="4" stroke-linecap="round"/><circle cx="38" cy="57" r="6" fill="#f58d8c" opacity=".55"/><circle cx="82" cy="57" r="6" fill="#f58d8c" opacity=".55"/></svg>',
-    };
-    return `<span class="featured-art featured-${kind}">${svg[kind]}</span>`;
-  };
+  const picture=(pic)=>window.SeowooArt?.picture(pic)||pic;
+  const gameArt=(name)=>window.SeowooArt?.icon(name)||'';
+  const featuredArt=kind=>`<span class="featured-art featured-${kind}">${gameArt({village:'village-icon',puzzle:'puzzle',feelings:'heart'}[kind])}</span>`;
   const featuredActivities = [
     ["village", "역할놀이 마을", "마트·주방·동물병원", "village"],
     ["puzzle", "퍼즐 탐험대", "끌어서 맞추는 퍼즐", "puzzle"],
@@ -97,6 +89,7 @@
     timers.clear();
     clearInterval(musicTimer);
     musicTimer = null;
+    window.SeowooNarrator?.reset();
     audio.stopAll();
     window.SeowooElevator.unmount();
     window.SeowooExperiences?.unmount?.();
@@ -155,6 +148,7 @@
       new CustomEvent("seowoo:route", { detail: { route: name } }),
     );
     render();
+    if(['numbers','more','think','numberBoard','alphabet','englishWords','koreanWords','hangul','music','treasure'].includes(route))window.SeowooNarrator?.say('menu-'+(route==='think'?'more':route));
     window.scrollTo(0, 0);
     main.querySelector("h1")?.focus({ preventScroll: true });
   }
@@ -274,7 +268,7 @@
       ]
         .map(
           ([r, t, s, p, c]) =>
-            `<button class="learning-card ${c}" data-go="${r}"><span class="learning-symbol">${p}</span><h2>${t}</h2><p>${s}</p>${icon("chevron")}</button>`,
+            `<button class="learning-card ${c}" data-go="${r}"><span class="learning-symbol">${gameArt(r)}</span><h2>${t}</h2><p>${s}</p>${icon("chevron")}</button>`,
         )
         .join("")}</div>`,
     );
@@ -362,12 +356,12 @@
   function questionVisual(q) {
     const t = q.target;
     if (q.kind === "quantity")
-      return `<div class="count-objects">${Array.from({ length: Number(t.key) }, (_, i) => `<button data-count="${i + 1}" aria-label="${i + 1}번째 별">★</button>`).join("")}</div>`;
+      return `<div class="count-objects">${Array.from({ length: Number(t.key) }, (_, i) => `<button data-count="${i + 1}" aria-label="${i + 1}번째 별">${gameArt("star")}</button>`).join("")}</div>`;
     if (q.kind === "order")
       return `<div class="number-train"><span>${+t.key - 2}</span><span>${+t.key - 1}</span><span>?</span></div>`;
     if (q.kind === "finger")
       return `<div class="finger-display" aria-label="손가락 ${t.key}개">${hand(Math.min(5, +t.key))}${+t.key > 5 ? hand(+t.key - 5) : ""}</div>`;
-    if (q.kind === "word") return `<div class="word-picture">${t.pic}</div>`;
+    if (q.kind === "word") return `<div class="word-picture">${picture(t.pic)}</div>`;
     if (q.kind === "color")
       return `<span class="color-sample" style="--sample:${t.color}"></span>`;
     return `<div class="question-symbol ${q.kind === "shape" ? "shape-symbol" : ""}">${t.symbol || t.key}</div>`;
@@ -461,14 +455,12 @@
       f.textContent = "잘했어!";
       f.classList.add("success");
       audio.success();
-      audio.speak("잘했어!");
+      const praise=audio.speak("잘했어!");
       main
         .querySelectorAll("[data-answer]")
         .forEach((b) => (b.disabled = true));
-      later(() => {
-        q.index++;
-        drawQuiz();
-      }, 1000);
+      const answerEpoch=epoch;
+      Promise.resolve(praise).then(()=>{if(answerEpoch!==epoch||quiz!==q)return;later(()=>{q.index++;drawQuiz();},180);});
     } else {
       button.classList.add("try-again");
       f.textContent = "다시 찾아볼까?";
@@ -487,9 +479,9 @@
     gameShell(
       theme,
       titles[route],
-      `<div class="result-card"><div class="result-star">★</div><h2>끝까지 잘했어!</h2><p>반짝별 ${score}개를 모았어</p><div class="controls"><button class="btn primary" data-replay="${kind}">한 번 더</button><button class="btn soft" data-go="home">놀이터로</button></div></div>`,
+      `<div class="result-card"><div class="result-star">${gameArt("star")}</div><h2>끝까지 잘했어!</h2><p>반짝별 ${score}개를 모았어</p><div class="controls"><button class="btn primary" data-replay="${kind}">한 번 더</button><button class="btn soft" data-go="home">놀이터로</button></div></div>`,
     );
-    audio.speak("잘했어!");
+    window.SeowooNarrator?.say("all-done");
   }
   function renderBoard() {
     gameShell(
@@ -529,7 +521,7 @@
       gameShell(
         "potty",
         "화장실 탐험대",
-        `<div class="result-card"><span class="big-emoji">🚽</span><h2>엄마아빠랑 다녀오자!</h2><p>앉아보기만 해도 충분해.</p><button class="btn primary" data-potty="sat">변기에 앉아봤어요</button><button class="btn soft" data-potty="return">돌아가기</button></div>`,
+        `<div class="result-card"><span class="big-emoji">${gameArt("potty-icon")}</span><h2>엄마아빠랑 다녀오자!</h2><p>앉아보기만 해도 충분해.</p><button class="btn primary" data-potty="sat">변기에 앉아봤어요</button><button class="btn soft" data-potty="return">돌아가기</button></div>`,
       );
       audio.speak("엄마아빠랑 화장실에 다녀오자");
       return;
@@ -636,7 +628,7 @@
       ]
         .map(
           ([r, t, p], i) =>
-            `<button class="learning-card pastel-${i % 6}" data-go="${r}"><span class="learning-symbol">${p}</span><h2>${t}</h2></button>`,
+            `<button class="learning-card pastel-${i % 6}" data-go="${r}"><span class="learning-symbol">${gameArt(r)}</span><h2>${t}</h2></button>`,
         )
         .join("")}</div>`,
     );
@@ -645,7 +637,7 @@
     gameShell(
       "english",
       "ABC 카드",
-      `<div class="alphabet-grid">${C.alphabet.map(([c, w, p]) => `<button class="alphabet-card" data-alpha="${c}"><b>${c}</b><span>${p}</span><small>${w}</small></button>`).join("")}</div><button class="btn primary" data-abc-play>ABC 들어보기</button>`,
+      `<div class="alphabet-grid">${C.alphabet.map(([c, w, p]) => `<button class="alphabet-card" data-alpha="${c}"><b>${c}</b><span>${picture(p)}</span><small>${w}</small></button>`).join("")}</div><button class="btn primary" data-abc-play>ABC 들어보기</button>`,
       "",
       "more",
     );
@@ -659,7 +651,7 @@
         .filter((w) => cat === "전체" || w.cat === cat)
         .map(
           (w) =>
-            `<button class="word-card" data-word="${C.words.indexOf(w)}" data-lang="${lang}"><span>${w.pic}</span><b>${lang === "en" ? w.en : w.ko}</b></button>`,
+            `<button class="word-card" data-word="${C.words.indexOf(w)}" data-lang="${lang}"><span>${picture(w.pic)}</span><b>${lang === "en" ? w.en : w.ko}</b></button>`,
         )
         .join("")}</div>`,
       "",
@@ -706,7 +698,7 @@
       gameShell(
         "shapes",
         "기억하고 톡톡",
-        `<div class="result-card"><div class="result-star">★</div><h2>잘 기억했어!</h2><button class="btn primary" data-go="memory">한 번 더</button></div>`,
+        `<div class="result-card"><div class="result-star">${gameArt("star")}</div><h2>잘 기억했어!</h2><button class="btn primary" data-go="memory">한 번 더</button></div>`,
       );
       return;
     }
@@ -719,7 +711,7 @@
     gameShell(
       "shapes",
       "기억하고 톡톡",
-      `<div class="memory-prompt"><h2>잘 보고 기억해봐!</h2><div id="memoryStage" class="memory-stage">☺</div></div><div class="answer-choices">${["🍎", "🚗", "🐶", "⭐"].map((s, i) => `<button class="answer toy-choice choice-${i}" data-memory="${i}" disabled>${s}</button>`).join("")}</div><div id="feedback" class="feedback" role="status">어떤 순서일까?</div>`,
+      `<div class="memory-prompt"><h2>잘 보고 기억해봐!</h2><div id="memoryStage" class="memory-stage">${gameArt("blocks")}</div></div><div class="answer-choices">${["🍎", "🚗", "🐶", "⭐"].map((s, i) => `<button class="answer toy-choice choice-${i}" data-memory="${i}" aria-label="${["사과","자동차","강아지","별"][i]}" disabled>${picture(s)}</button>`).join("")}</div><div id="feedback" class="feedback" role="status">어떤 순서일까?</div>`,
       "",
       "more",
     );
@@ -728,7 +720,7 @@
       if (!memory) return;
       const el = document.getElementById("memoryStage");
       if (i < m.sequence.length) {
-        el.textContent = ["🍎", "🚗", "🐶", "⭐"][m.sequence[i++]];
+        el.innerHTML = picture(["🍎", "🚗", "🐶", "⭐"][m.sequence[i++]]);
         later(() => {
           el.textContent = "";
           later(display, 220);
@@ -771,7 +763,7 @@
     gameShell(
       "plain",
       "보물상자",
-      `<div class="treasure-heading"><span class="result-star small">★</span><h2>차곡차곡 모은 작은 기쁨</h2><p>서우의 스티커 ${state.stickers.length}개</p></div><div class="sticker-grid">${C.stickers.map(([id, name, pic]) => `<div class="sticker ${state.stickers.includes(id) ? "" : "locked"}"><span>${state.stickers.includes(id) ? pic : "?"}</span><p>${state.stickers.includes(id) ? name : "아직 비밀"}</p></div>`).join("")}</div>`,
+      `<div class="treasure-heading"><span class="result-star small">${gameArt("star")}</span><h2>차곡차곡 모은 작은 기쁨</h2><p>서우의 스티커 ${state.stickers.length}개</p></div><div class="sticker-grid">${C.stickers.map(([id, name, pic]) => `<div class="sticker ${state.stickers.includes(id) ? "" : "locked"}"><span>${state.stickers.includes(id) ? picture(pic) : "?"}</span><p>${state.stickers.includes(id) ? name : "아직 비밀"}</p></div>`).join("")}</div>`,
     );
   }
   function renderTogether() {
@@ -779,7 +771,7 @@
     gameShell(
       "plain",
       "엄마아빠랑 같이",
-      `<div class="result-card"><span class="big-emoji">${m.pic}</span><h2>${m.text}</h2><div class="controls"><button class="btn primary" data-mission-done>같이 했어요</button><button class="btn soft" data-go="together">다른 놀이</button></div></div>`,
+      `<div class="result-card"><span class="big-emoji">${picture(m.pic)}</span><h2>${m.text}</h2><div class="controls"><button class="btn primary" data-mission-done>같이 했어요</button><button class="btn soft" data-go="together">다른 놀이</button></div></div>`,
       "",
       "more",
     );
@@ -789,7 +781,7 @@
     gameShell(
       "music",
       "음악 놀이터",
-      `<div class="music-intro"><span class="big-emoji">🎵</span><h2>오늘은 어떤 멜로디?</h2><p id="musicStatus" role="status">좋아하는 노래를 골라봐</p></div><div class="music-grid">${C.music.map((s, i) => `<button class="music-card pastel-${i}" data-music="${i}" aria-pressed="false"><span>${s.cover}</span><h2>${s.title}</h2><small>${s.file ? "노래 듣기" : "놀이 멜로디"}</small></button>`).join("")}</div><div class="controls"><button class="btn soft" data-music-stop>음악 멈추기</button><button class="btn soft" data-music-repeat aria-pressed="${state.music.repeat}">반복 ${state.music.repeat ? "켜짐" : "꺼짐"}</button></div>`,
+      `<div class="music-intro"><span class="big-emoji">${gameArt("xylophone")}</span><h2>오늘은 어떤 멜로디?</h2><p id="musicStatus" role="status">좋아하는 노래를 골라봐</p></div><div class="music-grid">${C.music.map((s, i) => `<button class="music-card pastel-${i}" data-music="${i}" aria-pressed="false"><span>${picture(s.cover)}</span><h2>${s.title}</h2><small>${s.file ? "노래 듣기" : "놀이 멜로디"}</small></button>`).join("")}</div><div class="controls"><button class="btn soft" data-music-stop>음악 멈추기</button><button class="btn soft" data-music-repeat aria-pressed="${state.music.repeat}">반복 ${state.music.repeat ? "켜짐" : "꺼짐"}</button></div>`,
     );
   }
   function playMusic(i) {
@@ -822,11 +814,13 @@
       if (n >= 24 && !state.music.repeat) {
         clearInterval(musicTimer);
         document.getElementById("musicStatus").textContent = "또 들어볼까?";
+        window.SeowooNarrator?.say("music-done");
         main
           .querySelectorAll("[data-music]")
           .forEach((b) => b.setAttribute("aria-pressed", "false"));
       }
     };
+    window.SeowooNarrator?.say("music-"+i);
     tick();
     musicTimer = setInterval(tick, i === 2 ? 650 : 420);
   }
@@ -837,6 +831,7 @@
       .querySelectorAll("[data-music]")
       .forEach((b) => b.setAttribute("aria-pressed", "false"));
     document.getElementById("musicStatus").textContent = "잠깐 쉬어가요";
+    window.SeowooNarrator?.reset();window.SeowooNarrator?.say("music-stop");
   }
   function dialogHeader(title) {
     return `<div class="dialog-head"><h2>${title}</h2><button class="icon-btn" data-parent-close aria-label="보호자 메뉴 닫기">${icon("close")}</button></div>`;
@@ -966,6 +961,7 @@
     const b = e.target.closest("button");
     if (!b) return;
     const d = b.dataset;
+    if("narrationRepeat" in d){window.SeowooNarrator?.repeat();return;}
     if (d.go) {
       go(d.go);
       return;
@@ -976,6 +972,7 @@
     }
     if ("sound" in d) {
       setting("voice", !state.settings.voice);
+      window.SeowooNarrator?.reset();
       audio.stopVoice();
       main.querySelectorAll("[data-sound]").forEach((x) => {
         x.innerHTML = icon(state.settings.voice ? "sound" : "mute");

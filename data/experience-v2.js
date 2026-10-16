@@ -23,9 +23,9 @@ window.SEOWOO_EXPERIENCE_V2 = {
   ],
   puzzles: [
     {
-      id:"shape-garden", title:"모양 정원", prompt:"같은 모양의 화분을 찾아줘", theme:"garden",
+      id:"shape-garden", title:"모양 정원", prompt:"같은 모양끼리 맞춰보자", theme:"garden",
       slots:[["circle","동그라미"],["triangle","세모"],["square","네모"],["star","별"]],
-      pieces:[["sun","sun","circle"],["tree","tree","triangle"],["window","window","square"],["flower","flower","star"]]
+      pieces:[["sun","shape-circle","circle"],["tree","shape-triangle","triangle"],["window","shape-square","square"],["flower","star","star"]]
     },
     {
       id:"animal-home", title:"동물 친구 집 찾기", prompt:"동물 친구를 알맞은 집으로 데려가줘", theme:"farm",
@@ -79,7 +79,7 @@ window.SEOWOO_EXPERIENCE_V2 = {
     },
     {
       id:"music-family", title:"소리 친구 모으기", prompt:"같은 악기 가족끼리 모아줘", theme:"music",
-      slots:[["hit","두드려요"],["blow","불어요"],["string","줄을 켜요"]],
+      slots:[["hit","두드려요"],["blow","불어요"],["string","줄이 있어요"]],
       pieces:[["drum","drum","hit"],["tambourine","tambourine","hit"],["trumpet","trumpet","blow"],["flute","flute","blow"],["violin","violin","string"],["guitar","guitar","string"]]
     }
   ],
