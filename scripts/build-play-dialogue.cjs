@@ -7,11 +7,27 @@ const D = sandbox.window.SEOWOO_EXPERIENCE_V2,
   lines = {};
 const add = (id, text) => (lines[id] = { text, lang: "ko-KR" });
 const fixed = {
-  "village-start": "서우야, 오늘은 어디에서 놀까? 가고 싶은 집을 눌러봐.",
+  "drag-help": "그림을 잡고, 반짝이는 자리로 끌어다 놓아봐.",
+  "potty-drag-0": "서우를 문 앞으로 끌어다 놓아볼까?",
+  "potty-drag-1": "옷 그림으로 서우를 옮겨서 바지를 내려보자.",
+  "potty-drag-2": "서우를 변기로 옮겨서 편안하게 앉아보자.",
+  "potty-drag-4": "휴지 쪽으로 서우를 옮겨서 깨끗이 닦아보자.",
+  "potty-drag-5": "물 내리는 버튼으로 서우를 옮겨볼까?",
+  "potty-drag-6": "옷 그림으로 서우를 옮겨서 바지를 올려보자.",
+  "potty-drag-7": "세면대로 서우를 옮겨서 손을 씻어보자. 세 번 뽀득뽀득!",
+  "block-start": "블록을 끌어서 빈칸에 놓아봐. 한 줄을 채우면 반짝하고 사라져!",
+  "block-place": "블록이 쏙! 다른 블록도 놓아볼까?",
+  "block-clear": "한 줄을 가득 채웠네! 반짝반짝!",
+  "block-multi": "여러 줄을 한꺼번에 채웠어! 멋지다!",
+  "block-combo": "또 한 줄! 연달아 잘했어!",
+  "block-over": "놓을 자리가 없네. 다시 시작해볼까?",
+  "block-pause": "잠깐 쉬자. 계속하기를 누르면 다시 놀 수 있어.",
+  "block-retry": "괜찮아. 빈칸이 있는 다른 자리에 놓아볼까?",
+  "village-start": "서우를 끌어서 가고 싶은 집에 놓아볼까?",
   "market-ready": "필요한 물건을 다 담았어! 이제 계산하기를 눌러볼까?",
   "market-done": "장보기 성공! 필요한 물건을 모두 샀어. 한 번 더 해볼까?",
   "market-duplicate": "이미 장바구니에 담았네. 다른 물건도 찾아볼까?",
-  "kitchen-wash": "깨끗하게 씻었어! 씻은 재료를 눌러서 도마로 옮겨보자.",
+  "kitchen-wash": "깨끗하게 씻었어! 씻은 재료를 끌어서 도마로 옮겨보자.",
   "kitchen-chop": "톡톡! 잘랐어. 이제 재료를 냄비에 넣어볼까?",
   "kitchen-add": "냄비에 쏙! 남은 재료도 준비해보자.",
   "kitchen-ready": "재료를 모두 넣었어! 요리하기를 눌러보자.",
@@ -52,7 +68,7 @@ const fixed = {
 Object.entries(fixed).forEach(([k, v]) => add(k, v));
 const products = D.village.market.products;
 for (const [id, name] of products) {
-  add("market-pick-" + id, `${name}, 잘 찾았어!`);
+  add("market-pick-" + id, `${name}${(name.charCodeAt(name.length - 1) - 0xac00) % 28 ? "을" : "를"} 장바구니에 담았네!`);
   add("market-next-" + id, `이번에는 ${name}, 찾아볼까?`);
   add("market-other-" + id, `${name}도 맛있지! 오늘 살 물건을 다시 찾아보자.`);
 }
@@ -65,7 +81,7 @@ D.village.market.missions.forEach((m, i) =>
 for (const r of D.village.kitchen.recipes)
   add(
     "kitchen-start-" + r.id,
-    `오늘은 ${r.name}, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.`,
+    `오늘은 ${r.name}, 만들어보자! 먼저 재료를 싱크대로 끌어 옮겨보자.`,
   );
 const actions = {
   stethoscope: "청진기로 콩닥콩닥 심장 소리를 들었어.",
