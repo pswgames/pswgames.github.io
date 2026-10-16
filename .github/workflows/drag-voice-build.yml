@@ -2,7 +2,7 @@ name: Build drag interaction recordings
 on:
   push:
     branches: [feat/drag-voice-20261016]
-    paths: [scripts/build-play-dialogue.cjs]
+    paths: [scripts/build-play-dialogue.cjs, .github/workflows/drag-voice-build.yml]
 permissions:
   contents: write
 jobs:
@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: pip install google-genai
+      - run: pip install google-genai lameenc
       - run: node scripts/build-play-dialogue.cjs
       - run: python scripts/extend_play_voice.py
         env:
