@@ -13,6 +13,7 @@ module.exports=async function({page,spec,context,go,tap,layout,out,results}){
  assert(await page.locator('[data-potty="restart"]').isVisible());await layout('potty-drag-complete');
  await tap('[data-potty="restart"]');await page.screenshot({path:out+'/'+spec.id+'-potty-drag.png',fullPage:true});
  results.push({profile:spec.id,flow:'potty: cancel, wrong target, 8 stages, flush lock, 3 washes, restart',status:'pass'});
+ await page.evaluate(()=>{window.__blockVoices=[];const a=SeowooCore.audio,original=a.playVoice.bind(a);a.playVoice=(id,...args)=>{if(document.body.dataset.route==='blockpang')__blockVoices.push(id);return original(id,...args);};});
  async function seed(kind){
    await go('home');await page.evaluate(kind=>{
     const E=SeowooBlockEngine,one=E.shapes.findIndex(p=>p.length===1),sq=E.shapes.findIndex(p=>p.length===4&&p.every(([x,y])=>x<2&&y<2));
@@ -40,8 +41,16 @@ module.exports=async function({page,spec,context,go,tap,layout,out,results}){
  await page.waitForFunction(()=>SeowooBlockPang.snapshot().score===0,null,{timeout:1500});
  s=await snapshot();assert.equal(s.score,0);assert.equal(s.board.filter(Boolean).length,0);assert(!s.over);assert.equal(s.tray.filter(Boolean).length,3);
  assert(Number(await page.evaluate(()=>localStorage.getItem('seowoo-blockpang-best-v1')))>=270,'best score survives restart');
- await page.waitForTimeout(6500);
- assert(await page.evaluate(()=>__voiceQA.completed.includes("play-block-start")),"new Block Pang Sulafat MP3 completes");
+ assert.equal(await page.locator('[data-narration-repeat],[data-sound]').count(),0,'block game has no narration or voice toggle');
+ const voiceSetting=await page.evaluate(()=>SeowooCore.state.settings.voice);
+ await tap('[data-block-sound]');
+ const mutedToneCount=await page.evaluate(()=>__blockTones.length);
+ await tap('[data-block-pause]');await tap('[data-block-resume]');
+ assert.equal(await page.evaluate(()=>__blockTones.length),mutedToneCount,'block effects mute independently');
+ await tap('[data-block-sound]');
+ assert((await page.evaluate(()=>__blockTones.length))>mutedToneCount,'effects resume after unmuting');
+ assert.equal(await page.evaluate(()=>SeowooCore.state.settings.voice),voiceSetting,'other game voice preference unchanged');
+ assert.deepEqual(await page.evaluate(()=>__blockVoices),[],'all block events use effects only, with no voice requests');
  await page.screenshot({path:out+'/'+spec.id+'-blockpang.png',fullPage:true});
  results.push({profile:spec.id,flow:'block: drag/cancel/reject, preview, refill, cross clear, combo, score, pause, resume, game over, restart, best record, original sound',status:'pass'});
 };

@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.4.0";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.4.1";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -173,8 +173,8 @@
     window.scrollTo({top:0,left:0,behavior:"instant"});
     main.querySelector("h1")?.focus({ preventScroll: true });
   }
-  function header(title, back = "home", extra = "") {
-    return `<header class="play-header"><button class="icon-btn" data-go="${back}" aria-label="${back === "home" ? "홈으로" : "뒤로가기"}">${icon(back === "home" ? "home" : "back")}</button><h1 tabindex="-1">${title}</h1><div class="header-actions">${extra}<button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button></div></header>`;
+  function header(title, back = "home", extra = "", showVoice = true) {
+    return `<header class="play-header"><button class="icon-btn" data-go="${back}" aria-label="${back === "home" ? "홈으로" : "뒤로가기"}">${icon(back === "home" ? "home" : "back")}</button><h1 tabindex="-1">${title}</h1><div class="header-actions">${extra}${showVoice ? `<button class="icon-btn" data-sound aria-label="${state.settings.voice ? "소리 끄기" : "소리 켜기"}">${icon(state.settings.voice ? "sound" : "mute")}</button>` : ""}</div></header>`;
   }
   function pill(route, label, n) {
     return `<button class="utility" data-go="${route}">${icon(n)}<span>${label}</span></button>`;
