@@ -1735,3 +1735,10 @@
   background: #fffdf6;
   box-shadow: 0 12px 25px #67857718;
 }
+
+/* A real basket makes the empty drop target readable before children can read. */
+.cart-box:empty {
+  background: url("../assets/art/v3/basket.webp") center / contain no-repeat;
+  background-blend-mode: multiply;
+  border-bottom-color: transparent;
+}
