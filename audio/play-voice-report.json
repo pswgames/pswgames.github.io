@@ -1400,10 +1400,164 @@
       "model": "gemini-3.8-flash-tts",
       "voice": "Sulafat",
       "group": "gemini38-4"
+    },
+    {
+      "ids": [
+        "play-response-puppy"
+      ],
+      "text": "반갑고 기쁜 마음이 들었겠네.",
+      "path": "audio/voice/ko/e00a2b1cd8c25fdc.mp3",
+      "seconds": 2.49,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-story-balloon"
+      ],
+      "text": "옆에 있던 풍선이 갑자기 큰 소리를 내며 터졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/ab5d7b44b711f2da.mp3",
+      "seconds": 7.71,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-response-balloon"
+      ],
+      "text": "깜짝 놀랄 수 있어. 놀란 몸을 천천히 진정시켜보자.",
+      "path": "audio/voice/ko/4156d00ea5f00813.mp3",
+      "seconds": 5.08,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-story-turn"
+      ],
+      "text": "미끄럼틀에서 친구가 새치기를 했어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/905a07dafaf3e690.mp3",
+      "seconds": 6.66,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-response-turn"
+      ],
+      "text": "화가 날 수 있어. '내 차례야'라고 또박또박 말해보자.",
+      "path": "audio/voice/ko/959d390c6d73e9d6.mp3",
+      "seconds": 5.05,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-mood-happy"
+      ],
+      "text": "기뻐요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/7ae5c62eca95e9ec.mp3",
+      "seconds": 4.25,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-mood-sad"
+      ],
+      "text": "속상해요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/16aa16d52be29e71.mp3",
+      "seconds": 4.13,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-mood-angry"
+      ],
+      "text": "화나요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/66531dcc05494a05.mp3",
+      "seconds": 3.79,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-mood-scared"
+      ],
+      "text": "무서워요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/c91e89e119b79a3c.mp3",
+      "seconds": 4.7,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-mood-surprised"
+      ],
+      "text": "놀랐어요. 네 마음을 알려줘서 고마워.",
+      "path": "audio/voice/ko/bfbee80d222c3318.mp3",
+      "seconds": 4.64,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-music-0"
+      ],
+      "text": "토끼 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/c9b7cd1624e9a960.mp3",
+      "seconds": 3.04,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-music-1"
+      ],
+      "text": "자동차 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/a99c3d86bdf71865.mp3",
+      "seconds": 2.38,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-music-2"
+      ],
+      "text": "잘자요 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/a9ae7b3a469531e0.mp3",
+      "seconds": 3.07,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
+    },
+    {
+      "ids": [
+        "play-music-3"
+      ],
+      "text": "신나는 노래. 같이 들어보자.",
+      "path": "audio/voice/ko/90be2274ff41706b.mp3",
+      "seconds": 2.88,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-5"
     }
   ],
   "status": "in_progress",
-  "remaining": 14,
+  "remaining": 0,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
