@@ -8,7 +8,7 @@ permissions:
   contents: write
 concurrency:
   group: play-voice-extension
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   voice:
     runs-on: ubuntu-latest
