@@ -1,0 +1,594 @@
+{
+  "village-start": {
+    "text": "서우야, 오늘은 어디에서 놀까? 가고 싶은 집을 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "market-ready": {
+    "text": "필요한 물건을 다 담았어! 이제 계산하기를 눌러볼까?",
+    "lang": "ko-KR"
+  },
+  "market-done": {
+    "text": "장보기 성공! 필요한 물건을 모두 샀어. 한 번 더 해볼까?",
+    "lang": "ko-KR"
+  },
+  "market-duplicate": {
+    "text": "이미 장바구니에 담았네. 다른 물건도 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "kitchen-wash": {
+    "text": "깨끗하게 씻었어! 씻은 재료를 눌러서 도마로 옮겨보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-chop": {
+    "text": "톡톡! 잘랐어. 이제 재료를 냄비에 넣어볼까?",
+    "lang": "ko-KR"
+  },
+  "kitchen-add": {
+    "text": "냄비에 쏙! 남은 재료도 준비해보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-ready": {
+    "text": "재료를 모두 넣었어! 요리하기를 눌러보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-cook": {
+    "text": "보글보글! 요리가 다 됐어. 접시에 담아볼까?",
+    "lang": "ko-KR"
+  },
+  "kitchen-done": {
+    "text": "맛있는 요리 완성! 정말 멋진 요리사네.",
+    "lang": "ko-KR"
+  },
+  "kitchen-raw": {
+    "text": "먼저 재료를 깨끗이 씻어보자. 싱크대로 옮겨볼까?",
+    "lang": "ko-KR"
+  },
+  "kitchen-washed": {
+    "text": "씻은 재료는 도마로 옮겨서 잘라보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-chopped": {
+    "text": "잘라 놓은 재료는 냄비에 넣어보자.",
+    "lang": "ko-KR"
+  },
+  "clinic-wrong": {
+    "text": "그 도구도 좋지만, 그림에 나온 도구부터 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-done": {
+    "text": "동물 친구를 잘 돌봐줬어. 정말 고마워! 다른 친구도 만나볼까?",
+    "lang": "ko-KR"
+  },
+  "puzzle-start": {
+    "text": "그림을 누르고, 알맞은 자리를 눌러봐. 끌어서 놓아도 좋아.",
+    "lang": "ko-KR"
+  },
+  "puzzle-select": {
+    "text": "어디에 놓으면 좋을까? 알맞은 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-right": {
+    "text": "잘 찾았어! 다른 그림도 제자리에 놓아볼까?",
+    "lang": "ko-KR"
+  },
+  "puzzle-wrong": {
+    "text": "괜찮아. 그림을 보고 다른 자리에 놓아볼까?",
+    "lang": "ko-KR"
+  },
+  "puzzle-done": {
+    "text": "그림을 모두 맞췄네! 다음 퍼즐도 해볼까?",
+    "lang": "ko-KR"
+  },
+  "feelings-start": {
+    "text": "서우야, 지금 기분이 어때? 네 마음과 닮은 얼굴을 골라봐.",
+    "lang": "ko-KR"
+  },
+  "feelings-try": {
+    "text": "그렇게 느낄 수도 있어. 그림 속 친구의 표정도 살펴볼까?",
+    "lang": "ko-KR"
+  },
+  "calm-breathe": {
+    "text": "동그라미를 누르고, 풍선처럼 천천히 숨을 쉬어보자.",
+    "lang": "ko-KR"
+  },
+  "calm-count": {
+    "text": "반짝이는 별을 천천히 세 번 눌러보자.",
+    "lang": "ko-KR"
+  },
+  "calm-stretch": {
+    "text": "동그라미를 누르고, 어깨를 으쓱 올렸다가 툭 내려보자.",
+    "lang": "ko-KR"
+  },
+  "calm-done": {
+    "text": "천천히 잘했어. 마음이 조금 편안해졌니?",
+    "lang": "ko-KR"
+  },
+  "menu-numbers": {
+    "text": "숫자랑 놀아볼까? 하고 싶은 그림을 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "menu-more": {
+    "text": "재미있는 놀이가 모였네! 마음에 드는 그림을 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "menu-numberBoard": {
+    "text": "좋아하는 숫자를 눌러봐. 하나부터 백까지 같이 읽어보자.",
+    "lang": "ko-KR"
+  },
+  "menu-alphabet": {
+    "text": "알파벳 카드를 눌러봐. 영어 이름을 들려줄게.",
+    "lang": "ko-KR"
+  },
+  "menu-englishWords": {
+    "text": "궁금한 그림을 눌러봐. 영어로 이름을 들어보자.",
+    "lang": "ko-KR"
+  },
+  "menu-koreanWords": {
+    "text": "그림을 누르면 이름을 들려줄게. 어떤 그림이 궁금하니?",
+    "lang": "ko-KR"
+  },
+  "menu-hangul": {
+    "text": "글자를 눌러서 소리를 들어보자. 가, 나, 다!",
+    "lang": "ko-KR"
+  },
+  "menu-music": {
+    "text": "어떤 멜로디를 들어볼까? 좋아하는 그림을 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "menu-treasure": {
+    "text": "서우가 모은 스티커야! 놀이를 마치면 하나씩 모을 수 있어.",
+    "lang": "ko-KR"
+  },
+  "memory-watch": {
+    "text": "그림을 잘 봐. 같은 순서로 눌러보자.",
+    "lang": "ko-KR"
+  },
+  "music-done": {
+    "text": "멜로디가 끝났어. 또 들어볼까?",
+    "lang": "ko-KR"
+  },
+  "music-stop": {
+    "text": "음악을 잠깐 멈췄어. 듣고 싶으면 다시 골라봐.",
+    "lang": "ko-KR"
+  },
+  "all-done": {
+    "text": "끝까지 잘했어! 한 번 더 해볼까?",
+    "lang": "ko-KR"
+  },
+  "quiz-english-start": {
+    "text": "영어 소리를 듣고 같은 글자를 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "listen-ready": {
+    "text": "다시 듣기를 누르면 안내를 들려줄게.",
+    "lang": "ko-KR"
+  },
+  "market-pick-apple": {
+    "text": "사과, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-apple": {
+    "text": "이번에는 사과, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-apple": {
+    "text": "사과도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-banana": {
+    "text": "바나나, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-banana": {
+    "text": "이번에는 바나나, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-banana": {
+    "text": "바나나도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-milk": {
+    "text": "우유, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-milk": {
+    "text": "이번에는 우유, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-milk": {
+    "text": "우유도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-bread": {
+    "text": "식빵, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-bread": {
+    "text": "이번에는 식빵, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-bread": {
+    "text": "식빵도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-carrot": {
+    "text": "당근, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-carrot": {
+    "text": "이번에는 당근, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-carrot": {
+    "text": "당근도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-egg": {
+    "text": "달걀, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-egg": {
+    "text": "이번에는 달걀, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-egg": {
+    "text": "달걀도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-cheese": {
+    "text": "치즈, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-cheese": {
+    "text": "이번에는 치즈, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-cheese": {
+    "text": "치즈도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-grape": {
+    "text": "포도, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-grape": {
+    "text": "이번에는 포도, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-grape": {
+    "text": "포도도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-pear": {
+    "text": "배, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-pear": {
+    "text": "이번에는 배, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-pear": {
+    "text": "배도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-cereal": {
+    "text": "시리얼, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-cereal": {
+    "text": "이번에는 시리얼, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-cereal": {
+    "text": "시리얼도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-yogurt": {
+    "text": "요거트, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-yogurt": {
+    "text": "이번에는 요거트, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-yogurt": {
+    "text": "요거트도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-pick-juice": {
+    "text": "주스, 잘 찾았어!",
+    "lang": "ko-KR"
+  },
+  "market-next-juice": {
+    "text": "이번에는 주스, 찾아볼까?",
+    "lang": "ko-KR"
+  },
+  "market-other-juice": {
+    "text": "주스도 맛있지! 오늘 살 물건을 다시 찾아보자.",
+    "lang": "ko-KR"
+  },
+  "market-start-0": {
+    "text": "오늘은 사과, 우유, 식빵. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-1": {
+    "text": "오늘은 바나나, 달걀, 치즈. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-2": {
+    "text": "오늘은 포도, 요거트, 시리얼. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-3": {
+    "text": "오늘은 배, 주스, 당근. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-4": {
+    "text": "오늘은 우유, 달걀, 식빵. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-5": {
+    "text": "오늘은 사과, 바나나, 요거트. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-6": {
+    "text": "오늘은 치즈, 식빵, 주스. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "market-start-7": {
+    "text": "오늘은 당근, 배, 달걀. 이렇게 세 가지를 사보자!",
+    "lang": "ko-KR"
+  },
+  "kitchen-start-soup": {
+    "text": "오늘은 야채수프, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-start-omelet": {
+    "text": "오늘은 치즈달걀, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "lang": "ko-KR"
+  },
+  "kitchen-start-stew": {
+    "text": "오늘은 포근한 스튜, 만들어보자! 먼저 재료를 눌러서 깨끗이 씻어보자.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-stethoscope": {
+    "text": "청진기로 콩닥콩닥 심장 소리를 들었어.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-thermometer": {
+    "text": "체온계로 체온을 쟀어.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-bandage": {
+    "text": "반창고를 살포시 붙였어.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-brush": {
+    "text": "빗으로 털을 살살 빗어줬어.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-water": {
+    "text": "목마른 친구에게 물을 줬어.",
+    "lang": "ko-KR"
+  },
+  "clinic-use-treat": {
+    "text": "친구에게 간식을 줬어.",
+    "lang": "ko-KR"
+  },
+  "clinic-next-stethoscope": {
+    "text": "이번에는 청진기, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-next-thermometer": {
+    "text": "이번에는 체온계, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-next-bandage": {
+    "text": "이번에는 반창고, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-next-brush": {
+    "text": "이번에는 빗, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-next-water": {
+    "text": "이번에는 물, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-next-treat": {
+    "text": "이번에는 간식, 골라볼까?",
+    "lang": "ko-KR"
+  },
+  "clinic-start-dog": {
+    "text": "멍멍이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+    "lang": "ko-KR"
+  },
+  "clinic-start-cat": {
+    "text": "야옹이를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+    "lang": "ko-KR"
+  },
+  "clinic-start-rabbit": {
+    "text": "토끼를 돌봐주자! 필요한 도구 그림을 보고 골라봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-shape-garden": {
+    "text": "같은 모양의 화분을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-animal-home": {
+    "text": "동물 친구를 알맞은 집으로 데려가줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-vehicle-place": {
+    "text": "탈것을 알맞은 곳으로 보내줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-fruit-color": {
+    "text": "과일을 같은 색 바구니에 담아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-big-small": {
+    "text": "큰 것은 큰 집, 작은 것은 작은 집. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-food-place": {
+    "text": "음식을 알맞은 곳에 정리해줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-weather-wear": {
+    "text": "날씨에 맞는 물건을 골라줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-bathroom-order": {
+    "text": "손 씻는 순서대로 놓아보자. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-half-match": {
+    "text": "반쪽을 맞춰 하나로 만들어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-bedtime": {
+    "text": "잠자기 전에 필요한 것을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-picnic": {
+    "text": "소풍에 필요한 것만 가방에 넣어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "puzzle-music-family": {
+    "text": "같은 악기 가족끼리 모아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+    "lang": "ko-KR"
+  },
+  "story-tower": {
+    "text": "열심히 쌓은 블록 탑이 갑자기 무너졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-tower": {
+    "text": "속상할 수 있어. 다시 천천히 쌓아보자.",
+    "lang": "ko-KR"
+  },
+  "story-thunder": {
+    "text": "창밖에서 아주 큰 천둥소리가 났어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-thunder": {
+    "text": "무서울 수 있어. 어른 손을 잡고 천천히 숨 쉬어보자.",
+    "lang": "ko-KR"
+  },
+  "story-bubble": {
+    "text": "커다란 비눗방울이 반짝이며 날아가. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-bubble": {
+    "text": "신나고 기쁜 마음이네. 같이 웃어보자.",
+    "lang": "ko-KR"
+  },
+  "story-toy": {
+    "text": "친구가 묻지 않고 내가 놀던 자동차를 가져갔어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-toy": {
+    "text": "화가 날 수 있어. '나도 놀고 있었어'라고 말해보자.",
+    "lang": "ko-KR"
+  },
+  "story-mom": {
+    "text": "집에 오니 엄마가 반갑게 꼭 안아줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-mom": {
+    "text": "마음이 따뜻하고 기쁘구나.",
+    "lang": "ko-KR"
+  },
+  "story-dark": {
+    "text": "불이 꺼져서 방이 아주 어두워졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-dark": {
+    "text": "깜깜하면 무서울 수 있어. 불을 켜고 천천히 둘러보자.",
+    "lang": "ko-KR"
+  },
+  "story-cookie": {
+    "text": "먹으려고 들고 있던 쿠키가 바닥에 떨어졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-cookie": {
+    "text": "아쉽고 속상한 마음이 들 수 있어.",
+    "lang": "ko-KR"
+  },
+  "story-birthday": {
+    "text": "문을 열었더니 친구들이 갑자기 생일 노래를 불러줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-birthday": {
+    "text": "깜짝 놀랐구나. 그리고 곧 기쁜 마음도 들 수 있어.",
+    "lang": "ko-KR"
+  },
+  "story-splash": {
+    "text": "친구가 뛰다가 내 옷에 물을 많이 튀겼어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-splash": {
+    "text": "화가 날 수 있어. 먼저 몸을 닦고 천천히 말해보자.",
+    "lang": "ko-KR"
+  },
+  "story-puppy": {
+    "text": "강아지가 달려와서 꼬리를 흔들며 반겨줬어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-puppy": {
+    "text": "반갑고 기쁜 마음이 들었겠네.",
+    "lang": "ko-KR"
+  },
+  "story-balloon": {
+    "text": "옆에 있던 풍선이 갑자기 큰 소리를 내며 터졌어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-balloon": {
+    "text": "깜짝 놀랄 수 있어. 놀란 몸을 천천히 진정시켜보자.",
+    "lang": "ko-KR"
+  },
+  "story-turn": {
+    "text": "미끄럼틀에서 친구가 새치기를 했어. 친구 마음은 어떨까?",
+    "lang": "ko-KR"
+  },
+  "response-turn": {
+    "text": "화가 날 수 있어. '내 차례야'라고 또박또박 말해보자.",
+    "lang": "ko-KR"
+  },
+  "mood-happy": {
+    "text": "기뻐요. 네 마음을 알려줘서 고마워.",
+    "lang": "ko-KR"
+  },
+  "mood-sad": {
+    "text": "속상해요. 네 마음을 알려줘서 고마워.",
+    "lang": "ko-KR"
+  },
+  "mood-angry": {
+    "text": "화나요. 네 마음을 알려줘서 고마워.",
+    "lang": "ko-KR"
+  },
+  "mood-scared": {
+    "text": "무서워요. 네 마음을 알려줘서 고마워.",
+    "lang": "ko-KR"
+  },
+  "mood-surprised": {
+    "text": "놀랐어요. 네 마음을 알려줘서 고마워.",
+    "lang": "ko-KR"
+  },
+  "music-0": {
+    "text": "토끼 노래. 같이 들어보자.",
+    "lang": "ko-KR"
+  },
+  "music-1": {
+    "text": "자동차 노래. 같이 들어보자.",
+    "lang": "ko-KR"
+  },
+  "music-2": {
+    "text": "잘자요 노래. 같이 들어보자.",
+    "lang": "ko-KR"
+  },
+  "music-3": {
+    "text": "신나는 노래. 같이 들어보자.",
+    "lang": "ko-KR"
+  }
+}
