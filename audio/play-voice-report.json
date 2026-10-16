@@ -621,8 +621,19 @@
       "model": "gemini-3.1-flash-tts-preview",
       "voice": "Sulafat",
       "single_utterance": true
+    },
+    {
+      "ids": [
+        "play-market-start-1"
+      ],
+      "text": "오늘은 바나나, 달걀, 치즈. 이렇게 세 가지를 사보자!",
+      "path": "audio/voice/ko/1b85c9d88623219b.mp3",
+      "seconds": 5.21,
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Sulafat",
+      "single_utterance": true
     }
   ],
   "status": "in_progress",
-  "remaining": 71
+  "remaining": 70
 }
