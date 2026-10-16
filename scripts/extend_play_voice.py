@@ -1,8 +1,9 @@
-"""Append only new Sulafat dialogue with a hard per-request process timeout.
-Each sentence is generated independently; existing recordings are never rewritten.
+"""Append fixed Sulafat clips; never rewrite an existing recording.
+The 3.1 free daily quota was exhausted. Remaining clips use the documented
+successor 3.8 Flash TTS with the same Sulafat preset, in bounded grouped calls.
+No generation API is used by the deployed application.
 """
-import base64, json, os, subprocess, sys, time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import base64, io, json, os, subprocess, sys, time, wave
 from pathlib import Path
 import generate_gemini31_voice_pack as voice
 
@@ -11,27 +12,37 @@ ROWS=json.loads((ROOT/'audio/play-dialogue.json').read_text())
 MAPPING={'play-'+id:voice.relpath(row['lang'],row['text']) for id,row in ROWS.items()}
 REPORT=ROOT/'audio/play-voice-report.json'
 RESULTS=ROOT/'.test-results/voice-generation'
+MODEL='gemini-3.8-flash-tts'
+STYLE='Warm, relaxed, subtly affectionate conversational delivery. Clear and gently paced for a three-year-old, without singing or exaggeration.'
 
-def one(id,attempt):
-    row=ROWS[id];client=voice.genai.Client(api_key=os.environ['GEMINI_API_KEY'],http_options={'timeout':60000,'retry_options':{'attempts':1}})
-    direction=voice.STYLE_DIRECTION['warm']
-    prompt=direction+' Read the following Korean sentence exactly once. Output only speech. Do not read instructions or add any words.\n\n'+row['text']
-    if attempt: prompt='Say exactly this in warm, natural standard Korean, with the Sulafat voice. Audio only:\n'+row['text']
-    if attempt == 0:
-        response=client.models.generate_content(model=voice.MODEL,contents=prompt,config={'response_modalities':['AUDIO'],'speech_config':{'voice_config':{'prebuilt_voice_config':{'voice_name':voice.VOICE}}}})
-        data=next(p.inline_data.data for p in response.candidates[0].content.parts if p.inline_data)
-    else:
-        response=client.interactions.create(model=voice.MODEL,input=prompt,response_format={'type':'audio'},generation_config={'speech_config':[{'voice':voice.VOICE}]},timeout=60)
-        data=response.output_audio.data
-    pcm=base64.b64decode(data) if isinstance(data,str) else bytes(data)
-    samples=voice.pcm_samples(pcm);energies=voice.frame_rms(samples)
-    if not energies or max(energies)<=0: raise RuntimeError('Silent recording')
-    segment=voice.trim_segment(samples,0,len(energies),max(38,max(energies)*.009))
-    duration=len(segment)/voice.SAMPLE_RATE
-    if not .2<duration<18: raise RuntimeError(f'Implausible single-utterance length {duration}')
-    path=MAPPING['play-'+id];(ROOT/path).write_bytes(voice.encode_mp3(segment))
-    RESULTS.mkdir(parents=True,exist_ok=True)
-    (RESULTS/(id+'.json')).write_text(json.dumps({'ids':['play-'+id],'text':row['text'],'path':path,'seconds':round(duration,3),'model':voice.MODEL,'voice':voice.VOICE,'single_utterance':True},ensure_ascii=False))
+def batch(name):
+    ids=json.loads((RESULTS/(name+'.input.json')).read_text())
+    transcript=' <long pause>\n'.join(ROWS[id]['text'] for id in ids)
+    client=voice.genai.Client(api_key=os.environ['GEMINI_API_KEY'],http_options={'timeout':110000,'retry_options':{'attempts':1}})
+    try:
+        response=client.models.generate_content(model=MODEL,contents=[{'role':'user','parts':[{'text':transcript,'speech_metadata':{'style':STYLE}}]}],config={'response_modalities':['AUDIO'],'speech_config':{'voice_config':{'prebuilt_voice_config':{'voice_name':voice.VOICE}}}})
+    except Exception as e:
+        print(type(e).__name__+': '+str(e),flush=True)
+        if '429' in str(e):sys.exit(75)
+        raise
+    data=next(p.inline_data.data for p in response.candidates[0].content.parts if p.inline_data)
+    data=base64.b64decode(data) if isinstance(data,str) else bytes(data)
+    if data[:4]==b'RIFF':
+        with wave.open(io.BytesIO(data),'rb') as wav:
+            assert (wav.getframerate(),wav.getnchannels(),wav.getsampwidth())==(24000,1,2)
+            data=wav.readframes(wav.getnframes())
+    samples=voice.pcm_samples(data);energies=voice.frame_rms(samples)
+    boundaries=voice.choose_boundaries(energies,len(ids));threshold=max(38,max(energies)*.009)
+    clips=[];encoded=[]
+    for i,id in enumerate(ids):
+        segment=voice.trim_segment(samples,boundaries[i],boundaries[i+1],threshold)
+        duration=len(segment)/voice.SAMPLE_RATE
+        if not max(.4,len(ROWS[id]['text'])*.045)<duration<18:raise RuntimeError(f'Invalid utterance length {id}: {duration}')
+        path=MAPPING['play-'+id]
+        encoded.append((path,voice.encode_mp3(segment)))
+        clips.append({'ids':['play-'+id],'text':ROWS[id]['text'],'path':path,'seconds':round(duration,3),'model':MODEL,'voice':voice.VOICE,'group':name})
+    for path,data in encoded:(ROOT/path).write_bytes(data)
+    (RESULTS/(name+'.json')).write_text(json.dumps(clips,ensure_ascii=False))
 
 def checkpoint(report):
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
@@ -40,43 +51,36 @@ def checkpoint(report):
     if (ROOT/'audio/play-files.js').exists():paths.append('audio/play-files.js')
     subprocess.run(['git','add',*paths],cwd=ROOT,check=True)
     if subprocess.run(['git','diff','--cached','--quiet'],cwd=ROOT).returncode:
-        subprocess.run(['git','commit','-m','feat: checkpoint new Sulafat play recordings'],cwd=ROOT,check=True)
+        subprocess.run(['git','commit','-m','feat: checkpoint fixed Sulafat play recordings'],cwd=ROOT,check=True)
         subprocess.run(['git','push','origin','HEAD:feat/playground-art-voice-20261016'],cwd=ROOT,check=True)
 
 def main():
-    report=json.loads(REPORT.read_text()) if REPORT.exists() else {'voice':voice.VOICE,'model':voice.MODEL,'scope':'new play dialogue only','clips':[]}
+    report=json.loads(REPORT.read_text()) if REPORT.exists() else {'voice':voice.VOICE,'scope':'new play dialogue only','clips':[]}
     known={c['path'] for c in report['clips']}
+    for c in report['clips']:c.setdefault('model',voice.MODEL);c.setdefault('voice',voice.VOICE)
     for id,row in ROWS.items():
         path=MAPPING['play-'+id]
         if (ROOT/path).exists() and path not in known:
-            report['clips'].append({'ids':['play-'+id],'text':row['text'],'path':path,'recovered_checkpoint':True});known.add(path)
+            report['clips'].append({'ids':['play-'+id],'text':row['text'],'path':path,'recovered_checkpoint':True,'model':voice.MODEL,'voice':voice.VOICE});known.add(path)
     pending=[id for id in ROWS if not (ROOT/MAPPING['play-'+id]).exists()]
-    report['status']='in_progress';report['remaining']=len(pending);checkpoint(report)
+    report.update(status='in_progress',remaining=len(pending),failed=[],model='mixed: original 3.1 and successor 3.8 / Sulafat',fallback_reason='Gemini 3.1 free per-model daily quota exhausted; original recordings preserved')
+    checkpoint(report);RESULTS.mkdir(parents=True,exist_ok=True)
     try:
-        def generate(id):
-            for attempt in range(2):
-                try:
-                    print(f'Generating bounded sentence: {id}, attempt {attempt+1}',flush=True)
-                    subprocess.run([sys.executable,__file__,'--one',id,str(attempt)],cwd=ROOT,timeout=65,check=True)
-                    return json.loads((RESULTS/(id+'.json')).read_text())
-                except (subprocess.TimeoutExpired,subprocess.CalledProcessError):
-                    time.sleep(2)
-            return None
-        report['failed']=[]
-        with ThreadPoolExecutor(max_workers=3) as pool:
-            futures={pool.submit(generate,id):id for id in pending}
-            for future in as_completed(futures):
-                clip=future.result()
-                if clip:report['clips'].append(clip)
-                else:report['failed'].append(futures[future])
-                report['remaining']=sum(not (ROOT/p).exists() for p in MAPPING.values())
-                checkpoint(report)
+        for offset in range(0,len(pending),14):
+            ids=pending[offset:offset+14];name=f'gemini38-{offset//14+1}'
+            print(f'Generating {name}: {len(ids)} remaining Sulafat utterances',flush=True)
+            (RESULTS/(name+'.input.json')).write_text(json.dumps(ids))
+            subprocess.run([sys.executable,__file__,'--batch',name],cwd=ROOT,timeout=120,check=True)
+            report['clips'].extend(json.loads((RESULTS/(name+'.json')).read_text()))
+            report['remaining']=sum(not (ROOT/p).exists() for p in MAPPING.values())
+            checkpoint(report)
+            if report['remaining']:time.sleep(20)
         missing=[p for p in MAPPING.values() if not (ROOT/p).exists()]
         if missing:raise RuntimeError(f'Missing {len(missing)} clips')
-        (ROOT/'audio/play-files.js').write_text('/* New Sulafat clips; existing files.js is unchanged. */\nObject.assign(window.SEOWOO_AUDIO_FILES,'+json.dumps(MAPPING,ensure_ascii=False,separators=(',',':'))+');\n')
-        report['status']='complete';report['catalog_entries']=len(MAPPING);report['remaining']=0
+        (ROOT/'audio/play-files.js').write_text('/* New fixed Sulafat clips; existing files.js is unchanged. */\nObject.assign(window.SEOWOO_AUDIO_FILES,'+json.dumps(MAPPING,ensure_ascii=False,separators=(',',':'))+');\n')
+        report.update(status='complete',catalog_entries=len(MAPPING),remaining=0)
     finally:checkpoint(report)
 
 if __name__=='__main__':
-    if len(sys.argv)>1 and sys.argv[1]=='--one':one(sys.argv[2],int(sys.argv[3]))
+    if len(sys.argv)>1 and sys.argv[1]=='--batch':batch(sys.argv[2])
     else:main()
