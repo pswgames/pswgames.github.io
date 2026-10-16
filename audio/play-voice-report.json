@@ -1092,10 +1092,164 @@
       "model": "gemini-3.8-flash-tts",
       "voice": "Sulafat",
       "group": "gemini38-2"
+    },
+    {
+      "ids": [
+        "play-puzzle-fruit-color"
+      ],
+      "text": "과일을 같은 색 바구니에 담아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/76f25b65637b4bb1.mp3",
+      "seconds": 6.23,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-big-small"
+      ],
+      "text": "큰 것은 큰 집, 작은 것은 작은 집. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/461247bde551e010.mp3",
+      "seconds": 8.65,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-food-place"
+      ],
+      "text": "음식을 알맞은 곳에 정리해줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/b872072374cb0482.mp3",
+      "seconds": 7.03,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-weather-wear"
+      ],
+      "text": "날씨에 맞는 물건을 골라줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/07b40bd70cd84ae8.mp3",
+      "seconds": 5.73,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-bathroom-order"
+      ],
+      "text": "손 씻는 순서대로 놓아보자. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/328efe78e8e13cf2.mp3",
+      "seconds": 5.43,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-half-match"
+      ],
+      "text": "반쪽을 맞춰 하나로 만들어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/7e81d9f174176922.mp3",
+      "seconds": 5.66,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-bedtime"
+      ],
+      "text": "잠자기 전에 필요한 것을 찾아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/6f0742e903d0c3fa.mp3",
+      "seconds": 6.33,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-picnic"
+      ],
+      "text": "소풍에 필요한 것만 가방에 넣어줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/629a15f2354938fd.mp3",
+      "seconds": 5.61,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-puzzle-music-family"
+      ],
+      "text": "같은 악기 가족끼리 모아줘. 그림을 고르고, 놓을 자리를 눌러봐.",
+      "path": "audio/voice/ko/bcbcfcae13b2d302.mp3",
+      "seconds": 5.27,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-story-tower"
+      ],
+      "text": "열심히 쌓은 블록 탑이 갑자기 무너졌어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/ac35de16f9275c52.mp3",
+      "seconds": 6.6,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-response-tower"
+      ],
+      "text": "속상할 수 있어. 다시 천천히 쌓아보자.",
+      "path": "audio/voice/ko/48cc7497ff15dca2.mp3",
+      "seconds": 4.08,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-story-thunder"
+      ],
+      "text": "창밖에서 아주 큰 천둥소리가 났어. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/4c6030bc92cd96d9.mp3",
+      "seconds": 6.5,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-response-thunder"
+      ],
+      "text": "무서울 수 있어. 어른 손을 잡고 천천히 숨 쉬어보자.",
+      "path": "audio/voice/ko/8c440236a2286737.mp3",
+      "seconds": 5.19,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
+    },
+    {
+      "ids": [
+        "play-story-bubble"
+      ],
+      "text": "커다란 비눗방울이 반짝이며 날아가. 친구 마음은 어떨까?",
+      "path": "audio/voice/ko/3db3dd57d563a795.mp3",
+      "seconds": 5.74,
+      "model": "gemini-3.8-flash-tts",
+      "voice": "Sulafat",
+      "group": "gemini38-3"
     }
   ],
   "status": "in_progress",
-  "remaining": 42,
+  "remaining": 28,
   "failed": [],
   "fallback_reason": "Gemini 3.1 free per-model daily quota exhausted; original recordings preserved"
 }
