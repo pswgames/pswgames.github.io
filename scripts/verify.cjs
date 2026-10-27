@@ -42,6 +42,7 @@ console.log(
 );
 for (const test of [
   "audio",
+  "audio-mixer",
   "voice-assets",
   "voice-coverage",
   "regression",
@@ -52,6 +53,7 @@ for (const test of [
   "storybook",
   "narrator",
   "block-engine",
+  "balloon",
 ]) {
   const r = spawnSync(process.execPath, [`tests/${test}.cjs`], {
     stdio: "inherit",

@@ -1,0 +1,248 @@
+.home-featured-card.balloon {
+  background: #fff0d8;
+}
+.featured-balloon {
+  font-size: 48px;
+}
+.balloon-world {
+  background: linear-gradient(145deg, #edfaff, #fff5dd);
+}
+.balloon-layout {
+  max-width: 1400px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: minmax(230px, 320px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.balloon-panel {
+  padding: 20px;
+  background: #fffffff0;
+  border: 3px solid white;
+  border-radius: 28px;
+  box-shadow: var(--shadow-sm);
+}
+.balloon-panel h2 {
+  font-size: 27px;
+  margin: 8px 0 14px;
+}
+.balloon-parent,
+.balloon-privacy {
+  line-height: 1.65;
+  font-size: 16px;
+}
+.balloon-privacy {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 12px;
+}
+.balloon-start,
+.balloon-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.balloon-hud {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0 10px;
+  font-size: 17px;
+}
+.balloon-hud b {
+  font-size: 28px;
+  color: #007db3;
+  font-variant-numeric: tabular-nums;
+}
+.balloon-hud > span {
+  white-space: nowrap;
+}
+.balloon-status {
+  min-height: 52px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #346675;
+}
+.balloon-stage {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 32px;
+  border: 5px solid white;
+  background: linear-gradient(#bcecff, #edfff6);
+  height: clamp(360px, 70svh, 700px);
+  min-width: 0;
+}
+.balloon-video,
+.balloon-hands,
+.balloon-toys {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.balloon-video {
+  object-fit: contain;
+  transform: scaleX(-1);
+  background: #344b63;
+}
+.balloon-hands {
+  pointer-events: none;
+  z-index: 3;
+}
+.balloon-toys {
+  z-index: 2;
+}
+.balloon-toy {
+  position: absolute;
+  width: clamp(76px, 16%, 130px);
+  aspect-ratio: 0.85;
+  min-height: 88px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 30% 23%, #fff9, var(--balloon) 45%);
+  box-shadow:
+    inset -6px -9px 0 #0000000c,
+    0 6px 15px #22446618;
+  border: 3px solid #fff9;
+  touch-action: manipulation;
+}
+.balloon-toy:active:not(:disabled) {
+  transform: translate(-50%, -50%) scale(0.95);
+}
+.balloon-toy:disabled {
+  opacity: 1;
+}
+.balloon-color-0 {
+  --balloon: #ff9cb6;
+}
+.balloon-color-1 {
+  --balloon: #ffd66d;
+}
+.balloon-color-2 {
+  --balloon: #a8a1ef;
+}
+.balloon-color-3 {
+  --balloon: #71d8c1;
+}
+.balloon-smile {
+  font-size: 35px;
+  color: #654e63;
+}
+.balloon-string {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 24px;
+  border-left: 2px solid #7b98aa;
+  transform: rotate(8deg);
+}
+.balloon-cloud {
+  position: absolute;
+  width: 120px;
+  height: 45px;
+  border-radius: 50%;
+  background: #ffffff9c;
+}
+.cloud-one {
+  top: 14%;
+  left: 6%;
+}
+.cloud-two {
+  bottom: 10%;
+  right: 3%;
+  width: 170px;
+}
+.balloon-stage-note {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 12%;
+  z-index: 4;
+  border-radius: 20px;
+  background: #fffffff0;
+  padding: 16px;
+  text-align: center;
+  font-size: clamp(18px, 2.7vw, 28px);
+  pointer-events: none;
+}
+.balloon-world[data-phase="playing"] .balloon-parent,
+.balloon-world[data-phase="playing"] .balloon-privacy {
+  display: none;
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  .balloon-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .balloon-stage {
+    height: 52svh;
+    min-height: 340px;
+  }
+  .balloon-world[data-phase="playing"] .balloon-panel {
+    padding: 12px;
+  }
+  .balloon-world[data-phase="playing"] .balloon-panel h2,
+  .balloon-world[data-phase="playing"] .eyebrow {
+    display: none;
+  }
+  .balloon-start,
+  .balloon-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .balloon-start .btn,
+  .balloon-controls .btn {
+    flex: 1 1 130px;
+    font-size: 16px;
+    padding: 10px;
+  }
+  .balloon-hud {
+    margin-top: 8px;
+  }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .balloon-layout {
+    grid-template-columns: minmax(200px, 29%) minmax(0, 1fr);
+    gap: 12px;
+  }
+  .balloon-panel {
+    padding: 12px;
+  }
+  .balloon-panel h2 {
+    font-size: 21px;
+  }
+  .balloon-stage {
+    height: calc(100svh - 88px);
+    min-height: 250px;
+    position: sticky;
+    top: 8px;
+  }
+  .balloon-controls .btn,
+  .balloon-start .btn {
+    min-height: 48px;
+    font-size: 16px;
+    padding: 8px;
+  }
+  .balloon-hud {
+    margin: 8px 0;
+    font-size: 14px;
+    gap: 6px;
+  }
+  .balloon-hud b {
+    font-size: 24px;
+  }
+  .balloon-controls {
+    margin-top: 8px;
+    gap: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .balloon-controls .btn {
+    flex: 1 1 85px;
+  }
+  .balloon-world[data-phase="playing"] .balloon-panel h2 {
+    display: none;
+  }
+}

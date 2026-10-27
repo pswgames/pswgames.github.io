@@ -16,6 +16,12 @@
       this.decodedVoices = new Map();
       this.voiceGain = null;
       this.effects = new Set();
+      this.mediaRoutes = new WeakMap();
+      this.media = new Set();
+      this.recentSfx = new Map();
+      this.sfxEpoch = 0;
+      this.musicSerial = 0;
+      this.ducked = false;
       const files = window.SEOWOO_AUDIO_FILES || {};
       this.manifest = Object.fromEntries(
         Object.entries(window.SEOWOO_AUDIO || {}).map(([id, entry]) => [
@@ -40,6 +46,7 @@
     unlock() {
       try {
         this.ctx ??= new (window.AudioContext || window.webkitAudioContext)();
+        this.ensureMixer();
         const prime = () => {
           if (!this.ctx || this.ctx.state !== "running") return;
           try {
@@ -61,6 +68,143 @@
           else prime();
         } else prime();
       } catch {}
+    }
+    // One graph for every local/synthetic path. Voice gain remains unchanged.
+    ensureMixer() {
+      if (this.channels || !this.ctx?.createDynamicsCompressor) return;
+      const c = this.ctx;
+      const limiter = c.createDynamicsCompressor();
+      limiter.threshold.value = -3;
+      limiter.knee.value = 0;
+      limiter.ratio.value = 20;
+      limiter.attack.value = 0.002;
+      limiter.release.value = 0.12;
+      // DynamicsCompressor includes automatic makeup gain. Cancel its ~1.7 dB
+      // boost so the existing guide voice retains its original standalone level.
+      const output = c.createGain();
+      output.gain.value = 0.82;
+      limiter.connect(output);
+      output.connect(c.destination);
+      this.channels = {};
+      for (const name of ["voice", "sfx", "music"]) {
+        const g = c.createGain();
+        g.gain.value = name === "voice" ? 1 : this.channelLevel(name);
+        g.connect(limiter);
+        this.channels[name] = g;
+      }
+      this.limiter = limiter;
+      this.syncSettings();
+    }
+    ramp(param, value, seconds = 0.08) {
+      if (!param) return;
+      const now = this.ctx?.currentTime || 0;
+      if (param.setTargetAtTime) {
+        if (param.cancelAndHoldAtTime) param.cancelAndHoldAtTime(now);
+        else {
+          param.cancelScheduledValues(now);
+          param.setValueAtTime(param.value, now);
+        }
+        param.setTargetAtTime(value, now, seconds / 3);
+      } else param.value = value;
+    }
+    channelLevel(channel) {
+      if (channel === "voice")
+        return this.settings.voice ? this.voiceVolume : 0;
+      if (!this.settings.sound) return 0;
+      return (
+        this.sfxVolume *
+        (channel === "music" ? 0.28 : 1) *
+        (this.ducked ? (channel === "music" ? 0.18 : 0.3) : 1)
+      );
+    }
+    syncSettings() {
+      if (this.channels) {
+        // Per-voice volume stays on its source, as before.
+        this.ramp(this.channels.voice.gain, 1);
+        this.ramp(this.channels.sfx.gain, this.channelLevel("sfx"));
+        this.ramp(this.channels.music.gain, this.channelLevel("music"));
+      }
+      this.refreshMedia();
+      if (!this.settings.voice || this.voiceVolume === 0) this.stopVoice();
+      if (!this.settings.sound || this.sfxVolume === 0) {
+        this.stopSfx();
+        this.stopMusic();
+      }
+    }
+    duck(active) {
+      this.ducked = active;
+      for (const name of ["sfx", "music"])
+        this.ramp(
+          this.channels?.[name].gain,
+          this.channelLevel(name),
+          active ? 0.09 : 0.3,
+        );
+      this.refreshMedia();
+    }
+    output(name) {
+      return this.channels?.[name] || this.ctx.destination;
+    }
+    routeMedia(a, channel, gain = 1) {
+      const route = { a, channel, gain, graph: false };
+      this.unlock();
+      if (this.channels && this.ctx.createMediaElementSource) {
+        try {
+          const source = this.ctx.createMediaElementSource(a);
+          const level = this.ctx.createGain();
+          level.gain.value =
+            gain * (channel === "voice" ? this.voiceVolume : 1);
+          source.connect(level);
+          level.connect(this.output(channel));
+          Object.assign(route, { source, level, graph: true });
+        } catch {}
+      }
+      this.mediaRoutes.set(a, route);
+      this.media.add(route);
+      a.volume = route.graph ? 1 : clamp(gain * this.channelLevel(channel));
+      return a;
+    }
+    releaseMedia(a) {
+      if (!a) return;
+      const route = this.mediaRoutes.get(a);
+      if (!route) return;
+      clearInterval(route.fade);
+      route.source?.disconnect();
+      route.level?.disconnect();
+      this.media.delete(route);
+      this.mediaRoutes.delete(a);
+    }
+    refreshMedia() {
+      for (const route of this.media) {
+        const target = route.graph
+          ? 1
+          : clamp(route.gain * this.channelLevel(route.channel));
+        if (route.graph && route.channel === "voice")
+          this.ramp(route.level.gain, this.voiceVolume);
+        clearInterval(route.fade);
+        if (route.graph || target === 0) {
+          route.a.volume = target;
+          continue;
+        }
+        const start = route.a.volume,
+          time = Date.now();
+        route.fade = setInterval(() => {
+          const fraction = Math.min(1, (Date.now() - time) / 180);
+          route.a.volume = start + (target - start) * fraction;
+          if (fraction === 1) clearInterval(route.fade);
+        }, 20);
+      }
+    }
+    effectGain(src, fallback = 1) {
+      return (
+        window.SEOWOO_AUDIO_PROFILE?.files?.[String(src).split("?")[0]] ??
+        fallback
+      );
+    }
+    stopMusic() {
+      this.musicSerial++;
+      this.music?.pause();
+      this.releaseMedia(this.music);
+      this.music = null;
     }
     pickVoice(lang) {
       this.refreshVoices();
@@ -87,14 +231,17 @@
       try {
         this.voice?.pause?.();
       } catch {}
+      this.releaseMedia(this.voice);
       this.voice = null;
       this.voiceGain = null;
+      this.duck(false);
       window.speechSynthesis?.cancel();
       this.finishVoice?.(false);
       this.finishVoice = null;
       clearTimeout(this.voiceTimeout);
     }
     stopSfx() {
+      this.sfxEpoch++;
       for (const s of this.effects) {
         try {
           s.stop?.();
@@ -102,6 +249,7 @@
         try {
           s.pause?.();
         } catch {}
+        this.releaseMedia(s);
       }
       this.effects.clear();
       this.motor = null;
@@ -109,8 +257,7 @@
     stopAll() {
       this.stopVoice();
       this.stopSfx();
-      this.music?.pause();
-      this.music = null;
+      this.stopMusic();
     }
     stop() {
       this.stopAll();
@@ -118,14 +265,19 @@
     setVoiceVolume(n) {
       this.voiceVolume = clamp(n);
       this.settings.voiceVolume = this.voiceVolume;
-      if (this.voice && "volume" in this.voice)
+      if (
+        this.voice &&
+        "volume" in this.voice &&
+        !this.mediaRoutes.get(this.voice)?.graph
+      )
         this.voice.volume = this.voiceVolume;
-      if (this.voiceGain)
-        this.voiceGain.gain.value = this.voiceVolume;
+      if (this.voiceGain) this.voiceGain.gain.value = this.voiceVolume;
+      this.syncSettings();
     }
     setSfxVolume(n) {
       this.sfxVolume = clamp(n);
       this.settings.sfxVolume = this.sfxVolume;
+      this.syncSettings();
     }
     preload(ids) {
       for (const id of ids) {
@@ -153,10 +305,12 @@
       this.stopVoice();
       if (
         !this.settings.voice ||
+        this.voiceVolume === 0 ||
         (!this.settings.englishVoice && lang.startsWith("en"))
       )
         return Promise.resolve(false);
       const token = this.serial;
+      this.duck(true);
       entry ??= Object.values(this.manifest).find(
         (x) =>
           (x.lang || "ko-KR") === lang && normalize(x.text) === normalize(text),
@@ -166,6 +320,8 @@
           if (token !== this.serial) return;
           clearTimeout(this.voiceTimeout);
           this.finishVoice = null;
+          this.releaseMedia(this.voice);
+          this.duck(false);
           this.voice = null;
           this.voiceGain = null;
           resolve(ok);
@@ -176,6 +332,10 @@
         const deviceFallback = () => {
           if (token !== this.serial || deviceFallbackStarted) return;
           deviceFallbackStarted = true;
+          try {
+            this.voice?.pause?.();
+          } catch {}
+          this.releaseMedia(this.voice);
           if (!window.speechSynthesis) {
             finish(false);
             return;
@@ -192,6 +352,7 @@
           if (v) u.voice = v;
           u.onend = () => finish(true);
           u.onerror = () => finish(false);
+          this.voice = u;
           window.speechSynthesis.speak(u);
         };
 
@@ -210,11 +371,10 @@
             return;
           }
           try {
-            const a =
-              this.buffers.get(entry.src) || new Audio(versionedSrc(entry.src));
+            const a = new Audio(versionedSrc(entry.src));
             a.preload = "auto";
             a.currentTime = 0;
-            a.volume = this.voiceVolume;
+            this.routeMedia(a, "voice");
             this.voice = a;
             a.onended = () => finish(true);
             a.onerror = deviceFallback;
@@ -244,7 +404,11 @@
                 throw new Error(`voice asset HTTP ${response.status}`);
               const bytes = await response.arrayBuffer();
               buffer = await new Promise((res, rej) => {
-                const result = this.ctx.decodeAudioData(bytes.slice(0), res, rej);
+                const result = this.ctx.decodeAudioData(
+                  bytes.slice(0),
+                  res,
+                  rej,
+                );
                 result?.then?.(res, rej);
               });
               this.decodedVoices.set(entry.src, buffer);
@@ -256,7 +420,7 @@
             source.buffer = buffer;
             gain.gain.value = this.voiceVolume;
             source.connect(gain);
-            gain.connect(this.ctx.destination);
+            gain.connect(this.output("voice"));
             this.voice = source;
             this.voiceGain = gain;
             source.onended = () => {
@@ -295,10 +459,10 @@
         }
 
         if (entry?.src) {
-          const a = this.buffers.get(entry.src) || new Audio(entry.src);
+          const a = new Audio(entry.src);
           this.voice = a;
           a.currentTime = 0;
-          a.volume = this.voiceVolume;
+          this.routeMedia(a, "voice");
           a.onended = () => finish(true);
           a.onerror = deviceFallback;
           a.play().catch(deviceFallback);
@@ -307,11 +471,21 @@
     }
     async playFile(src) {
       this.stopVoice();
-      if (!src || !this.settings.voice) return false;
+      if (!src || !this.settings.voice || this.voiceVolume === 0) return false;
+      this.duck(true);
       const token = this.serial;
       const a = new Audio(src);
       this.voice = a;
-      a.volume = this.voiceVolume;
+      this.routeMedia(a, "voice");
+      const finish = () => {
+        if (token === this.serial) {
+          this.releaseMedia(a);
+          this.voice = null;
+          this.duck(false);
+        }
+      };
+      a.onended = finish;
+      a.onerror = finish;
       try {
         await a.play();
         if (token !== this.serial) {
@@ -320,40 +494,64 @@
         }
         return true;
       } catch {
+        finish();
         return false;
       }
     }
     async playMusic(src) {
-      this.music?.pause();
-      this.music = null;
-      if (!src || !this.settings.sound) return false;
-      const a = new Audio(src);
+      this.stopMusic();
+      if (!src || !this.settings.sound || this.sfxVolume === 0) return false;
+      const token = this.musicSerial;
+      const a = this.routeMedia(new Audio(src), "music", this.effectGain(src));
       this.music = a;
-      a.volume = 0.45;
+      const finish = () => {
+        this.releaseMedia(a);
+        if (this.music === a) this.music = null;
+      };
+      a.onended = finish;
+      a.onerror = finish;
       try {
         await a.play();
+        if (token !== this.musicSerial) {
+          a.pause();
+          finish();
+          return false;
+        }
         return this.music === a;
       } catch {
+        finish();
         return false;
       }
     }
-    tone(freq = 660, dur = 0.1, type = "sine", vol = 0.05, delay = 0) {
-      if (!this.settings.sound) return;
+    musicTone(freq, dur = 0.45) {
+      this.tone(freq, dur, "sine", 0.05, 0, "music");
+    }
+    tone(
+      freq = 660,
+      dur = 0.1,
+      type = "sine",
+      vol = 0.05,
+      delay = 0,
+      channel = "sfx",
+    ) {
+      if (!this.settings.sound || this.sfxVolume === 0) return;
       this.unlock();
-      if (!this.ctx) return;
+      if (!this.ctx || vol <= 0 || this.effects.size >= 6) return;
       const t = this.ctx.currentTime + delay,
         o = this.ctx.createOscillator(),
         g = this.ctx.createGain();
       o.type = type;
       o.frequency.setValueAtTime(freq, t);
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(
-        Math.max(0.0002, vol * this.sfxVolume),
-        t + 0.012,
-      );
+      const peak =
+        Math.min(0.36, 0.3 * Math.pow(vol / 0.05, 0.25)) *
+        (type === "square" ? 0.7 : 1) *
+        (this.channels ? 1 : this.channelLevel(channel));
+      g.gain.linearRampToValueAtTime(peak, t + Math.min(0.012, dur / 4));
+      g.gain.setValueAtTime(peak, t + dur * 0.55);
       g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
       o.connect(g);
-      g.connect(this.ctx.destination);
+      g.connect(this.output(channel));
       this.effects.add(o);
       o.onended = () => {
         this.effects.delete(o);
@@ -365,9 +563,9 @@
     }
     // Filtered air/friction, intentionally synthesized; replaceable by licensed recordings.
     noise(duration, frequency, volume, loop = false) {
-      if (!this.settings.sound) return;
+      if (!this.settings.sound || this.sfxVolume === 0) return;
       this.unlock();
-      if (!this.ctx) return;
+      if (!this.ctx || volume <= 0 || this.effects.size >= 6) return;
       const c = this.ctx,
         t = c.currentTime,
         s = c.createBufferSource(),
@@ -389,14 +587,24 @@
       f.type = "lowpass";
       f.frequency.value = frequency;
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(volume * this.sfxVolume, t + 0.12);
+      g.gain.linearRampToValueAtTime(
+        Math.min(volume, 0.2) *
+          (frequency <= 180 ? 0.42 : 1) *
+          (this.channels ? 1 : this.channelLevel("sfx")),
+        t + 0.12,
+      );
       if (!loop) {
-        g.gain.setValueAtTime(volume * this.sfxVolume, t + duration * 0.6);
+        g.gain.setValueAtTime(
+          Math.min(volume, 0.2) *
+            (frequency <= 180 ? 0.42 : 1) *
+            (this.channels ? 1 : this.channelLevel("sfx")),
+          t + duration * 0.6,
+        );
         g.gain.linearRampToValueAtTime(0, t + duration);
       }
       s.connect(f);
       f.connect(g);
-      g.connect(c.destination);
+      g.connect(this.output("sfx"));
       this.effects.add(s);
       s.onended = () => {
         this.effects.delete(s);
@@ -416,31 +624,52 @@
       try {
         this.motor.pause?.();
       } catch {}
+      this.releaseMedia(this.motor);
       this.effects.delete(this.motor);
       this.motor = null;
     }
     playLocalSfx(id, spec) {
-      if (!this.settings.sound || !spec?.src) return false;
+      if (!this.settings.sound || this.sfxVolume === 0 || !spec?.src)
+        return false;
       if (id === "motorStart") this.stopMotor();
       if (id === "motorStop") this.stopMotor();
-      const a = new Audio(spec.src);
+      const epoch = this.sfxEpoch;
+      const a = this.routeMedia(
+        new Audio(spec.src),
+        "sfx",
+        this.effectGain(spec.src, spec.gain ?? 1),
+      );
       a.preload = "auto";
       a.loop = !!spec.loop;
-      a.volume = clamp(this.sfxVolume * (spec.gain ?? 1));
       this.effects.add(a);
+      let failed = false;
       const cleanup = () => {
-        if (!a.loop) this.effects.delete(a);
-        if (this.motor === a && !a.loop) this.motor = null;
+        this.effects.delete(a);
+        this.releaseMedia(a);
+        if (this.motor === a) this.motor = null;
+      };
+      const fallback = () => {
+        if (failed) return;
+        failed = true;
+        a.pause();
+        cleanup();
+        if (
+          epoch === this.sfxEpoch &&
+          this.settings.sound &&
+          this.sfxVolume > 0
+        )
+          this.playSyntheticSfx(id);
       };
       a.onended = cleanup;
-      a.onerror = () => {
-        cleanup();
-        this.playSyntheticSfx(id);
-      };
-      a.play().catch(() => {
-        cleanup();
-        this.playSyntheticSfx(id);
-      });
+      a.onerror = fallback;
+      a.play()
+        .then(() => {
+          if (epoch !== this.sfxEpoch) {
+            a.pause();
+            cleanup();
+          }
+        })
+        .catch(fallback);
       if (id === "motorStart" && a.loop) this.motor = a;
       return true;
     }
@@ -475,8 +704,13 @@
       }
     }
     playSfx(id) {
-      if (!this.settings.sound) return;
+      if (!this.settings.sound || this.sfxVolume === 0) return;
       if (id === "motorStop") this.stopMotor();
+      const now = Date.now(),
+        previous = this.recentSfx.get(id);
+      if (previous != null && now - previous < 75) return;
+      this.recentSfx.set(id, now);
+      if (this.effects.size >= 6) return;
       const spec = this.sfxManifest[id];
       if (spec?.src && this.playLocalSfx(id, spec)) return;
       this.playSyntheticSfx(id);

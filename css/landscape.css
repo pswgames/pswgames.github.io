@@ -1,0 +1,550 @@
+/* Height-aware layouts: keep toys reachable instead of shrinking whole pages. */
+.home-featured-grid {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.home-world {
+  height: auto;
+  min-height: 100svh;
+  max-height: none;
+}
+.home-top {
+  min-height: 76px;
+}
+.brand-block {
+  top: 100px;
+}
+.home-bottom {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  width: min(1440px, 100%);
+  margin: clamp(290px, 38svh, 400px) auto 0;
+  padding: 0 max(24px, env(safe-area-inset-right)) 20px
+    max(24px, env(safe-area-inset-left));
+}
+.home-featured-card b {
+  word-break: keep-all;
+}
+.music-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.music-card {
+  min-width: 0;
+}
+.music-card .v2-icon {
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+}
+@media (max-width: 900px) {
+  .music-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 701px) and (max-width: 1250px) and (min-height: 601px) {
+  .home-featured-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.play-header > *,
+.game-body > *,
+.v2-body > * {
+  min-width: 0;
+}
+dialog {
+  max-height: calc(
+    100dvh - max(24px, env(safe-area-inset-top)) -
+      max(24px, env(safe-area-inset-bottom))
+  );
+  overflow: auto;
+}
+.block-overlay {
+  overflow-y: auto;
+  align-items: safe center;
+}
+.block-modal {
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  .home-bottom {
+    margin: 0 16px;
+    width: auto;
+    padding: 0;
+  }
+  .brand-block {
+    top: auto;
+  }
+  .home-featured-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-featured-card.balloon {
+    grid-column: 1 / -1;
+  }
+}
+@media (orientation: landscape) and (max-height: 600px) {
+  .play-screen {
+    padding: max(8px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+  }
+  .play-header {
+    grid-template-columns: 104px minmax(0, 1fr) 104px;
+    min-height: 48px;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+  .play-header h1 {
+    font-size: 25px;
+  }
+  .play-header .icon-btn {
+    width: 48px;
+    height: 48px;
+  }
+  .home-world {
+    min-height: 100svh;
+    overflow: visible;
+  }
+  .home-top {
+    padding: 10px max(20px, env(safe-area-inset-right)) 0
+      max(20px, env(safe-area-inset-left));
+    min-height: 58px;
+  }
+  .home-greeting {
+    font-size: 14px;
+  }
+  .brand-block {
+    position: absolute;
+    height: auto;
+    padding: 0;
+    top: 82px;
+    left: 7%;
+  }
+  .home-landscape {
+    top: 0;
+    height: 100%;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .brand-logo {
+    font-size: 58px;
+  }
+  .brand-block > p {
+    font-size: 17px;
+  }
+  .welcome-note {
+    display: none;
+  }
+  .home-bottom {
+    margin-top: 145px;
+    padding: 0 max(20px, env(safe-area-inset-right)) 16px
+      max(20px, env(safe-area-inset-left));
+  }
+  .home-featured-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .home-featured-card {
+    min-height: 78px;
+    grid-template-columns: 48px minmax(0, 1fr) 10px;
+    padding: 8px;
+    gap: 6px;
+  }
+  .home-featured-card .featured-art {
+    width: 48px;
+    height: 48px;
+    font-size: 40px;
+  }
+  .home-featured-card b {
+    font-size: 18px;
+  }
+  .home-featured-card small {
+    display: none;
+  }
+  .activity-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .activity-card {
+    min-height: 100px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .activity-card .toy-art {
+    width: 78px;
+    height: 78px;
+  }
+  .activity-card > span:first-child {
+    font-size: 23px;
+  }
+  .home-footer {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-message {
+    display: none;
+  }
+  /* A shared viewport for the block tray and board makes dragging possible. */
+  .block-game {
+    width: min(940px, 100%);
+    padding: 0 6px 12px;
+    display: grid;
+    grid-template-columns: minmax(230px, min(45vw, calc(100svh - 96px))) minmax(
+        0,
+        1fr
+      );
+    gap: 8px 24px;
+    --unit: 18px;
+    --gap: 2px;
+  }
+  .block-board-wrap {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    align-self: start;
+    padding: 8px;
+  }
+  .block-intro {
+    grid-column: 2;
+    margin: 0;
+    gap: 8px;
+  }
+  .block-intro img {
+    width: 40px;
+    height: 40px;
+  }
+  .block-intro p {
+    font-size: 15px;
+  }
+  .block-scoreboard {
+    grid-column: 2;
+    margin: 0;
+    padding: 6px 2px;
+  }
+  .block-tray {
+    grid-column: 2;
+    margin: 0;
+    min-height: 96px;
+    padding: 4px;
+    gap: 4px;
+  }
+  .block-pocket,
+  .block-grab {
+    min-height: 82px;
+  }
+  .block-help {
+    grid-column: 2;
+    margin: 0;
+    min-height: 0;
+    font-size: 13px;
+  }
+  .block-modal {
+    padding: 16px;
+    gap: 8px;
+  }
+  .block-modal > img {
+    width: 42px;
+    height: 42px;
+  }
+  .block-modal strong {
+    font-size: 28px;
+  }
+  .dialog-head {
+    padding: 10px 18px;
+  }
+  .parent-gate {
+    padding-top: 14px;
+  }
+  .modal-card {
+    padding: 18px;
+  }
+  .modal-card > img {
+    width: 60px;
+    height: 60px;
+  }
+  /* Drag sources and their targets must fit in the same vertical interval. */
+  .v2-world-hub {
+    min-height: 370px;
+    padding: 12px;
+    gap: 12px;
+  }
+  .v2-world-title {
+    padding: 8px 16px;
+  }
+  .v2-world-title h2 {
+    font-size: 23px;
+  }
+  .v2-world-title > span,
+  .world-building small {
+    display: none;
+  }
+  .world-building {
+    padding: 8px;
+    border-radius: 20px;
+  }
+  .world-building .v2-icon {
+    width: 56px;
+    height: 56px;
+  }
+  .world-building b {
+    font-size: 19px;
+  }
+  .v2-town-kid {
+    height: 108px;
+  }
+  .town-child {
+    width: 90px;
+    height: 108px;
+    flex-basis: 90px;
+  }
+  .kid-talk {
+    padding: 10px;
+    font-size: 15px;
+  }
+  .v2-role-wrap {
+    min-height: 0;
+    padding: 12px;
+    gap: 12px;
+  }
+  .market-products {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+    border-width: 3px;
+  }
+  .product-card {
+    min-height: 82px;
+    padding: 5px;
+    border-radius: 15px;
+  }
+  .product-card .v2-icon {
+    width: 50px;
+    height: 50px;
+  }
+  .product-card small {
+    font-size: 14px;
+  }
+  .market-cart {
+    min-height: 160px;
+    padding: 10px;
+    position: sticky;
+    top: 10px;
+    align-self: start;
+  }
+  .cart-box {
+    min-height: 80px;
+  }
+  .cart-box .v2-icon {
+    width: 46px;
+    height: 46px;
+  }
+  .market-checkout {
+    padding: 10px;
+  }
+  .checkout-display {
+    min-height: 48px;
+    font-size: 20px;
+  }
+  .recipe-card {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+  .recipe-card h2 {
+    font-size: 24px;
+  }
+  .recipe-card .v2-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .fridge-tray {
+    min-height: 80px;
+    gap: 10px;
+  }
+  .ingredient {
+    min-width: 74px;
+  }
+  .ingredient .v2-icon {
+    width: 48px;
+    height: 48px;
+  }
+  .kitchen-zone {
+    min-height: 150px;
+    padding: 8px;
+  }
+  .kitchen-zone > b {
+    font-size: 17px;
+  }
+  .station-art,
+  .station-art > .v2-icon {
+    height: 64px;
+  }
+  .station-art > .v2-icon {
+    width: 64px;
+  }
+  .v2-pot {
+    height: 100px;
+    width: 115px;
+  }
+  .v2-pot > .v2-icon {
+    width: 95px;
+    height: 95px;
+  }
+  .patient-card {
+    padding: 10px;
+    gap: 8px;
+  }
+  .patient-drop {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 220px;
+    width: 100%;
+  }
+  .patient-drop > span {
+    font-size: 13px;
+    padding: 6px;
+  }
+  .v2-patient {
+    grid-column: 1;
+    grid-row: 3;
+    width: 190px;
+    height: 185px;
+  }
+  .clinic-toolbox {
+    grid-column: 2;
+    grid-row: 3;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    padding: 8px;
+  }
+  .clinic-tool {
+    padding: 6px;
+  }
+  .clinic-tool .v2-icon {
+    width: 52px;
+    height: 52px;
+  }
+  .clinic-tool small {
+    font-size: 14px;
+  }
+  .v2-puzzle-world {
+    padding: 12px;
+  }
+  .puzzle-top {
+    padding: 10px;
+  }
+  .puzzle-top h2 {
+    font-size: 24px;
+  }
+  .v2-puzzle-board {
+    grid-template-columns: 1.25fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: center;
+  }
+  .puzzle-slots {
+    gap: 8px;
+  }
+  .v2-slot {
+    min-height: 100px;
+    padding: 7px;
+    border-radius: 18px;
+  }
+  .slot-visual > .v2-icon {
+    width: 56px;
+    height: 54px;
+  }
+  .v2-slot > b {
+    font-size: 16px;
+  }
+  .placed-items {
+    min-height: 0;
+  }
+  .placed-items > .v2-icon {
+    width: 34px;
+    height: 34px;
+  }
+  .puzzle-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 8px;
+    gap: 8px;
+  }
+  .v2-piece {
+    min-height: 88px;
+    border-radius: 18px;
+  }
+  .v2-piece .v2-icon {
+    width: 60px;
+    height: 60px;
+  }
+  .puzzle-status {
+    padding: 10px;
+    margin-top: 12px;
+  }
+  .case-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .case-scene {
+    min-height: 240px;
+  }
+  .case-copy {
+    padding: 16px;
+  }
+  .theme-elevator.play-screen {
+    --console-width: 280px;
+    min-height: 375px;
+  }
+  .floor-panel {
+    grid-template-columns: minmax(0, 1fr) 52px;
+    grid-template-rows: minmax(0, 1fr);
+  }
+  .floor-main {
+    grid-template-columns: repeat(4, minmax(48px, 1fr));
+    grid-template-rows: repeat(5, minmax(48px, 1fr));
+  }
+  .door-controls {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 48px);
+    align-content: end;
+  }
+  .floor-key {
+    font-size: 23px;
+  }
+  .potty-layout {
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 1fr);
+    align-items: start;
+  }
+  .potty-step-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .potty-step {
+    min-height: 90px;
+    padding: 8px 2px;
+  }
+  .potty-art {
+    width: 50px;
+    height: 50px;
+  }
+  .potty-step b {
+    font-size: 12px;
+  }
+  .potty-heading h2 {
+    font-size: 24px;
+  }
+  .potty-drag-guide {
+    font-size: 15px;
+    padding: 8px;
+  }
+  .potty-target {
+    width: 68px;
+    height: 76px;
+  }
+  .potty-child {
+    min-width: 52px;
+    min-height: 72px;
+  }
+}

@@ -17,7 +17,7 @@
       toast,
       awardSticker,
     } = K;
-  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.4.2";
+  const APP_VERSION = window.__SEOWOO_VERSION__ || "7.5.1";
   const main = document.getElementById("main"),
     parent = document.getElementById("parentDialog");
   const paths = {
@@ -53,10 +53,11 @@
   const art = (n) =>
     `<span class="toy-art art-${n}" aria-hidden="true"></span>`;
   const picture = (pic) => window.SeowooArt?.picture(pic) || pic;
-  const gameArt = (name) => window.SeowooArt?.icon(name) || "";
+  const gameArt = (name) => name === "balloon" ? '<span aria-hidden="true">🎈</span>' : window.SeowooArt?.icon(name) || "";
   const featuredArt = (kind) =>
-    `<span class="featured-art featured-${kind}">${gameArt({ village: "village-icon", puzzle: "puzzle", feelings: "heart", blockpang: "blocks" }[kind])}</span>`;
+    `<span class="featured-art featured-${kind}">${gameArt({ village: "village-icon", puzzle: "puzzle", feelings: "heart", blockpang: "blocks", balloon: "balloon" }[kind])}</span>`;
   const featuredActivities = [
+    ["balloon", "풍선톡톡", "손을 살짝 움직이는 몸놀이", "balloon"],
     ["blockpang", "서우 블록팡", "차곡차곡 한 줄 팡!", "blockpang"],
     ["village", "역할놀이 마을", "마트·주방·동물병원", "village"],
     ["puzzle", "퍼즐 탐험대", "끌어서 맞추는 퍼즐", "puzzle"],
@@ -97,6 +98,7 @@
     window.SeowooExperiences?.unmount?.();
     window.SeowooPottyDrag?.unmount();
     window.SeowooBlockPang?.unmount();
+    window.SeowooBalloon?.unmount();
     quiz = null;
     memory = null;
   }
@@ -105,6 +107,7 @@
     elevator: "투명 엘리베이터",
     potty: "화장실 탐험대",
     blockpang: "서우 블록팡",
+    balloon: "풍선톡톡",
     language: "말글 놀이터",
     numbers: "숫자 놀이",
     shape: "도형 찾기",
@@ -202,6 +205,9 @@
         break;
       case "elevator":
         renderElevator();
+        break;
+      case "balloon":
+        window.SeowooBalloon?.mount({main,header});
         break;
       case "blockpang":
         window.SeowooBlockPang?.mount({main,header,icon});
@@ -656,6 +662,7 @@
       "plain",
       route === "think" ? "생각 놀이터" : "더 많은 놀이",
       `<div class="more-intro"><span class="eyebrow">새로 생긴 놀이</span><h2>서우가 직접 만지고 움직이는 놀이</h2><p>정답보다 탐색과 표현을 먼저 생각했어.</p></div><div class="more-grid premium-first">${[
+        ["balloon", "풍선톡톡 · 몸놀이", "🎈"],
         ["blockpang", "서우 블록팡", ""],
         ["village", "역할놀이 마을", "🏘️"],
         ["puzzle", "퍼즐 탐험대", "🧩"],
@@ -863,7 +870,7 @@
     let n = 0;
     const tick = () => {
       const f = melodies[i][n++ % 8];
-      if (f) audio.tone(f, 0.45, "sine", 0.09);
+      if (f) audio.musicTone(f, 0.45);
       if (n >= 24 && !state.music.repeat) {
         clearInterval(musicTimer);
         document.getElementById("musicStatus").textContent = "또 들어볼까?";
@@ -1003,7 +1010,7 @@
     parent.innerHTML = `${dialogHeader("기록 초기화")}<div class="parent-content app-info"><h3>처음부터 시작할까요?</h3><p>이 기기의 놀이 기록, 스티커와 놀이 설정을 지워요. 이 작업은 되돌릴 수 없어요. 보호자 비밀번호는 유지됩니다.</p><button class="btn soft" data-records>취소</button><button class="btn primary" data-reset-confirm>기록과 설정 지우기</button></div>`;
   }
   function info() {
-    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 ${APP_VERSION}</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·카메라·계정 가입 없이 놀 수 있어요.</p><p>한국어 안내 음성은 Gemini Sulafat 로컬 음원을 우선 사용하며, 로컬 재생이 실패할 때만 기기 음성을 마지막 안전망으로 사용합니다. 영어도 저장된 로컬 음원을 우선 사용합니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
+    parent.innerHTML = `${dialogHeader("앱 정보")}<div class="parent-content app-info"><h3>서우놀이터 ${APP_VERSION}</h3><p>놀면서 자라는 서우의 작은 세상.</p><p>사진과 그림은 앱에 함께 저장됩니다. 마이크·계정 가입 없이 놀 수 있어요. 풍선톡톡은 카메라 몸놀이 또는 카메라 없는 손가락 놀이를 선택해요. 카메라 영상과 동작 좌표는 기기 안에서만 처리하고 저장하거나 전송하지 않아요.</p><p>한국어 안내 음성은 Gemini Sulafat 로컬 음원을 우선 사용하며, 로컬 재생이 실패할 때만 기기 음성을 마지막 안전망으로 사용합니다. 영어도 저장된 로컬 음원을 우선 사용합니다. 기기 대체 음성은 기종에 따라 음색과 음량이 달라질 수 있습니다.</p><p>웹 화면잠금은 앱 안의 이동을 제한합니다. 기기 전체 잠금은 iPhone 사용법 유도 또는 Android 전용 모드가 필요합니다.</p><button class="btn primary" data-parent-back>돌아가기</button></div>`;
   }
   function closeParent() {
     parent.close();

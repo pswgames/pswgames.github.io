@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-27",
+  "base": "e3ac6ed",
+  "branch": "feat/balloon-tap-landscape",
+  "routes": [
+    "home",
+    "elevator",
+    "potty",
+    "blockpang",
+    "balloon",
+    "language",
+    "numbers",
+    "shape",
+    "english",
+    "treasure",
+    "music",
+    "more",
+    "numberBoard",
+    "quantity",
+    "numberOrder",
+    "finger",
+    "alphabet",
+    "englishWords",
+    "koreanWords",
+    "hangul",
+    "think",
+    "color",
+    "memory",
+    "together",
+    "village",
+    "puzzle",
+    "feelings"
+  ],
+  "screenChecks": 1320,
+  "profiles": {
+    "chromium-844x390": 110,
+    "chromium-667x375": 110,
+    "chromium-1024x768": 110,
+    "chromium-1180x820": 110,
+    "chromium-390x844": 110,
+    "chromium-768x1024": 110,
+    "webkit-844x390": 110,
+    "webkit-667x375": 110,
+    "webkit-1024x768": 110,
+    "webkit-1180x820": 110,
+    "webkit-390x844": 110,
+    "webkit-768x1024": 110
+  },
+  "failures": [],
+  "balloon": {
+    "touch": true,
+    "rotation": true,
+    "completion": true,
+    "permissionDenial": true,
+    "syntheticHands": true,
+    "trackingLoss": true,
+    "visibilityCleanup": true,
+    "restartCleanup": true,
+    "cameraEnded": true,
+    "realCameraUsed": false,
+    "errors": []
+  },
+  "model": {
+    "poses": 0,
+    "runtime": "0.10.21",
+    "delegate": "CPU",
+    "fixture": "generated blank canvas",
+    "realCameraUsed": false
+  },
+  "offline": {
+    "offlineTouch": true,
+    "existingGames": true,
+    "keys": [
+      "seowoo-v7.5.0"
+    ],
+    "balloon": true,
+    "model": false
+  },
+  "rotation": [
+    "chromium blockpang: in-flight drag cancelled and state preserved",
+    "chromium puzzle: in-flight drag cancelled and state preserved",
+    "chromium potty: in-flight drag cancelled and state preserved",
+    "webkit blockpang: in-flight drag cancelled and state preserved",
+    "webkit puzzle: in-flight drag cancelled and state preserved",
+    "webkit potty: in-flight drag cancelled and state preserved"
+  ]
+}
