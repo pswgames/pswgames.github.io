@@ -73,11 +73,44 @@ let browser;
       voiceVolume: 1,
       sfxVolume: 0.9,
     };
+    const windowDb = (buffer, start, end) => {
+      const samples = buffer
+        .getChannelData(0)
+        .slice(
+          Math.floor(start * buffer.sampleRate),
+          Math.floor(end * buffer.sampleRate),
+        );
+      return (
+        20 *
+        Math.log10(
+          Math.sqrt(samples.reduce((s, x) => s + x * x, 0) / samples.length),
+        )
+      );
+    };
     const render = async (kind, old = false) => {
       const c = new Offline(1, 48000 * 3, 48000),
         a = new SeowooAudioManager({ ...settings });
       a.ctx = c;
-      if (kind === "voice") {
+      let resumeDuck;
+      if (kind.startsWith("channel-")) {
+        const [, mode, channel] = kind.split("-");
+        a.ensureMixer();
+        const oscillator = c.createOscillator(),
+          gain = c.createGain();
+        oscillator.frequency.value = 440;
+        gain.gain.value = 0.1;
+        oscillator.connect(gain);
+        gain.connect(a.output(channel));
+        oscillator.start(0);
+        oscillator.stop(2);
+        if (mode !== "normal") a.duck(true);
+        if (mode === "recover") {
+          resumeDuck = c.suspend(0.5).then(() => {
+            a.duck(false);
+            return c.resume();
+          });
+        }
+      } else if (kind === "voice") {
         const bytes = await (
           await fetch(SEOWOO_AUDIO_FILES["common-0"])
         ).arrayBuffer();
@@ -144,15 +177,27 @@ let browser;
         } else if (isMusic) a.musicTone(660, dur);
         else a.tone(660, dur, type, vol);
       }
-      const buffer = await c.startRendering();
+      const rendered = c.startRendering();
+      if (resumeDuck) await resumeDuck;
+      const buffer = await rendered;
       a.stopAll();
-      return measure(buffer);
+      return {
+        ...measure(buffer),
+        earlyDb: windowDb(buffer, 0.3, 0.4),
+        afterReleaseDb: windowDb(buffer, 1.4, 1.6),
+        releaseStartDb: windowDb(buffer, 0.5, 0.51),
+      };
     };
     const result = {};
     for (const k of ["pop", "block", "music", "voice"])
       result[k] = { before: await render(k, true), after: await render(k) };
     for (const k of ["noise-flush", "noise-motor", "sequence", "overlap"])
       result[k] = await render(k);
+    for (const channel of ["sfx", "music"])
+      for (const mode of ["normal", "duck", "recover"])
+        result[`channel-${mode}-${channel}`] = await render(
+          `channel-${mode}-${channel}`,
+        );
     return result;
   });
   for (const [name, row] of Object.entries(measurement)) {
@@ -171,6 +216,24 @@ let browser;
     ) < 0.2,
     "solo guide voice level preserved",
   );
+  for (const channel of ["sfx", "music"]) {
+    const normal = measurement[`channel-normal-${channel}`],
+      duck = measurement[`channel-duck-${channel}`],
+      recover = measurement[`channel-recover-${channel}`];
+    const expected = 20 * Math.log10(channel === "music" ? 0.18 : 0.3);
+    assert(
+      Math.abs(duck.earlyDb - normal.earlyDb - expected) < 0.2,
+      `${channel}: rendered duck level`,
+    );
+    assert(
+      Math.abs(recover.afterReleaseDb - normal.afterReleaseDb) < 0.2,
+      `${channel}: rendered restoration`,
+    );
+    assert(
+      recover.releaseStartDb < normal.releaseStartDb - 3,
+      `${channel}: release must fade rather than jump`,
+    );
+  }
   // Start media through a genuine click, as the app does. WebKit does not
   // treat evaluate() after offline renders as a user activation.
   await page.evaluate(() => {
@@ -237,15 +300,12 @@ let browser;
     // retain their element handles and require actual timeline progress.
     if (!(await window.__audioQAMusic)) throw Error("HTML music did not play");
     const voice = a.playVoice("play-drag-help");
-    await new Promise((r) => setTimeout(r, 180));
     const duck = a.ducked;
-    await new Promise((r) => setTimeout(r, 140));
-    const duckGain = a.channels.sfx.gain.value;
-    const musicDuckGain = a.channels.music.gain.value;
+    const voicePlayed = await voice;
+    const restored = !a.ducked;
+    if (!a.decodedVoices.has(a.manifest["play-drag-help"].src))
+      throw Error("Guide voice not decoded locally");
     a.stopVoice();
-    await voice;
-    await new Promise((r) => setTimeout(r, 400));
-    const restored = a.channels.sfx.gain.value;
     a.playSfx("motorStart");
     // HTMLAudio music is separately covered by the mixer contract. Current
     // music-menu tracks are generated on the music channel, rendered above.
@@ -260,17 +320,15 @@ let browser;
     a.playSfx("motorStart");
     return {
       duck,
-      duckGain,
-      musicDuckGain,
+      voicePlayed,
       restored,
       mediaPlayed: true,
       htmlMusicPlayed: true,
     };
   });
   assert(playback.duck);
-  assert(playback.duckGain < 0.31);
-  assert(playback.musicDuckGain < 0.06);
-  assert(playback.restored > 0.85);
+  assert(playback.voicePlayed);
+  assert(playback.restored);
   await page.locator('[data-go="home"]').first().click();
   assert.deepEqual(
     await page.evaluate(() => ({

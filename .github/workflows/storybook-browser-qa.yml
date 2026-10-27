@@ -78,15 +78,15 @@ jobs:
           node-version: '22'
       - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
       - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - run: npm run test:audio:browser
+        env:
+          QA_ENGINE: ${{ matrix.engine }}
       - run: npm run test:layout
         env:
           QA_ENGINE: ${{ matrix.engine }}
       - run: npm run test:balloon:browser
         if: matrix.engine == 'chromium'
       - run: npm run test:rotation
-        env:
-          QA_ENGINE: ${{ matrix.engine }}
-      - run: npm run test:audio:browser
         env:
           QA_ENGINE: ${{ matrix.engine }}
       - run: npm run test:model
