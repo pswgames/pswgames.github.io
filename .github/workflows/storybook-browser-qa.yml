@@ -86,12 +86,53 @@ jobs:
       - run: npm run test:rotation
         env:
           QA_ENGINE: ${{ matrix.engine }}
+      - run: npm run test:audio:browser
+        env:
+          QA_ENGINE: ${{ matrix.engine }}
+      - run: npm run test:model
+        if: matrix.engine == 'chromium'
       - run: npm run test:offline
         if: matrix.engine == 'chromium'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: landscape-${{ matrix.engine }}
+          path: |
+            .test-results/landscape
+            .test-results/balloon
+            .test-results/audio
+          retention-days: 7
+
+  y700:
+    needs: source
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts --no-audit --no-fund --no-package-lock
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:layout
+        env:
+          QA_ENGINE: chromium
+          QA_SIZE: 1280x800
+      - run: npm run test:layout
+        env:
+          QA_ENGINE: chromium
+          QA_SIZE: 1024x640
+      - run: npm run test:rotation
+        env:
+          QA_ENGINE: chromium
+          QA_TABLET: '1'
+      - run: npm run test:balloon:browser
+        env:
+          QA_TABLET: '1'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: y700-qa
           path: |
             .test-results/landscape
             .test-results/balloon

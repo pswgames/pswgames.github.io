@@ -46,11 +46,11 @@ let browser;
   const cache = await page.evaluate(async () => ({
     keys: await caches.keys(),
     balloon: !!(await caches.match("js/balloon.js")),
-    model: (await (await caches.open("seowoo-v7.5.0")).keys()).some((r) =>
+    model: (await (await caches.open("seowoo-v7.5.1")).keys()).some((r) =>
       /mediapipe|\.task/.test(r.url),
     ),
   }));
-  assert(cache.keys.includes("seowoo-v7.5.0"));
+  assert(cache.keys.includes("seowoo-v7.5.1"));
   assert(cache.balloon);
   assert(!cache.model);
   await page.evaluate(() => SeowooApp.go("elevator"));

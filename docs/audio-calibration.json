@@ -1,0 +1,213 @@
+{
+  "referenceActiveRmsDb": -15.459,
+  "referenceIds": [
+    "common-0",
+    "common-1",
+    "closing",
+    "opening",
+    "up",
+    "down",
+    "arrival-1",
+    "play-drag-help",
+    "play-potty-drag-0"
+  ],
+  "windowMs": 20,
+  "activeGateDbBelowMax": -20,
+  "realListeningPerformed": false,
+  "notes": "LUFS reported for context; short events calibrated by active 20ms RMS + true peak, duration and role. Runtime nonvoice ceiling and ducking apply in addition. No source media modified.",
+  "measurements": {
+    "common-0": {
+      "src": "audio/voice/ko/80f03d058868d076.mp3",
+      "duration": 0.96,
+      "rmsDb": -18.193,
+      "activeRmsDb": -16.305,
+      "peakDb": -2.246,
+      "truePeakDb": -2.2,
+      "lufs": -17.4
+    },
+    "common-1": {
+      "src": "audio/voice/ko/6cceed6dbbb69560.mp3",
+      "duration": 0.624,
+      "rmsDb": -19.183,
+      "activeRmsDb": -16.803,
+      "peakDb": -5.526,
+      "truePeakDb": -5.5,
+      "lufs": -17.6
+    },
+    "closing": {
+      "src": "audio/voice/ko/e46db253c19084be.mp3",
+      "duration": 1.2,
+      "rmsDb": -17.253,
+      "activeRmsDb": -15.392,
+      "peakDb": -5.672,
+      "truePeakDb": -5.6,
+      "lufs": -16.9
+    },
+    "opening": {
+      "src": "audio/voice/ko/16a3dcf7960f5bec.mp3",
+      "duration": 1.248,
+      "rmsDb": -14.977,
+      "activeRmsDb": -13.661,
+      "peakDb": -4.101,
+      "truePeakDb": -4.1,
+      "lufs": -14.6
+    },
+    "up": {
+      "src": "audio/voice/ko/c7922c75abd818f0.mp3",
+      "duration": 0.864,
+      "rmsDb": -18.501,
+      "activeRmsDb": -16.469,
+      "peakDb": -4.887,
+      "truePeakDb": -4.8,
+      "lufs": -18.0
+    },
+    "down": {
+      "src": "audio/voice/ko/2e87b600badd669e.mp3",
+      "duration": 0.912,
+      "rmsDb": -16.995,
+      "activeRmsDb": -15.459,
+      "peakDb": -3.494,
+      "truePeakDb": -3.5,
+      "lufs": -17.0
+    },
+    "arrival-1": {
+      "src": "audio/voice/ko/70ab94dda06da0f7.mp3",
+      "duration": 0.984,
+      "rmsDb": -16.312,
+      "activeRmsDb": -14.311,
+      "peakDb": -4.024,
+      "truePeakDb": -3.8,
+      "lufs": -15.1
+    },
+    "play-drag-help": {
+      "src": "audio/voice/ko/82fd43ae43d5dc48.mp3",
+      "duration": 4.32,
+      "rmsDb": -18.781,
+      "activeRmsDb": -16.059,
+      "peakDb": -1.664,
+      "truePeakDb": -1.7,
+      "lufs": -18.1
+    },
+    "play-potty-drag-0": {
+      "src": "audio/voice/ko/a42e24e68f7c05ed.mp3",
+      "duration": 2.568,
+      "rmsDb": -15.774,
+      "activeRmsDb": -13.998,
+      "peakDb": -0.921,
+      "truePeakDb": -0.8,
+      "lufs": -15.5
+    },
+    "arrival": {
+      "src": "audio/sfx/arrival.wav",
+      "duration": 1.12,
+      "rmsDb": -18.072,
+      "activeRmsDb": -17.755,
+      "peakDb": -5.358,
+      "truePeakDb": -5.3,
+      "lufs": -18.2,
+      "targetActiveRmsDb": -20.459,
+      "gain": 0.5821,
+      "beforeActiveRmsDb": -18.67,
+      "afterActiveRmsDb": -23.37,
+      "afterTruePeakDb": -10.915
+    },
+    "button": {
+      "src": "audio/sfx/button.wav",
+      "duration": 0.12,
+      "rmsDb": -23.616,
+      "activeRmsDb": -22.824,
+      "peakDb": -13.006,
+      "truePeakDb": -12.6,
+      "lufs": -70.0,
+      "targetActiveRmsDb": -20.459,
+      "gain": 1.31296,
+      "beforeActiveRmsDb": -24.654,
+      "afterActiveRmsDb": -21.374,
+      "afterTruePeakDb": -11.15
+    },
+    "doorClose": {
+      "src": "audio/sfx/door-close.wav",
+      "duration": 1.05,
+      "rmsDb": -22.561,
+      "activeRmsDb": -22.35,
+      "peakDb": -13.141,
+      "truePeakDb": -13.1,
+      "lufs": -22.8,
+      "targetActiveRmsDb": -23.459,
+      "gain": 0.88014,
+      "beforeActiveRmsDb": -24.989,
+      "afterActiveRmsDb": -24.374,
+      "afterTruePeakDb": -15.124
+    },
+    "doorOpen": {
+      "src": "audio/sfx/door-open.wav",
+      "duration": 1.05,
+      "rmsDb": -23.38,
+      "activeRmsDb": -22.807,
+      "peakDb": -12.888,
+      "truePeakDb": -12.8,
+      "lufs": -23.6,
+      "targetActiveRmsDb": -23.459,
+      "gain": 0.92768,
+      "beforeActiveRmsDb": -25.446,
+      "afterActiveRmsDb": -24.374,
+      "afterTruePeakDb": -14.367
+    },
+    "flush": {
+      "src": "audio/sfx/flush.wav",
+      "duration": 1.15,
+      "rmsDb": -26.599,
+      "activeRmsDb": -26.082,
+      "peakDb": -13.242,
+      "truePeakDb": -13.2,
+      "lufs": -25.8,
+      "targetActiveRmsDb": -23.459,
+      "gain": 1.35254,
+      "beforeActiveRmsDb": -28.107,
+      "afterActiveRmsDb": -24.374,
+      "afterTruePeakDb": -11.492
+    },
+    "motorStart": {
+      "src": "audio/sfx/motor-loop.wav",
+      "duration": 2.4,
+      "rmsDb": -25.201,
+      "activeRmsDb": -25.201,
+      "peakDb": -19.285,
+      "truePeakDb": -19.3,
+      "lufs": -27.1,
+      "targetActiveRmsDb": -30.459,
+      "gain": 0.54588,
+      "beforeActiveRmsDb": -30.268,
+      "afterActiveRmsDb": -31.374,
+      "afterTruePeakDb": -25.473
+    },
+    "motorStop": {
+      "src": "audio/sfx/motor-stop.wav",
+      "duration": 0.62,
+      "rmsDb": -22.263,
+      "activeRmsDb": -21.821,
+      "peakDb": -15.374,
+      "truePeakDb": -15.4,
+      "lufs": -23.2,
+      "targetActiveRmsDb": -23.459,
+      "gain": 0.82813,
+      "beforeActiveRmsDb": -25.589,
+      "afterActiveRmsDb": -24.374,
+      "afterTruePeakDb": -17.953
+    },
+    "success": {
+      "src": "audio/sfx/success.wav",
+      "duration": 0.62,
+      "rmsDb": -20.609,
+      "activeRmsDb": -20.319,
+      "peakDb": -7.895,
+      "truePeakDb": -7.9,
+      "lufs": -20.5,
+      "targetActiveRmsDb": -20.459,
+      "gain": 0.78524,
+      "beforeActiveRmsDb": -22.149,
+      "afterActiveRmsDb": -23.334,
+      "afterTruePeakDb": -10.915
+    }
+  }
+}

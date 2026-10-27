@@ -36,6 +36,8 @@ class Audio {
     spoken.push(t);
     return Promise.resolve(true);
   }
+  syncSettings() {}
+  musicTone() {}
   unlock() {}
   stop() {}
   stopAll() {}

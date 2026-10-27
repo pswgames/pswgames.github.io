@@ -110,6 +110,7 @@
   function setting(k, v) {
     if (arguments.length === 1) return state.settings[k];
     state.settings[k] = v;
+    audio.syncSettings();
     save();
   }
   function reset() {

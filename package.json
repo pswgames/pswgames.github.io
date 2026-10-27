@@ -1,6 +1,6 @@
 {
   "name": "seowoo-playground",
-  "version": "7.5.0",
+  "version": "7.5.1",
   "private": true,
   "scripts": {
     "dev": "node scripts/serve.cjs",
@@ -11,9 +11,10 @@
     "test:layout": "node tests/layout-browser.cjs",
     "test:flows": "node tests/storybook-browser.cjs",
     "test:model": "node tests/model-smoke.cjs",
-    "lint": "prettier --check js/balloon*.js css/balloon.css css/landscape.css tests/balloon*.cjs tests/layout-browser.cjs tests/model-smoke.cjs tests/offline-balloon.cjs tests/rotation-browser.cjs",
+    "lint": "prettier --check js/balloon*.js css/balloon.css css/landscape.css tests/balloon*.cjs tests/layout-browser.cjs tests/model-smoke.cjs tests/offline-balloon.cjs tests/rotation-browser.cjs js/audio.js js/audio-profile.js tests/audio.cjs tests/audio-mixer.cjs tests/audio-browser.cjs",
     "test:offline": "node tests/offline-balloon.cjs",
-    "test:rotation": "node tests/rotation-browser.cjs"
+    "test:rotation": "node tests/rotation-browser.cjs",
+    "test:audio:browser": "node tests/audio-browser.cjs"
   },
   "devDependencies": {
     "jsdom": "30.0.1",

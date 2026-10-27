@@ -42,6 +42,7 @@ console.log(
 );
 for (const test of [
   "audio",
+  "audio-mixer",
   "voice-assets",
   "voice-coverage",
   "regression",

@@ -81,8 +81,7 @@ const fs = require("fs"),
       }
     },
     fetch: async (src) => {
-      const fail =
-        src === "ko-media?v=current" || src === "ko-dead?v=current";
+      const fail = src === "ko-media?v=current" || src === "ko-dead?v=current";
       return {
         ok: !fail,
         status: fail ? 404 : 200,
@@ -91,6 +90,8 @@ const fs = require("fs"),
     },
     setTimeout,
     clearTimeout,
+    setInterval,
+    clearInterval,
   };
   vm.runInNewContext(fs.readFileSync("js/audio.js", "utf8"), sandbox);
   const a = new sandbox.window.SeowooAudioManager({
@@ -103,7 +104,7 @@ const fs = require("fs"),
   const first = a.playVoice("hello");
   const second = a.playVoice("bad");
   assert.equal(await first, false);
-  assert(instances[0].paused);
+  assert(instances.some((x) => x.src === "hello" && x.paused));
   await new Promise((r) => setTimeout(r, 10));
   assert.equal(
     spoken.length,
@@ -129,7 +130,10 @@ const fs = require("fs"),
   const mediaInstance = instances.find((x) =>
     String(x.src).startsWith("ko-media?v=current"),
   );
-  assert(mediaInstance, "Korean Web Audio failure must retry the same local MP3");
+  assert(
+    mediaInstance,
+    "Korean Web Audio failure must retry the same local MP3",
+  );
   mediaInstance.onended();
   assert(
     await mediaFallback,
@@ -149,7 +153,10 @@ const fs = require("fs"),
     "Korean playback must fall back to device TTS instead of becoming silent",
   );
   spoken.at(-1).onend();
-  assert(await deviceFallback, "device TTS fallback should settle successfully");
+  assert(
+    await deviceFallback,
+    "device TTS fallback should settle successfully",
+  );
 
   const dynamicFallback = a.speak("카탈로그에 없는 안내");
   await new Promise((r) => setTimeout(r, 5));
