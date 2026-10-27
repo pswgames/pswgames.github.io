@@ -56,15 +56,42 @@ const tablet = process.env.QA_TABLET === "1";
       await page.mouse.down();
       await page.mouse.move(r.x + r.width / 2 + 12, r.y + r.height / 2 - 12);
       assert.equal(await page.locator(ghost).count(), 1);
+      await page.evaluate(() => {
+        window.__rotationEvents = [];
+        window.addEventListener(
+          "resize",
+          () => window.__rotationEvents.push([innerWidth, innerHeight]),
+          { once: true },
+        );
+      });
       await page.setViewportSize(
         tablet ? { width: 800, height: 1280 } : { width: 390, height: 844 },
       );
-      await page.waitForTimeout(250);
+      // WebKit can deliver resize after setViewportSize resolves. Assert the
+      // cancelled drag while the pointer is still held, rather than racing a
+      // fixed delay or letting pointerup hide a missing resize cancellation.
+      try {
+        await page.waitForFunction(
+          (selector) => !document.querySelector(selector),
+          ghost,
+          { timeout: 5000 },
+        );
+      } catch (error) {
+        console.error(
+          route,
+          await page.evaluate(() => ({
+            width: innerWidth,
+            height: innerHeight,
+            resizeEvents: window.__rotationEvents,
+          })),
+        );
+        throw error;
+      }
       await page.mouse.up();
       assert.equal(
         await page.locator(ghost).count(),
         0,
-        "rotation removes held toy",
+        `${route}: rotation removes held toy`,
       );
       const after = await page.evaluate(() => ({
         score: SeowooBlockPang.snapshot()?.score,
