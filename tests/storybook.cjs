@@ -221,7 +221,7 @@ const tick = () => new Promise((r) => setImmediate(r));
     "audio/files.js": "78495e9cfb874e695d4416f6c31ea6b548cd6039811cabfe8aac442ed4152774"
 };
   for (const [file, digest] of Object.entries(preserved)) {
-    assert.equal(require('crypto').createHash('sha256').update(fs.readFileSync(file)).digest('hex'), digest, file + ' must remain unchanged');
+    assert.equal(require('crypto').createHash('sha256').update(fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n')).digest('hex'), digest, file + ' must remain unchanged');
   }
   console.log(
     "PASS storybook: 8 shopping lists, 3 recipes, 3 patients, 12 puzzles, 12 emotion stories, retry/duplicates/wrong choices, all illustrations, elevator source preservation",

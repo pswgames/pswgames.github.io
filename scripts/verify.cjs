@@ -52,6 +52,7 @@ for (const test of [
   "storybook",
   "narrator",
   "block-engine",
+  "balloon",
 ]) {
   const r = spawnSync(process.execPath, [`tests/${test}.cjs`], {
     stdio: "inherit",

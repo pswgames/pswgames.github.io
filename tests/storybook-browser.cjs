@@ -1,4 +1,4 @@
-/* Real browser regression. Runs in an isolated CI runner, never the user's PC. */
+/* Real browser regression in isolated temporary browser contexts. */
 const { chromium, webkit } = require("playwright"),
   assert = require("node:assert/strict"),
   fs = require("fs"),
@@ -12,7 +12,7 @@ let currentPage;
 const results = [],
   failures = [];
 const server = spawn(process.execPath, ["scripts/serve.cjs"], {
-  stdio: "pipe",
+  stdio: "pipe", env: {...process.env,PORT:"4175"},
 });
 const ready = new Promise((resolve, reject) => {
   server.stdout.on("data", (d) => {
@@ -23,6 +23,8 @@ const ready = new Promise((resolve, reject) => {
 const routes = [
   "home",
   "blockpang",
+  "balloon",
+  "think",
   "village",
   "puzzle",
   "feelings",
@@ -50,6 +52,9 @@ const routes = [
 (async () => {
   await ready;
   for (const spec of [
+    { id: "phone-landscape-small", type: chromium, width:667, height:375, touch:true },
+    { id: "phone-landscape", type: chromium, width:844, height:390, touch:true },
+    { id: "tablet-landscape", type: chromium, width:1024, height:768, touch:true },
     { id: "android-chromium", type: chromium, width:412, height:915, touch:true },
     {
       id: "desktop-chromium",
@@ -86,18 +91,27 @@ const routes = [
     });
     await page.addInitScript(() => {
       window.__voiceQA = { starts: 0, fallbacks: [], urls: [] };
-      const start = AudioBufferSourceNode.prototype.start;
-      AudioBufferSourceNode.prototype.start = function (...a) {
-        if (this.buffer?.duration > 0.2) window.__voiceQA.starts++;
-        return start.apply(this, a);
-      };
-      const speak = speechSynthesis.speak.bind(speechSynthesis);
-      speechSynthesis.speak = (u) => {
-        window.__voiceQA.fallbacks.push(u.text);
-        speak(u);
-      };
+      const Context = window.AudioContext || window.webkitAudioContext;
+      if (Context) {
+        const create = Context.prototype.createBufferSource;
+        Context.prototype.createBufferSource = function (...args) {
+          const source = create.apply(this, args), start = source.start;
+          source.start = function (...a) {
+            if (this.buffer?.duration > 0.2) window.__voiceQA.starts++;
+            return start.apply(this, a);
+          };
+          return source;
+        };
+      }
+      if (window.speechSynthesis) {
+        const speak = speechSynthesis.speak.bind(speechSynthesis);
+        speechSynthesis.speak = (u) => {
+          window.__voiceQA.fallbacks.push(u.text);
+          speak(u);
+        };
+      }
     });
-    await page.goto("http://127.0.0.1:4173/");
+    await page.goto("http://127.0.0.1:4175/");
     await page.locator(".home-featured-card").first().waitFor();
     const {dragTo,block}=require("./browser-drag.cjs")(page,spec,context);
     const tap = async (sel) => {
@@ -343,14 +357,14 @@ const routes = [
     // Initial activation may deliberately reload the installing tab. Start the
     // offline journey in a fresh tab only after that worker controls the origin.
     const installingPage = await context.newPage();
-    await installingPage.goto("http://127.0.0.1:4173/");
+    await installingPage.goto("http://127.0.0.1:4175/");
     await installingPage.waitForFunction(() => navigator.serviceWorker.controller, null, {
       timeout: 45000,
     });
     await installingPage.close();
     const page = await context.newPage();
     currentPage = page;
-    await page.goto("http://127.0.0.1:4173/");
+    await page.goto("http://127.0.0.1:4175/");
     await page.locator('[data-go="village"]').click();
     await page.locator('[data-place="market"]').click();
     await page.waitForTimeout(9000);
@@ -383,7 +397,7 @@ const routes = [
     await browser.close();
   }
   fs.writeFileSync(
-    out + "/results.json",
+    out + "/results" + (profileOnly ? "-" + profileOnly : "") + ".json",
     JSON.stringify({ results, failures }, null, 2),
   );
   console.log("PASS real browser storybook: " + results.length + " checks");
@@ -394,7 +408,7 @@ const routes = [
       .catch(() => {});
     failures.push(String(e.stack || e));
     fs.writeFileSync(
-      out + "/results.json",
+      out + "/results" + (profileOnly ? "-" + profileOnly : "") + ".json",
       JSON.stringify({ results, failures }, null, 2),
     );
     console.error(e);

@@ -35,4 +35,4 @@ http
       res.end(e ? "Not found" : b);
     });
   })
-  .listen(4173, "127.0.0.1", () => console.log("Preview ready"));
+  .listen(Number(process.env.PORT || 4173), "127.0.0.1", () => console.log("Preview ready"));

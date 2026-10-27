@@ -95,11 +95,11 @@ const doc = w.document,
   const report = [];
   const dragPotty=()=>require("./drag-helper.cjs")(w,".potty-child","[data-potty-zone]",{wait:20});
   assert.equal(doc.querySelectorAll(".activity-card").length, 6);
-  assert.equal(doc.querySelectorAll(".home-featured-card").length, 4);
+  assert.equal(doc.querySelectorAll(".home-featured-card").length, 5);
   assert(doc.querySelector('[data-go="village"].home-featured-card'));
   assert(doc.querySelector('[data-go="puzzle"].home-featured-card'));
   assert(doc.querySelector('[data-go="feelings"].home-featured-card'));
-  report.push("홈: 기존 여섯 활동 + 신규 4개 놀이 직접 진입");
+  report.push("홈: 기존 여섯 활동 + 신규 5개 놀이 직접 진입");
   go("elevator");
   const floorOrder = Array.from({ length: 10 }, (_, row) => [
     19 - row * 2,
