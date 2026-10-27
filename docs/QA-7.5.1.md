@@ -38,7 +38,7 @@ Web Audio 미지원 시 HTMLAudio volume을 이용한 낮은 음량/ducking 경�
 - `pnpm lint`, `pnpm build:offline`: 캐시 `seowoo-v7.5.1`, 음량 프로파일 포함 1,612개.
 - `pnpm test:audio:browser`: 실제 사용자 클릭으로 시작한 효과음의 디코딩/시간 진행, 합성 출력/연속/중첩 렌더, 단독 안내 크기 보존, 음성 duck/복원, 0/OFF, 이탈 후 모든 소스 정리.
 - 기존 `test:balloon:browser`, `test:layout`, `test:flows`, `test:rotation`, `test:model`, `test:offline` 유지. 최종 변경본의 GitHub CI에 오디오 Chromium/WebKit, 생성 캔버스 모델 스모크, Y700 비율 2종과 회전/풍선 검사를 추가했다.
-- 로컬 Chromium: Y700 비율 1280×800/1024×640 각 110건, 드래그 회전, 풍선 수명 주기, 실제 서비스워커 오프라인 통과. 일반 Chromium 6종 화면도 실행했다. 로컬 WebKit은 시스템 라이브러리 부재, 모델 외부 접속은 실행 환경 네트워크 문제로 실패했다. 이 둘은 원격 CI에서 통과했다. 최초 원격 오디오 검사에서 WebKit의 evaluate 호출을 사용자 제스처로 취급한 오류가 발견되어 실제 클릭과 재생 진행 상태 확인으로 수정했다. 250ms 고정 대기를 없앴으며 재생 진행 조건과 timeout 실패는 유지한다.
+- 로컬 Chromium: Y700 비율 1280×800/1024×640 각 110건, 드래그 회전, 풍선 수명 주기, 실제 서비스워커 오프라인 통과. 일반 Chromium 6종 화면도 실행했다. 로컬 WebKit은 시스템 라이브러리 부재, 모델 외부 접속은 실행 환경 네트워크 문제로 실패했다. 이 둘은 원격 CI에서 통과했다. 최초 원격 오디오 검사에서 WebKit의 evaluate 호출을 사용자 제스처로 취급한 오류가 발견되어 실제 클릭과 재생 진행 상태 확인으로 수정했다. 250ms 고정 대기를 없앴으며 재생 진행 조건과 timeout 실패는 유지한다. 짧은 파일이 종료되면 manager.music이 정리되므로 재생 객체 참조를 보관하고 두 음원의 currentTime 진행을 확인한다. 완료된 파일을 현재 재생 객체로 찾지 않는다. 동시 출력 headroom은 별도 실제 Web Audio 렌더로 검증한다.
 - 기존 저장값/기록/PIN/스티커 보존은 migration/PWA 테스트로 확인하며 저장 스키마 변경 없음.
 
 `python scripts/analyze-audio.py`로 원본을 수정하지 않고 보정값을 재생성할 수 있다(ffmpeg, numpy 필요). 이후 `pnpm exec prettier --write js/audio-profile.js` 및 전체 검사/오프라인 빌드를 실행한다.

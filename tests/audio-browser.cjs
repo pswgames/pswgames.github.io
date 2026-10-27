@@ -196,6 +196,7 @@ let browser;
       a.playSfx("arrival");
       window.__audioQAMedia = [...a.effects][0];
       window.__audioQAMusic = a.playMusic(SEOWOO_SFX.success.src);
+      window.__audioQAMusicElement = a.music;
     };
     document.body.append(button);
   });
@@ -206,9 +207,8 @@ let browser;
         const media = window.__audioQAMedia;
         return (
           media &&
-          !media.paused &&
           media.currentTime > 0 &&
-          SeowooCore.audio.music?.currentTime > 0
+          window.__audioQAMusicElement?.currentTime > 0
         );
       },
       null,
@@ -219,6 +219,10 @@ let browser;
       "Media start diagnostics",
       await page.evaluate(() => ({
         failures: window.__audioMediaErrors,
+        effectTime: window.__audioQAMedia?.currentTime,
+        effectEnded: window.__audioQAMedia?.ended,
+        musicTime: window.__audioQAMusicElement?.currentTime,
+        musicEnded: window.__audioQAMusicElement?.ended,
         state: SeowooCore.audio.ctx?.state,
         paused: window.__audioQAMedia?.paused,
         ready: window.__audioQAMedia?.readyState,
@@ -229,6 +233,8 @@ let browser;
   }
   const playback = await page.evaluate(async () => {
     const a = SeowooCore.audio;
+    // Short clips may already have ended and been released by the mixer;
+    // retain their element handles and require actual timeline progress.
     if (!(await window.__audioQAMusic)) throw Error("HTML music did not play");
     const voice = a.playVoice("play-drag-help");
     await new Promise((r) => setTimeout(r, 180));
