@@ -272,8 +272,6 @@
       )
         this.voice.volume = this.voiceVolume;
       if (this.voiceGain) this.voiceGain.gain.value = this.voiceVolume;
-      if (this.voice instanceof SpeechSynthesisUtterance)
-        this.voice.volume = this.voiceVolume;
       this.syncSettings();
     }
     setSfxVolume(n) {

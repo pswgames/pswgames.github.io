@@ -238,6 +238,15 @@ const fs = require("node:fs"),
   b.setSfxVolume(0);
   assert.equal(b.music, null);
   b.stopAll();
+  // WebViews may have no device speech API; local audio/volume must still work.
+  delete sandbox.SpeechSynthesisUtterance;
+  sandbox.window.speechSynthesis = undefined;
+  const noDeviceSpeech = new sandbox.window.SeowooAudioManager({
+    voice: true,
+    sound: true,
+  });
+  assert.doesNotThrow(() => noDeviceSpeech.setVoiceVolume(0.4));
+  noDeviceSpeech.stopAll();
   a.stopAll();
   console.log(
     "PASS mixer: all SFX/music routes, calibrated gains, unchanged voice, duck/restore, caps, zero/OFF, late failure, media cleanup and degraded fallback",

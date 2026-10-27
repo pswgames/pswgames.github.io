@@ -220,7 +220,7 @@ const tick = () => new Promise((r) => setImmediate(r));
     "js/elevator.js": "1de5da475f94c2eae77272ec84867a5270bde6fabb74e25d18756e44d4b834d7",
     "js/panorama.js": "202de9d9cf267fea31db9c776dd9832b48566c1eda075d1be7220fc38d522405",
     // 7.5.1 intentionally changes the mixer; behavioral audio suites cover it.
-    "js/audio.js": "546f1a85366907db9480abc41fb86b6b969dbeb294ac380e43e6840af9a30f24",
+    "js/audio.js": "b7bfa761f2dc74036648a0ec89d6acf5c45cbc7c13668bf20aeccee1285c7910",
     "audio/files.js": "78495e9cfb874e695d4416f6c31ea6b548cd6039811cabfe8aac442ed4152774"
 };
   for (const [file, digest] of Object.entries(preserved)) {
