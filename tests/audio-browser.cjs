@@ -171,29 +171,78 @@ let browser;
     ) < 0.2,
     "solo guide voice level preserved",
   );
+  // Start media through a genuine click, as the app does. WebKit does not
+  // treat evaluate() after offline renders as a user activation.
+  await page.evaluate(() => {
+    window.__audioMediaErrors = [];
+    const original = HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play = function (...args) {
+      return original.apply(this, args).catch((error) => {
+        window.__audioMediaErrors.push({ src: this.src, name: error.name });
+        throw error;
+      });
+    };
+    const button = document.createElement("button");
+    button.id = "audio-qa-start";
+    button.textContent = "Start audio QA";
+    button.onclick = () => {
+      const a = SeowooCore.audio;
+      a.stopAll();
+      a.settings.voice = true;
+      a.settings.sound = true;
+      a.setVoiceVolume(1);
+      a.setSfxVolume(0.9);
+      a.unlock();
+      a.playSfx("arrival");
+      window.__audioQAMedia = [...a.effects][0];
+      window.__audioQAMusic = a.playMusic(SEOWOO_SFX.success.src);
+    };
+    document.body.append(button);
+  });
+  await page.locator("#audio-qa-start").click();
+  try {
+    await page.waitForFunction(
+      () => {
+        const media = window.__audioQAMedia;
+        return (
+          media &&
+          !media.paused &&
+          media.currentTime > 0 &&
+          SeowooCore.audio.music?.currentTime > 0
+        );
+      },
+      null,
+      { timeout: 5000 },
+    );
+  } catch (error) {
+    console.error(
+      "Media start diagnostics",
+      await page.evaluate(() => ({
+        failures: window.__audioMediaErrors,
+        state: SeowooCore.audio.ctx?.state,
+        paused: window.__audioQAMedia?.paused,
+        ready: window.__audioQAMedia?.readyState,
+        error: window.__audioQAMedia?.error?.message,
+      })),
+    );
+    throw error;
+  }
   const playback = await page.evaluate(async () => {
     const a = SeowooCore.audio;
-    a.stopAll();
-    a.settings.voice = true;
-    a.settings.sound = true;
-    a.setVoiceVolume(1);
-    a.setSfxVolume(0.9);
-    a.unlock();
-    a.playSfx("arrival");
-    const media = [...a.effects][0];
-    await new Promise((r) => setTimeout(r, 250));
-    if (media.paused || media.currentTime <= 0)
-      throw Error("SFX media did not decode/play");
+    if (!(await window.__audioQAMusic)) throw Error("HTML music did not play");
     const voice = a.playVoice("play-drag-help");
     await new Promise((r) => setTimeout(r, 180));
     const duck = a.ducked;
     await new Promise((r) => setTimeout(r, 140));
     const duckGain = a.channels.sfx.gain.value;
+    const musicDuckGain = a.channels.music.gain.value;
     a.stopVoice();
     await voice;
     await new Promise((r) => setTimeout(r, 400));
     const restored = a.channels.sfx.gain.value;
     a.playSfx("motorStart");
+    // HTMLAudio music is separately covered by the mixer contract. Current
+    // music-menu tracks are generated on the music channel, rendered above.
     await a.playMusic(SEOWOO_SFX.arrival.src);
     a.setSfxVolume(0);
     if (a.effects.size || a.music)
@@ -203,10 +252,18 @@ let browser;
     a.setSfxVolume(0.9);
     a.setVoiceVolume(1);
     a.playSfx("motorStart");
-    return { duck, duckGain, restored, mediaPlayed: true };
+    return {
+      duck,
+      duckGain,
+      musicDuckGain,
+      restored,
+      mediaPlayed: true,
+      htmlMusicPlayed: true,
+    };
   });
   assert(playback.duck);
   assert(playback.duckGain < 0.31);
+  assert(playback.musicDuckGain < 0.06);
   assert(playback.restored > 0.85);
   await page.locator('[data-go="home"]').first().click();
   assert.deepEqual(
